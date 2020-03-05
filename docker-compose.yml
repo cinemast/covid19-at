@@ -12,6 +12,7 @@ services:
       - "9090:9090"
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
   grafana:
     image: grafana/grafana:latest
     environment:
@@ -27,3 +28,4 @@ services:
     volumes:
       - ./config/datasource:/etc/grafana/provisioning/datasources
       - ./config/dashboard:/etc/grafana/provisioning/dashboards
+      - ./data/grafana:/var/lib/grafana
