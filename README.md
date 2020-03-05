@@ -14,6 +14,9 @@ It then exposes the gathered metrics as [prometheus](https://prometheus.io/) end
 - Open [http://localhost:9090/](http://localhost:9090/) for Prometheus
 - Open [http://localhost:8282/metrics](http://localhost:8282/metrics) for the metric exporter
 
+## Demo Setup
+
+https://covid19.spiessknafl.at
 
 ## Screenshot
 ![](screenshots/grafana.png)
