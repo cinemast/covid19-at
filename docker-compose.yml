@@ -1,11 +1,13 @@
 version: '3'
 services: 
   covid19:
+    restart: always
     build: .
     ports:
       - "8282:8282"
   prometheus:
     image: prom/prometheus:latest
+    restart: always
     depends_on:
       - covid19
     ports:
@@ -15,6 +17,7 @@ services:
       - ./data/prometheus:/prometheus
   grafana:
     image: grafana/grafana:latest
+    restart: always
     environment:
       GF_SECURITY_ADMIN_PASSWORD: "admin"
       GF_USERS_ALLOW_SIGN_UP: "false"
