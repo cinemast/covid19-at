@@ -5,6 +5,5 @@ build-arm64:
 image:
 	docker build -t covid19-at .
 
-deploy: build-arm64
-	scp covid19.service root@on2:/etc/systemd/system/covid19.service
-	scp covid19-at on2:cov19/covid19-at
+deploy:
+	ssh covid19.spiessknafl.at "cd covid19-at && git pull && docker-compose up -d"

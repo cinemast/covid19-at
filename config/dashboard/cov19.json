@@ -15,7 +15,7 @@
     "editable": true,
     "gnetId": null,
     "graphTooltip": 0,
-    "id": 1,
+    "id": 2,
     "links": [],
     "panels": [
       {
@@ -52,7 +52,7 @@
           "justifyMode": "auto",
           "orientation": "auto"
         },
-        "pluginVersion": "6.6.0",
+        "pluginVersion": "6.6.2",
         "targets": [
           {
             "expr": "cov19_tests ",
@@ -103,7 +103,7 @@
           "justifyMode": "auto",
           "orientation": "auto"
         },
-        "pluginVersion": "6.6.0",
+        "pluginVersion": "6.6.2",
         "targets": [
           {
             "expr": "cov19_confirmed ",
@@ -157,7 +157,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "cov19_detail{country=\"Austria\"}",
+            "expr": "max(cov19_detail{country=\"Austria\"}) without (instance,job)",
             "legendFormat": "{{province}}",
             "refId": "A"
           }
@@ -283,7 +283,8 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "cov19_confirmed",
+            "expr": "max(cov19_confirmed) without (instance,job)",
+            "format": "time_series",
             "legendFormat": "Confirmed cases Austria",
             "refId": "A"
           }
@@ -378,7 +379,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "cov19_detail{country != \"Austria\"}",
+            "expr": "max(cov19_detail{country != \"Austria\"})  without (instance,job)",
             "instant": false,
             "legendFormat": "{{country}}",
             "refId": "A"
@@ -466,7 +467,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "expr": "cov19_tests",
+            "expr": "max(cov19_tests) without (instance,job)",
             "legendFormat": "cov19 Tests",
             "refId": "A"
           }
@@ -521,7 +522,7 @@
       "list": []
     },
     "time": {
-      "from": "now-6h",
+      "from": "now-24h",
       "to": "now"
     },
     "timepicker": {
@@ -539,7 +540,7 @@
       ]
     },
     "timezone": "",
-    "title": "Cov19",
-    "uid": "2fa2-Y_Wz",
-    "version": 1
+    "title": "Covid-19",
+    "uid": "2fa2-Y_Wz22",
+    "version": 2
   }
