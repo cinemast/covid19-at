@@ -8,5 +8,12 @@ provided by the [Austrian ministry for Health](https://www.sozialministerium.at/
 
 It then exposes the gathered metrics as [prometheus](https://prometheus.io/) endpoint under `http://localhost:8282/metrics`
 
-## Example Grafana Dashboard
+## Usage
+- ```docker-compose up```
+- Open [http://localhost:3000/d/2fa2-Y_Wz/cov19?orgId=1&refresh=5s](http://localhost:3000/d/2fa2-Y_Wz/cov19?orgId=1&refresh=5s) for Grafana (Credentials: admin/admin)
+- Open [http://localhost:9090/](http://localhost:9090/) for Prometheus
+- Open [http://localhost:8282/metrics](http://localhost:8282/metrics) for the metric exporter
+
+
+## Screenshot
 ![](screenshots/grafana.png)

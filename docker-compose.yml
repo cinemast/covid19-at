@@ -1,0 +1,26 @@
+version: '3'
+services: 
+  covid19:
+    build: .
+    ports:
+      - "8282:8282"
+  prometheus:
+    image: prom/prometheus:latest
+    depends_on:
+      - covid19
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    depends_on: 
+      - prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./config/datasource:/etc/grafana/provisioning/datasources
+      - ./config/dashboard:/etc/grafana/provisioning/dashboards

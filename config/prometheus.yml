@@ -1,0 +1,8 @@
+global:
+  scrape_interval:     1m
+  evaluation_interval: 1m 
+
+scrape_configs:
+  - job_name: 'covid19'
+    static_configs:
+    - targets: ['covid19:8282']
