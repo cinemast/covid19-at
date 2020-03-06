@@ -34,7 +34,7 @@ func getStats() Stats {
 	}
 
 	summary, err := document.Find(".abstract").First().Html()
-	re := regexp.MustCompile("Bestätigte Erkrankungsfälle: ([0-9]+)")
+	re := regexp.MustCompile("Bestätigte Fälle: ([0-9]+)")
 	re2 := regexp.MustCompile("Bisher durchgeführte Testungen: ([0-9]+)")
 
 	tests, _ := strconv.Atoi(re2.FindStringSubmatch(summary)[1])
