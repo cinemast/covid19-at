@@ -85,12 +85,12 @@ func getWorldStats() []WorldStat {
 	}
 
 	rows := table.Find("tr")
-	result := make([]WorldStat, rows.Size()-2)
+	result := make([]WorldStat, rows.Size()-1)
 
 	rows.Each(func(i int, s *goquery.Selection) {
-		if i > 0 && i < rows.Size()-1 {
+		if i < rows.Size()-1 {
 			rowStart := s.Find("td").First()
-			result[i-1] = WorldStat{
+			result[i] = WorldStat{
 				continent: rowStart.Text(),
 				country:   rowStart.Next().Text(),
 				infected:  atoi(rowStart.Next().Next().Text()),
