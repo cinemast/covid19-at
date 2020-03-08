@@ -17,7 +17,9 @@ It then exposes the gathered metrics as [prometheus](https://prometheus.io/) end
 
 ## Demo Setup
 
-https://covid19.spiessknafl.at
+- https://covid19.spiessknafl.at
+- https://covid19.spiessknafl.at/prometheus
+- https://covid19.spiessknafl.at/covid19/metrics
 
 ## Screenshot
 ![](screenshots/grafana.png)

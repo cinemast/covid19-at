@@ -9,18 +9,19 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-//Stats for Cov19 in Austria
-type Stats struct {
+//TotalStat for Cov19 in Austria
+type TotalStat struct {
 	tests     int
 	confirmed int
 }
 
-type Stat struct {
-	name   string
-	count  int
-	deaths int
+//ProvinceStat for Cov19
+type ProvinceStat struct {
+	name  string
+	count int
 }
 
+//WorldStat for Cov19 infections and deaths
 type WorldStat struct {
 	continent string
 	country   string
@@ -28,33 +29,30 @@ type WorldStat struct {
 	deaths    int
 }
 
-func getStats() Stats {
+func getStats() TotalStat {
 	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
-		return Stats{0, 0}
+		return TotalStat{0, 0}
 	}
 	defer response.Body.Close()
 
-	// Create a goquery document from the HTTP response
 	document, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
-		return Stats{0, 0}
+		return TotalStat{0, 0}
 	}
 
 	summary, err := document.Find(".abstract").First().Html()
 	re := regexp.MustCompile("Bestätigte Fälle: ([0-9]+)")
 	re2 := regexp.MustCompile("Bisher durchgeführte Testungen: ([0-9]+)")
 
-	tests := atoi(re2.FindStringSubmatch(summary)[1])
-	confirmed := atoi(re.FindStringSubmatch(summary)[1])
-	return Stats{tests: tests, confirmed: confirmed}
+	return TotalStat{tests: atoi(re2.FindStringSubmatch(summary)[1]), confirmed: atoi(re.FindStringSubmatch(summary)[1])}
 }
 
-func getDetails() []Stat {
+func getDetails() []ProvinceStat {
 	response, err := http.Get("https://www.sozialministerium.at/Themen/Gesundheit/Uebertragbare-Krankheiten/Infektionskrankheiten-A-Z/Neuartiges-Coronavirus.html")
 	if err != nil {
 		fmt.Println("Error get request")
-		return []Stat{}
+		return []ProvinceStat{}
 	}
 	defer response.Body.Close()
 
@@ -63,10 +61,10 @@ func getDetails() []Stat {
 	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`)
 	matches := re.FindAllStringSubmatch(summary, -1)
 
-	result := make([]Stat, len(matches))
+	result := make([]ProvinceStat, len(matches))
 	for i, match := range matches {
 		number := atoi(match[2])
-		result[i] = Stat{match[1], number, 0}
+		result[i] = ProvinceStat{match[1], number}
 	}
 
 	return result
@@ -78,6 +76,8 @@ func getWorldStats() []WorldStat {
 		fmt.Println("Error get request")
 
 	}
+	defer response.Body.Close()
+
 	document, err := goquery.NewDocumentFromReader(response.Body)
 	table := document.Find("table").Find("tbody")
 	if table == nil {
