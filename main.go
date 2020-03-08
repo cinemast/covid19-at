@@ -92,9 +92,9 @@ func getWorldStats() []WorldStat {
 			rowStart := s.Find("td").First()
 			result[i-1] = WorldStat{
 				continent: rowStart.Text(),
-				country:   rowStart.Next().Find("p").Text(),
-				infected:  atoi(rowStart.Next().Next().Find("p").Text()),
-				deaths:    atoi(rowStart.Next().Next().Next().Find("p").Text()),
+				country:   rowStart.Next().Text(),
+				infected:  atoi(rowStart.Next().Next().Text()),
+				deaths:    atoi(rowStart.Next().Next().Next().Text()),
 			}
 		}
 	})
