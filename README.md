@@ -5,6 +5,7 @@ provided by the [Austrian ministry for Health](https://www.sozialministerium.at/
 
 - https://www.sozialministerium.at/Themen/Gesundheit/Uebertragbare-Krankheiten/Infektionskrankheiten-A-Z/Neuartiges-Coronavirus.html
 - https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
+- https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases
 
 It then exposes the gathered metrics as [prometheus](https://prometheus.io/) endpoint under `http://localhost:8282/metrics`
 

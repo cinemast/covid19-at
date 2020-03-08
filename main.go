@@ -16,8 +16,16 @@ type Stats struct {
 }
 
 type Stat struct {
-	name  string
-	count int
+	name   string
+	count  int
+	deaths int
+}
+
+type WorldStat struct {
+	continent string
+	country   string
+	infected  int
+	deaths    int
 }
 
 func getStats() Stats {
@@ -37,8 +45,8 @@ func getStats() Stats {
 	re := regexp.MustCompile("Bestätigte Fälle: ([0-9]+)")
 	re2 := regexp.MustCompile("Bisher durchgeführte Testungen: ([0-9]+)")
 
-	tests, _ := strconv.Atoi(re2.FindStringSubmatch(summary)[1])
-	confirmed, _ := strconv.Atoi(re.FindStringSubmatch(summary)[1])
+	tests := atoi(re2.FindStringSubmatch(summary)[1])
+	confirmed := atoi(re.FindStringSubmatch(summary)[1])
 	return Stats{tests: tests, confirmed: confirmed}
 }
 
@@ -57,10 +65,47 @@ func getDetails() []Stat {
 
 	result := make([]Stat, len(matches))
 	for i, match := range matches {
-		number, _ := strconv.Atoi(match[2])
-		result[i] = Stat{match[1], number}
+		number := atoi(match[2])
+		result[i] = Stat{match[1], number, 0}
 	}
 
+	return result
+}
+
+func getWorldStats() []WorldStat {
+	response, err := http.Get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases")
+	if err != nil {
+		fmt.Println("Error get request")
+
+	}
+	document, err := goquery.NewDocumentFromReader(response.Body)
+	table := document.Find("table").Find("tbody")
+	if table == nil {
+		fmt.Println("Error getting world stats")
+	}
+
+	rows := table.Find("tr")
+	result := make([]WorldStat, rows.Size()-2)
+
+	rows.Each(func(i int, s *goquery.Selection) {
+		if i > 0 && i < rows.Size()-1 {
+			rowStart := s.Find("td").First()
+			result[i-1] = WorldStat{
+				continent: rowStart.Text(),
+				country:   rowStart.Next().Find("p").Text(),
+				infected:  atoi(rowStart.Next().Next().Find("p").Text()),
+				deaths:    atoi(rowStart.Next().Next().Next().Find("p").Text()),
+			}
+		}
+	})
+	return result
+}
+
+func atoi(s string) int {
+	result, err := strconv.Atoi(s)
+	if err != nil {
+		return 0
+	}
 	return result
 }
 
@@ -91,6 +136,10 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	for _, s := range getWorldStats() {
+		fmt.Fprintf(w, "cov19_world_death{continent=\"%s\",country=\"%s\"} %d\n", s.continent, s.country, s.deaths)
+		fmt.Fprintf(w, "cov19_world_infected{continent=\"%s\",country=\"%s\"} %d\n", s.continent, s.country, s.infected)
+	}
 }
 
 func main() {
