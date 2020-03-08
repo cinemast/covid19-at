@@ -15,7 +15,6 @@
     "editable": true,
     "gnetId": null,
     "graphTooltip": 0,
-    "id": 2,
     "links": [],
     "panels": [
       {
@@ -169,6 +168,7 @@
         "targets": [
           {
             "expr": "sum(cov19_world_infected)",
+            "instant": true,
             "refId": "A"
           }
         ],
@@ -179,7 +179,6 @@
       },
       {
         "datasource": null,
-        "description": "Source: https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases",
         "gridPos": {
           "h": 5,
           "w": 6,
@@ -205,12 +204,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
                     "color": "red",
-                    "value": 80
+                    "value": null
                   }
                 ]
               },
@@ -930,5 +925,5 @@
     "timezone": "",
     "title": "Covid-19-2",
     "uid": "2fa2-Y_Wz222",
-    "version": 7
+    "version": 2
   }
