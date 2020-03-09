@@ -43,12 +43,12 @@ func getStats() TotalStat {
 
 	summary, err := document.Find(".abstract").First().Html()
 	re := regexp.MustCompile("Fälle: ([0-9]+)")
-	//re2 := regexp.MustCompile("Testungen:.* ([0-9]+)")
+	re2 := regexp.MustCompile("Testungen: </strong> <strong>(?P<number>[0-9]+)")
 
 	confirmed := atoi(re.FindStringSubmatch(summary)[1])
-	//tests := atoi(re2.FindStringSubmatch(summary)[1])
+	tests := atoi(re2.FindAllStringSubmatch(summary, -1)[0][1])
 
-	return TotalStat{tests: 0, confirmed: confirmed}
+	return TotalStat{tests: tests, confirmed: confirmed}
 }
 
 func getDetails() []ProvinceStat {
