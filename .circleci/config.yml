@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.14
+    working_directory: /go/src/github.com/cinemast/covid19-at
+    steps:
+      - checkout
+      - run: GORACE="halt_on_error=1" go test -timeout 5s -race -v -coverprofile="coverage.txt" -covermode=atomic ./...
