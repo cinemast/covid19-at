@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -29,21 +30,16 @@ type WorldStat struct {
 	deaths    int
 }
 
-func getStats() TotalStat {
-	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
-	if err != nil {
-		return TotalStat{0, 0}
-	}
-	defer response.Body.Close()
-
-	document, err := goquery.NewDocumentFromReader(response.Body)
+func parseStats(reader io.Reader) TotalStat {
+	document, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		return TotalStat{0, 0}
 	}
 
 	summary, err := document.Find(".abstract").First().Html()
+	fmt.Println(summary)
 	re := regexp.MustCompile("Fälle: ([0-9]+)")
-	re2 := regexp.MustCompile("Testungen: </strong> <strong>(?P<number>[0-9]+)")
+	re2 := regexp.MustCompile("Testungen: </strong>  <strong>(?P<number>[0-9]+)")
 
 	confirmed := atoi(re.FindStringSubmatch(summary)[1])
 	tests := atoi(re2.FindAllStringSubmatch(summary, -1)[0][1])
@@ -51,16 +47,20 @@ func getStats() TotalStat {
 	return TotalStat{tests: tests, confirmed: confirmed}
 }
 
-func getDetails() []ProvinceStat {
-	response, err := http.Get("https://www.sozialministerium.at/Themen/Gesundheit/Uebertragbare-Krankheiten/Infektionskrankheiten-A-Z/Neuartiges-Coronavirus.html")
+func getStats() TotalStat {
+	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
-		fmt.Println("Error get request")
-		return []ProvinceStat{}
+		return TotalStat{0, 0}
 	}
 	defer response.Body.Close()
 
-	document, err := goquery.NewDocumentFromReader(response.Body)
-	summary, err := document.Find("#content").Html()
+	return parseStats(response.Body)
+
+}
+
+func parseProvinceStats(r io.Reader) []ProvinceStat {
+	document, _ := goquery.NewDocumentFromReader(r)
+	summary, _ := document.Find("#content").Html()
 	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`)
 	matches := re.FindAllStringSubmatch(summary, -1)
 
@@ -71,6 +71,17 @@ func getDetails() []ProvinceStat {
 	}
 
 	return result
+}
+
+func getDetails() []ProvinceStat {
+	response, err := http.Get("https://www.sozialministerium.at/Themen/Gesundheit/Uebertragbare-Krankheiten/Infektionskrankheiten-A-Z/Neuartiges-Coronavirus.html")
+	if err != nil {
+		fmt.Println("Error get request")
+		return []ProvinceStat{}
+	}
+	defer response.Body.Close()
+
+	return parseProvinceStats(response.Body)
 }
 
 func getWorldStats() []WorldStat {
