@@ -31,6 +31,9 @@ type WorldStat struct {
 	deaths    int
 }
 
+var ecdc_url = "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+var healthministry_url = "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+
 func parseStats(reader io.Reader) TotalStat {
 	document, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
@@ -60,9 +63,10 @@ func parseStats(reader io.Reader) TotalStat {
 }
 
 func getStats(c chan TotalStat) {
-	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
+	response, err := http.Get(healthministry_url)
 	if err != nil {
 		c <- TotalStat{0, 0, 0}
+		return
 	}
 	defer response.Body.Close()
 	c <- parseStats(response.Body)
@@ -90,9 +94,10 @@ func parseProvinceStats(r io.Reader) []ProvinceStat {
 }
 
 func getDetails(c chan []ProvinceStat) {
-	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
+	response, err := http.Get(healthministry_url)
 	if err != nil {
 		c <- []ProvinceStat{}
+		return
 	}
 	defer response.Body.Close()
 	c <- parseProvinceStats(response.Body)
@@ -122,10 +127,10 @@ func parseWorldStats(r io.Reader) []WorldStat {
 }
 
 func getWorldStats(c chan []WorldStat) {
-	response, err := http.Get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases")
+	response, err := http.Get(ecdc_url)
 	if err != nil {
-		response.Body.Close()
 		c <- make([]WorldStat, 0)
+		return
 	}
 	defer response.Body.Close()
 	c <- parseWorldStats(response.Body)
@@ -171,33 +176,36 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	summary, details, world := getStatsAsync()
 	failures := 0
 
+	errorResponse := ""
+
 	if summary.confirmed == 0 {
 		failures++
-		fmt.Fprintf(w, "Summary confirmed are failing\n")
+		errorResponse = errorResponse + "Summary confirmed are failing\n"
 	}
 
 	if summary.healed == 0 {
 		failures++
-		fmt.Fprintf(w, "Summary healed are failing\n")
+		errorResponse = errorResponse + "Summary healed are failing\n"
 	}
 
 	if summary.tests == 0 {
 		failures++
-		fmt.Fprintf(w, "Summary tests are failing\n")
+		errorResponse = errorResponse + "Summary tests are failing\n"
 	}
 
 	if len(details) == 0 || details[0].count == 0 {
 		failures++
-		fmt.Fprintf(w, "Details Austria are failing\n")
+		errorResponse = errorResponse + "Details Austria are failing\n"
 	}
 
 	if len(world) == 0 {
 		failures++
-		fmt.Fprintf(w, "World stats are failing\n")
+		errorResponse = errorResponse + "World stats are failing\n"
 	}
 
 	if failures > 0 {
 		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, errorResponse)
 	} else {
 		fmt.Fprintf(w, "Everything is fine :)\n")
 	}
@@ -206,5 +214,5 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/metrics", handleMetrics)
 	http.HandleFunc("/health", handleHealth)
-	http.ListenAndServe(":8282", nil)
+	http.ListenAndServe("localhost:8282", nil)
 }

@@ -73,6 +73,38 @@ func TestHealth(t *testing.T) {
 	assert.Equal(t, "Everything is fine :)\n", string(greeting))
 }
 
+func TestFailingHealth(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("<html></html>"))
+	}))
+	defer ts.Close()
+	ecdc_url_orig := ecdc_url
+	healthministry_url_orig := healthministry_url
+
+	ecdc_url = ts.URL
+	healthministry_url = ts.URL
+
+	ts2 := httptest.NewServer(http.HandlerFunc(handleHealth))
+	defer ts2.Close()
+
+	response, err := ts2.Client().Get(ts2.URL)
+
+	ecdc_url = ecdc_url_orig
+	healthministry_url = healthministry_url_orig
+
+	assert.Nil(t, err)
+	assert.Equal(t, 500, response.StatusCode)
+	errorDescription, err := ioutil.ReadAll(response.Body)
+	assert.Equal(t,
+		`Summary confirmed are failing
+Summary healed are failing
+Summary tests are failing
+Details Austria are failing
+World stats are failing
+`, string(errorDescription))
+
+}
+
 func TestMetrics(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(handleMetrics))
 	defer ts.Close()
@@ -86,5 +118,4 @@ func TestMetrics(t *testing.T) {
 	assert.True(t, strings.Contains(metricResult, "cov19_healed"))
 	assert.True(t, strings.Contains(metricResult, "cov19_world_infected"))
 	assert.True(t, strings.Contains(metricResult, "cov19_world_death"))
-
 }
