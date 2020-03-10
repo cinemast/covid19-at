@@ -59,15 +59,13 @@ func parseStats(reader io.Reader) TotalStat {
 	return TotalStat{tests: tests, confirmed: confirmed, healed: healed}
 }
 
-func getStats() TotalStat {
+func getStats(c chan TotalStat) {
 	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
-		return TotalStat{0, 0, 0}
+		c <- TotalStat{0, 0, 0}
 	}
 	defer response.Body.Close()
-
-	return parseStats(response.Body)
-
+	c <- parseStats(response.Body)
 }
 
 func parseProvinceStats(r io.Reader) []ProvinceStat {
@@ -91,14 +89,13 @@ func parseProvinceStats(r io.Reader) []ProvinceStat {
 	return result
 }
 
-func getDetails() []ProvinceStat {
+func getDetails(c chan []ProvinceStat) {
 	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
-		return []ProvinceStat{}
+		c <- []ProvinceStat{}
 	}
 	defer response.Body.Close()
-
-	return parseProvinceStats(response.Body)
+	c <- parseProvinceStats(response.Body)
 }
 
 func parseWorldStats(r io.Reader) []WorldStat {
@@ -124,14 +121,14 @@ func parseWorldStats(r io.Reader) []WorldStat {
 	return result
 }
 
-func getWorldStats() []WorldStat {
+func getWorldStats(c chan []WorldStat) {
 	response, err := http.Get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases")
 	if err != nil {
 		response.Body.Close()
-		return make([]WorldStat, 0)
+		c <- make([]WorldStat, 0)
 	}
 	defer response.Body.Close()
-	return parseWorldStats(response.Body)
+	c <- parseWorldStats(response.Body)
 }
 
 func atoi(s string) int {
@@ -153,13 +150,24 @@ func isAustria(location string) bool {
 	return false
 }
 
+func getStatsAsync() (TotalStat, []ProvinceStat, []WorldStat) {
+	statsChannel := make(chan TotalStat)
+	provinceChannel := make(chan []ProvinceStat)
+	worldChannel := make(chan []WorldStat)
+	go getStats(statsChannel)
+	go getDetails(provinceChannel)
+	go getWorldStats(worldChannel)
+	return <-statsChannel, <-provinceChannel, <-worldChannel
+}
+
 func handleMetrics(w http.ResponseWriter, r *http.Request) {
-	stats := getStats()
+
+	stats, details, worldStats := getStatsAsync()
+
 	fmt.Fprintf(w, "cov19_tests %d\n", stats.tests)
 	fmt.Fprintf(w, "cov19_confirmed %d\n", stats.confirmed)
 	fmt.Fprintf(w, "cov19_healed %d\n", stats.healed)
 
-	details := getDetails()
 	for _, detail := range details {
 		if isAustria(detail.name) {
 			fmt.Fprintf(w, "cov19_detail{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.count)
@@ -168,17 +176,14 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for _, s := range getWorldStats() {
+	for _, s := range worldStats {
 		fmt.Fprintf(w, "cov19_world_death{continent=\"%s\",country=\"%s\"} %d\n", s.continent, s.country, s.deaths)
 		fmt.Fprintf(w, "cov19_world_infected{continent=\"%s\",country=\"%s\"} %d\n", s.continent, s.country, s.infected)
 	}
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
-	summary := getStats()
-	details := getDetails()
-	world := getWorldStats()
-
+	summary, details, world := getStatsAsync()
 	failures := 0
 
 	if summary.confirmed == 0 {
