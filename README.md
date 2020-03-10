@@ -18,6 +18,10 @@ It then exposes the gathered metrics as [prometheus](https://prometheus.io/) end
 - Open [http://localhost:9090/](http://localhost:9090/) for Prometheus
 - Open [http://localhost:8282/metrics](http://localhost:8282/metrics) for the metric exporter
 
+## Docker Image
+- https://hub.docker.com/r/cinemast/covid19-at
+- `docker pull cinemast/covid19-at`
+
 ## Demo Setup
 
 - https://covid19.spiessknafl.at

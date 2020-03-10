@@ -139,17 +139,6 @@ func atoi(s string) int {
 	return result
 }
 
-var provinces = [9]string{"Wien", "Niederösterreich", "Oberösterreich", "Salzburg", "Tirol", "Vorarlberg", "Steiermark", "Burgenland", "Kärnten"}
-
-func isAustria(location string) bool {
-	for _, province := range provinces {
-		if province == location {
-			return true
-		}
-	}
-	return false
-}
-
 func getStatsAsync() (TotalStat, []ProvinceStat, []WorldStat) {
 	statsChannel := make(chan TotalStat)
 	provinceChannel := make(chan []ProvinceStat)
@@ -169,11 +158,7 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "cov19_healed %d\n", stats.healed)
 
 	for _, detail := range details {
-		if isAustria(detail.name) {
-			fmt.Fprintf(w, "cov19_detail{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.count)
-		} else {
-			fmt.Fprintf(w, "cov19_detail{country=\"%s\"} %d\n", detail.name, detail.count)
-		}
+		fmt.Fprintf(w, "cov19_detail{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.count)
 	}
 
 	for _, s := range worldStats {
