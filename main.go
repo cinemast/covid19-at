@@ -31,8 +31,8 @@ type WorldStat struct {
 	deaths    int
 }
 
-var ecdc_url = "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-var healthministry_url = "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+var ecdcURL = "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+var healthministryURL = "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
 
 func parseStats(reader io.Reader) TotalStat {
 	document, err := goquery.NewDocumentFromReader(reader)
@@ -63,7 +63,7 @@ func parseStats(reader io.Reader) TotalStat {
 }
 
 func getStats(c chan TotalStat) {
-	response, err := http.Get(healthministry_url)
+	response, err := http.Get(healthministryURL)
 	if err != nil {
 		c <- TotalStat{0, 0, 0}
 		return
@@ -94,7 +94,7 @@ func parseProvinceStats(r io.Reader) []ProvinceStat {
 }
 
 func getDetails(c chan []ProvinceStat) {
-	response, err := http.Get(healthministry_url)
+	response, err := http.Get(healthministryURL)
 	if err != nil {
 		c <- []ProvinceStat{}
 		return
@@ -127,7 +127,7 @@ func parseWorldStats(r io.Reader) []WorldStat {
 }
 
 func getWorldStats(c chan []WorldStat) {
-	response, err := http.Get(ecdc_url)
+	response, err := http.Get(ecdcURL)
 	if err != nil {
 		c <- make([]WorldStat, 0)
 		return

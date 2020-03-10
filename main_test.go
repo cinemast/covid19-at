@@ -78,19 +78,19 @@ func TestFailingHealth(t *testing.T) {
 		w.Write([]byte("<html></html>"))
 	}))
 	defer ts.Close()
-	ecdc_url_orig := ecdc_url
-	healthministry_url_orig := healthministry_url
+	ecdcURLOrig := ecdcURL
+	healthministryURLOrig := healthministryURL
 
-	ecdc_url = ts.URL
-	healthministry_url = ts.URL
+	ecdcURL = ts.URL
+	healthministryURL = ts.URL
 
 	ts2 := httptest.NewServer(http.HandlerFunc(handleHealth))
 	defer ts2.Close()
 
 	response, err := ts2.Client().Get(ts2.URL)
 
-	ecdc_url = ecdc_url_orig
-	healthministry_url = healthministry_url_orig
+	ecdcURL = ecdcURLOrig
+	healthministryURL = healthministryURLOrig
 
 	assert.Nil(t, err)
 	assert.Equal(t, 500, response.StatusCode)
