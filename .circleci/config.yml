@@ -7,3 +7,4 @@ jobs:
     steps:
       - checkout
       - run: GORACE="halt_on_error=1" go test -timeout 5s -race -v -coverprofile="coverage.txt" -covermode=atomic ./...
+      - run: bash <(curl -s https://codecov.io/bash)
