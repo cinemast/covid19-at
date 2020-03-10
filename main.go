@@ -14,6 +14,7 @@ import (
 type TotalStat struct {
 	tests     int
 	confirmed int
+	healed    int
 }
 
 //ProvinceStat for Cov19
@@ -33,24 +34,35 @@ type WorldStat struct {
 func parseStats(reader io.Reader) TotalStat {
 	document, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
-		return TotalStat{0, 0}
+		return TotalStat{0, 0, 0}
 	}
 
 	summary, err := document.Find(".abstract").First().Html()
-	fmt.Println(summary)
-	re := regexp.MustCompile("Fälle: ([0-9]+)")
-	re2 := regexp.MustCompile("Testungen: </strong>  <strong>(?P<number>[0-9]+)")
 
-	confirmed := atoi(re.FindStringSubmatch(summary)[1])
-	tests := atoi(re2.FindAllStringSubmatch(summary, -1)[0][1])
+	confirmedMatch := regexp.MustCompile(`Fälle: [^0-9]*([0-9]+)`).FindStringSubmatch(summary)
+	healed := 0
+	confirmed := 0
+	tests := 0
+	if len(confirmedMatch) >= 2 {
+		confirmed = atoi(confirmedMatch[1])
+	}
 
-	return TotalStat{tests: tests, confirmed: confirmed}
+	testsMatch := regexp.MustCompile(`Testungen: [^0-9]*(?P<number>[0-9]+)`).FindAllStringSubmatch(summary, -1)
+	if len(testsMatch) >= 1 && len(testsMatch[0]) >= 2 {
+		tests = atoi(testsMatch[0][1])
+	}
+
+	healedMatch := regexp.MustCompile(`Genesene Personen: [^0-9]*([0-9]+)`).FindStringSubmatch(summary)
+	if len(healedMatch) >= 2 {
+		healed = atoi(healedMatch[1])
+	}
+	return TotalStat{tests: tests, confirmed: confirmed, healed: healed}
 }
 
 func getStats() TotalStat {
 	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
-		return TotalStat{0, 0}
+		return TotalStat{0, 0, 0}
 	}
 	defer response.Body.Close()
 
@@ -60,7 +72,7 @@ func getStats() TotalStat {
 
 func parseProvinceStats(r io.Reader) []ProvinceStat {
 	document, _ := goquery.NewDocumentFromReader(r)
-	summary, _ := document.Find("#content").Html()
+	summary, _ := document.Find(".infobox").Html()
 	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`)
 	matches := re.FindAllStringSubmatch(summary, -1)
 
@@ -74,7 +86,7 @@ func parseProvinceStats(r io.Reader) []ProvinceStat {
 }
 
 func getDetails() []ProvinceStat {
-	response, err := http.Get("https://www.sozialministerium.at/Themen/Gesundheit/Uebertragbare-Krankheiten/Infektionskrankheiten-A-Z/Neuartiges-Coronavirus.html")
+	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
 		fmt.Println("Error get request")
 		return []ProvinceStat{}
@@ -136,9 +148,9 @@ func isAustria(location string) bool {
 
 func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	stats := getStats()
-	fmt.Println("Summary: ", stats)
 	fmt.Fprintf(w, "cov19_tests %d\n", stats.tests)
 	fmt.Fprintf(w, "cov19_confirmed %d\n", stats.confirmed)
+	fmt.Fprintf(w, "cov19_healed %d\n", stats.healed)
 
 	details := getDetails()
 	fmt.Println("Details: ", details)
@@ -156,7 +168,47 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	summary := getStats()
+	details := getDetails()
+	world := getWorldStats()
+
+	failures := 0
+
+	if summary.confirmed == 0 {
+		failures++
+		fmt.Fprintf(w, "Summary confirmed are failing\n")
+	}
+
+	if summary.healed == 0 {
+		failures++
+		fmt.Fprintf(w, "Summary healed are failing\n")
+	}
+
+	if summary.tests == 0 {
+		failures++
+		fmt.Fprintf(w, "Summary tests are failing\n")
+	}
+
+	if len(details) == 0 || details[0].count == 0 {
+		failures++
+		fmt.Fprintf(w, "Details Austria are failing\n")
+	}
+
+	if len(world) == 0 {
+		failures++
+		fmt.Fprintf(w, "World stats are failing\n")
+	}
+
+	if failures > 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+		fmt.Fprintf(w, "Everything is fine :)\n")
+	}
+}
+
 func main() {
 	http.HandleFunc("/metrics", handleMetrics)
+	http.HandleFunc("/health", handleHealth)
 	http.ListenAndServe(":8282", nil)
 }
