@@ -73,8 +73,14 @@ func getStats() TotalStat {
 func parseProvinceStats(r io.Reader) []ProvinceStat {
 	document, _ := goquery.NewDocumentFromReader(r)
 	summary, _ := document.Find(".infobox").Html()
+
+	summaryMatch := regexp.MustCompile(`Bestätigte Fälle.*`).FindAllString(summary, 1)
+	if len(summaryMatch) == 0 {
+		return make([]ProvinceStat, 0)
+	}
+
 	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`)
-	matches := re.FindAllStringSubmatch(summary, -1)
+	matches := re.FindAllStringSubmatch(summaryMatch[0], -1)
 
 	result := make([]ProvinceStat, len(matches))
 	for i, match := range matches {
@@ -88,7 +94,6 @@ func parseProvinceStats(r io.Reader) []ProvinceStat {
 func getDetails() []ProvinceStat {
 	response, err := http.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html")
 	if err != nil {
-		fmt.Println("Error get request")
 		return []ProvinceStat{}
 	}
 	defer response.Body.Close()
@@ -96,21 +101,13 @@ func getDetails() []ProvinceStat {
 	return parseProvinceStats(response.Body)
 }
 
-func getWorldStats() []WorldStat {
-	response, err := http.Get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases")
-	if err != nil {
-		fmt.Println("Error get request")
-
-	}
-	defer response.Body.Close()
-
-	document, err := goquery.NewDocumentFromReader(response.Body)
-	table := document.Find("table").Find("tbody")
-	if table == nil {
-		fmt.Println("Error getting world stats")
+func parseWorldStats(r io.Reader) []WorldStat {
+	document, _ := goquery.NewDocumentFromReader(r)
+	rows := document.Find("table").Find("tbody").Find("tr")
+	if rows.Size() == 0 {
+		return make([]WorldStat, 0)
 	}
 
-	rows := table.Find("tr")
 	result := make([]WorldStat, rows.Size()-1)
 
 	rows.Each(func(i int, s *goquery.Selection) {
@@ -125,6 +122,16 @@ func getWorldStats() []WorldStat {
 		}
 	})
 	return result
+}
+
+func getWorldStats() []WorldStat {
+	response, err := http.Get("https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases")
+	if err != nil {
+		response.Body.Close()
+		return make([]WorldStat, 0)
+	}
+	defer response.Body.Close()
+	return parseWorldStats(response.Body)
 }
 
 func atoi(s string) int {
@@ -153,7 +160,6 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "cov19_healed %d\n", stats.healed)
 
 	details := getDetails()
-	fmt.Println("Details: ", details)
 	for _, detail := range details {
 		if isAustria(detail.name) {
 			fmt.Fprintf(w, "cov19_detail{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.count)
