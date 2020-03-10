@@ -1,3 +1,7 @@
+[![CircleCI](https://circleci.com/gh/cinemast/dbolve.svg?style=svg)](https://circleci.com/gh/cinemast/covid19-at)
+[![codecov](https://codecov.io/gh/cinemast/dbolve/branch/master/graph/badge.svg)](https://codecov.io/gh/cinemast/covid19-at)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cinemast/dbolve)](https://goreportcard.com/report/github.com/cinemast/covid19-at)
+
 # covid19-at
 
 This is a small go-application that parses the following URLs for statistics regarding covid19-infections and deaths
