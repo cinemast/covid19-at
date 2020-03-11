@@ -70,7 +70,7 @@ func TestHealth(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 200, response.StatusCode)
 	greeting, err := ioutil.ReadAll(response.Body)
-	assert.Equal(t, "Everything is fine :)\n", string(greeting))
+	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/helth.png\"/></body></html>", string(greeting))
 }
 
 func TestFailingHealth(t *testing.T) {
@@ -96,12 +96,7 @@ func TestFailingHealth(t *testing.T) {
 	assert.Equal(t, 500, response.StatusCode)
 	errorDescription, err := ioutil.ReadAll(response.Body)
 	assert.Equal(t,
-		`Summary confirmed are failing
-Summary healed are failing
-Summary tests are failing
-Details Austria are failing
-World stats are failing
-`, string(errorDescription))
+		"<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Summary confirmed are failing\nSummary healed are failing\nSummary tests are failing\nDetails Austria are failing\nWorld stats are failing\n</pre></body></html>", string(errorDescription))
 
 }
 
