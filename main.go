@@ -208,9 +208,9 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 
 	if failures > 0 {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, errorResponse)
+		fmt.Fprintf(w, `<html><body><img width="500" src="https://spiessknafl.at/fine.jpg"/><pre>%s</pre></body></html>`, errorResponse)
 	} else {
-		fmt.Fprintf(w, "Everything is fine :)\n")
+		fmt.Fprintf(w, `<html><body><img width="500" src="https://spiessknafl.at/helth.png"/></body></html>`)
 	}
 }
 
