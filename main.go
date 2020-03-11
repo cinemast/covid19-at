@@ -217,5 +217,5 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/metrics", handleMetrics)
 	http.HandleFunc("/health", handleHealth)
-	http.ListenAndServe("localhost:8282", nil)
+	http.ListenAndServe(":8282", nil)
 }
