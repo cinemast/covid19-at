@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -50,12 +51,12 @@ func parseStats(reader io.Reader) TotalStat {
 		confirmed = atoi(confirmedMatch[1])
 	}
 
-	testsMatch := regexp.MustCompile(`Testungen: [^0-9]*(?P<number>[0-9]+)`).FindAllStringSubmatch(summary, -1)
+	testsMatch := regexp.MustCompile(`Testungen: [^0-9]*(?P<number>[0-9\.]+)`).FindAllStringSubmatch(summary, -1)
 	if len(testsMatch) >= 1 && len(testsMatch[0]) >= 2 {
 		tests = atoi(testsMatch[0][1])
 	}
 
-	healedMatch := regexp.MustCompile(`Genesene Personen: [^0-9]*([0-9]+)`).FindStringSubmatch(summary)
+	healedMatch := regexp.MustCompile(`Genesene Personen: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(healedMatch) >= 2 {
 		healed = atoi(healedMatch[1])
 	}
@@ -137,6 +138,8 @@ func getWorldStats(c chan []WorldStat) {
 }
 
 func atoi(s string) int {
+	s = strings.ReplaceAll(s, ".", "")
+	s = strings.ReplaceAll(s, ",", "")
 	result, err := strconv.Atoi(s)
 	if err != nil {
 		return 0
