@@ -20,8 +20,9 @@ type TotalStat struct {
 
 //ProvinceStat for Cov19
 type ProvinceStat struct {
-	name  string
-	count int
+	name     string
+	infected int
+	death    int
 }
 
 //WorldStat for Cov19 infections and deaths
@@ -73,25 +74,50 @@ func getStats(c chan TotalStat) {
 	c <- parseStats(response.Body)
 }
 
+func mapToSlice(m map[string]ProvinceStat) []ProvinceStat {
+	r := make([]ProvinceStat, len(m))
+	i := 0
+	for _, v := range m {
+		r[i] = v
+		i++
+	}
+	return r
+}
+
 func parseProvinceStats(r io.Reader) []ProvinceStat {
 	document, _ := goquery.NewDocumentFromReader(r)
 	summary, _ := document.Find(".infobox").Html()
-
+	result := make(map[string]ProvinceStat)
 	summaryMatch := regexp.MustCompile(`Bestätigte Fälle.*`).FindAllString(summary, 1)
 	if len(summaryMatch) == 0 {
-		return make([]ProvinceStat, 0)
+		return []ProvinceStat{}
 	}
 
 	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`)
 	matches := re.FindAllStringSubmatch(summaryMatch[0], -1)
 
-	result := make([]ProvinceStat, len(matches))
-	for i, match := range matches {
-		number := atoi(match[2])
-		result[i] = ProvinceStat{match[1], number}
+	for _, match := range matches {
+		stat := ProvinceStat{name: match[1], infected: atoi(match[2]), death: 0}
+		result[stat.name] = stat
 	}
 
-	return result
+	deathMatch := regexp.MustCompile(`Todesfälle.*`).FindAllString(summary, 1)
+	if len(deathMatch) > 0 {
+		matches := regexp.MustCompile(`(?P<number>\d+) \((?P<location>\S+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
+		for _, match := range matches {
+			if len(match) > 2 {
+				name := match[2]
+				death := atoi(match[1])
+				if val, ok := result[name]; ok {
+					val.death = death
+					result[name] = val
+				} else {
+					result[name] = ProvinceStat{name: name, infected: 0, death: death}
+				}
+			}
+		}
+	}
+	return mapToSlice(result)
 }
 
 func getDetails(c chan []ProvinceStat) {
@@ -166,7 +192,12 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "cov19_healed %d\n", stats.healed)
 
 	for _, detail := range details {
-		fmt.Fprintf(w, "cov19_detail{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.count)
+		if detail.infected > 0 {
+			fmt.Fprintf(w, "cov19_detail{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.infected)
+		}
+		if detail.death > 0 {
+			fmt.Fprintf(w, "cov19_detail_dead{country=\"Austria\",province=\"%s\"} %d\n", detail.name, detail.death)
+		}
 	}
 
 	for _, s := range worldStats {
@@ -196,7 +227,7 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 		errorResponse = errorResponse + "Summary tests are failing\n"
 	}
 
-	if len(details) == 0 || details[0].count == 0 {
+	if len(details) == 0 || (details[0].infected == 0 && details[0].death == 0) {
 		failures++
 		errorResponse = errorResponse + "Details Austria are failing\n"
 	}

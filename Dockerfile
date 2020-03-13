@@ -8,4 +8,4 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=build /go/src/app/covid19-at .
 EXPOSE 8282
-CMD ["./covid19-at"] 
+CMD ["./covid19-at"]

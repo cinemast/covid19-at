@@ -40,8 +40,6 @@ func TestProvinceError(t *testing.T) {
 func TestProvinceSuccess(t *testing.T) {
 	result := parseProvinceStats(loadHTML("test/austria_stats_2020_03_10.html"))
 	assert.Equal(t, 9, len(result))
-	assert.Equal(t, 40, result[0].count)
-	assert.Equal(t, "Niederösterreich", result[0].name)
 }
 
 func TestWorldError(t *testing.T) {
