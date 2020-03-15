@@ -14,8 +14,8 @@ It then exposes the gathered metrics as [prometheus](https://prometheus.io/) end
 
 ## Usage
 - ```docker-compose up```
-- Open [http://localhost:3000/d/2fa2-Y_Wz/cov19?orgId=1&refresh=5s](http://localhost:3000/d/2fa2-Y_Wz/cov19?orgId=1&refresh=5s) for Grafana (Credentials: admin/admin)
-- Open [http://localhost:9090/](http://localhost:9090/) for Prometheus
+- Open [http://localhost:3000/](http://localhost:3000/) for Grafana (Credentials: admin/admin)
+- Open [http://localhost:9090/prometheus](http://localhost:9090/prometheus) for Prometheus
 - Open [http://localhost:8282/metrics](http://localhost:8282/metrics) for the metric exporter
 
 ## Docker Image
