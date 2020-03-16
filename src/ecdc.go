@@ -9,6 +9,7 @@ import 	(
 //EcdcExporter for parsing tables
 type EcdcExporter struct {
 	url string
+	lp *LocationProvider
 }
 
 //EcdcStat for Cov19 infections and deaths
@@ -20,8 +21,8 @@ type EcdcStat struct {
 }
 
 //NewEcdcExporter creates a new exporter
-func NewEcdcExporter() *EcdcExporter {
-	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"}
+func NewEcdcExporter(lp *LocationProvider) *EcdcExporter {
+	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", lp:lp}
 }
 
 //GetMetrics parses the ECDC table
@@ -32,7 +33,13 @@ func (e *EcdcExporter) GetMetrics() ([]Metric, error) {
 	}
 	result := make([]Metric, 2*len(stats))
 	for i := range stats {
-		tags := map[string]string{"country": stats[i].country, "continent": stats[i].continent}
+		var tags map[string]string
+		if e.lp != nil && e.lp.GetLocation(stats[i].country) != nil {
+			location := e.lp.GetLocation(stats[i].country)
+			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
+		} else {
+			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent}
+		}
 		result[2*i].Tags = &tags
 		result[2*i].Name = "cov19_world_death"
 		result[2*i].Value = stats[i].deaths

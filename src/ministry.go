@@ -10,11 +10,12 @@ import(
 //MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
 type MinistryExporter struct {
 	url string
+	lp *LocationProvider
 }
 
 //NewMinistryExporter creates a new MinistryExporter
-func NewMinistryExporter() *MinistryExporter {
-	return &MinistryExporter{url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"}
+func NewMinistryExporter(lp *LocationProvider) *MinistryExporter {
+	return &MinistryExporter{url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", lp:lp}
 }
 
 //GetMetrics returns total stats and province details
@@ -29,8 +30,8 @@ func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
 		return nil, err
 	}
 
-	summary, err1 := GetTotalStats(document)
-	details, err2 := GetProvinceStats(document)
+	summary, err1 := e.GetTotalStats(document)
+	details, err2 := e.GetProvinceStats(document)
 
 	if err1 != nil && err2 != nil {
 		err = errors.New(err1.Error() + " " + err2.Error())
@@ -44,7 +45,7 @@ func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
 }
 
 //GetProvinceStats exports metrics per "Bundesland"
-func GetProvinceStats(document *goquery.Document) ([]Metric, error) {
+func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) ([]Metric, error) {
 	summary, err := document.Find(".infobox").Html()
 	if err != nil { 
 		return nil, err
@@ -59,7 +60,14 @@ func GetProvinceStats(document *goquery.Document) ([]Metric, error) {
 	matches := re.FindAllStringSubmatch(summaryMatch[0], -1)
 
 	for _, match := range matches {
-		tags := map[string]string{"country": "Austria", "province": match[1]}
+		var tags map[string]string
+		if e.lp != nil && e.lp.GetLocation(match[1]) != nil {
+			location := e.lp.GetLocation(match[1])
+			tags = map[string]string{"country": "Austria", "province": match[1], "latitude": ftos(location.lat), "longitude": ftos(location.long)}
+		} else {
+			tags = map[string]string{"country": "Austria", "province": match[1]}
+		}
+		
 		metric := Metric{Name: "cov19_detail", Value: atoi(match[2]), Tags: &tags}
 		result = append(result, metric)
 	}
@@ -86,7 +94,7 @@ func GetProvinceStats(document *goquery.Document) ([]Metric, error) {
 }
 
 //GetTotalStats gets sumamrized stats and number of tests
-func GetTotalStats(document *goquery.Document) ([]Metric, error) {
+func (e *MinistryExporter) GetTotalStats(document *goquery.Document) ([]Metric, error) {
 	result := make([]Metric, 0)
 	summary, err := document.Find(".abstract").First().Html()
 

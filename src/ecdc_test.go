@@ -7,7 +7,7 @@ import (
 
 func TestEcdcStats(t *testing.T) {
 
-	ecdc := NewEcdcExporter()
+	ecdc := NewEcdcExporter(nil)
 	result, err := ecdc.GetMetrics()
 
 	assert.Nil(t, err)

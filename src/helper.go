@@ -14,3 +14,15 @@ func atoi(s string) uint64 {
 	}
 	return result
 }
+
+func atof(s string) float64 {
+	result, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0
+	}
+	return result
+}
+
+func ftos(f float64) string {
+	return strconv.FormatFloat(f, 'f', 6, 64)
+}

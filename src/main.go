@@ -5,8 +5,9 @@ import (
 	"net/http"
 )
 
-var ministryExporter = NewMinistryExporter()
-var ecdcExporter = NewEcdcExporter()
+var locationProvider = NewLocationProvider()
+var ministryExporter = NewMinistryExporter(locationProvider)
+var ecdcExporter = NewEcdcExporter(locationProvider)
 
 func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	austriaStats, _ := ministryExporter.GetMetrics()
