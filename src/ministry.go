@@ -67,10 +67,17 @@ func GetProvinceStats(document *goquery.Document) ([]Metric, error) {
 	deathMatch := regexp.MustCompile(`Todesfälle.*`).FindAllString(summary, 1)
 	if len(deathMatch) > 0 {
 		matches := regexp.MustCompile(`(?P<number>\d+) \((?P<location>\S+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
+		provinceIndex := 2
+		valueIndex := 1
+		if len(matches) == 0 {
+			matches = regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
+			provinceIndex = 1
+			valueIndex = 2
+		}
 		for _, match := range matches {
 			if len(match) > 2 {
-				tags := map[string]string{"country": "Austria", "province": match[2]}
-				metric := Metric{Name: "cov19_detail_dead", Value: atoi(match[1]), Tags: &tags}
+				tags := map[string]string{"country": "Austria", "province": match[provinceIndex]}
+				metric := Metric{Name: "cov19_detail_dead", Value: atoi(match[valueIndex]), Tags: &tags}
 				result = append(result, metric)
 			}
 		}
