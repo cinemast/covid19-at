@@ -14,7 +14,6 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	if austriaStats != nil {
 		WriteMetrics(austriaStats, w)
 	}
-	
 	worldStats, _ := ecdcExporter.GetMetrics()
 	if worldStats != nil {
 		WriteMetrics(worldStats, w)
@@ -25,17 +24,31 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	failures := 0
 	errorResponse := ""
 	
-	_, err := ecdcExporter.GetMetrics()
-	if err != nil {
+	worldStats, err := ecdcExporter.GetMetrics()
+	if err != nil || len(worldStats) < 200 {
 		failures++
 		errorResponse = errorResponse + "World stats are failing\n"
 	}
 
-	_, err = ministryExporter.GetMetrics()
+	for _,m := range worldStats {
+		country := (*m.Tags)["country"]
+		if locationProvider.GetLocation(country) == nil {
+			failures++
+			errorResponse = errorResponse + "Could not find location for country " + country + "\n"
+		}
+	}
+
+	ministryStats, err := ministryExporter.GetMetrics()
 	if err != nil {
 		failures++
-		errorResponse = errorResponse + err.Error()
+		errorResponse = errorResponse + err.Error() + "\n"
 	}
+
+	if len(ministryStats) < 14 {
+		failures++
+		errorResponse = errorResponse + "Missing ministry stats\n"
+	}
+
 
 	if failures > 0 {
 		w.WriteHeader(http.StatusInternalServerError)
