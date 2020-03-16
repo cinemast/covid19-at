@@ -1,6 +1,6 @@
 FROM golang:latest as build
 WORKDIR /go/src/app
-COPY . .
+COPY src/ .
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" ./...
 
 FROM alpine:latest  

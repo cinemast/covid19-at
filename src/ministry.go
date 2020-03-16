@@ -19,13 +19,11 @@ func NewMinistryExporter() *MinistryExporter {
 
 //GetMetrics returns total stats and province details
 func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
-
 	response, err := http.Get(e.url)
 	if err != nil  {
 		return nil, err
 	}
 	defer response.Body.Close()
-
 	document, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
 		return nil, err
@@ -33,7 +31,6 @@ func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
 
 	summary, err1 := GetTotalStats(document)
 	details, err2 := GetProvinceStats(document)
-
 
 	if err1 != nil && err2 != nil {
 		err = errors.New(err1.Error() + " " + err2.Error())
@@ -80,7 +77,6 @@ func GetProvinceStats(document *goquery.Document) ([]Metric, error) {
 	}
 	return result, nil
 }
-
 
 //GetTotalStats gets sumamrized stats and number of tests
 func GetTotalStats(document *goquery.Document) ([]Metric, error) {
