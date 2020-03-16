@@ -712,7 +712,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_infected{continent=\"Europe\"} > 0 ",
+          "expr": "max(cov19_world_infected{continent=\"Europe\"}) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -807,7 +807,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_death{continent=\"Europe\"} > 0 ",
+          "expr": "max(cov19_world_death{continent=\"Europe\"}) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -902,7 +902,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_infected{continent=\"Europe\"} > 0 ",
+          "expr": "max(cov19_world_infected{continent=\"Europe\"}) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -997,7 +997,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_death{continent=\"Europe\"} > 0 ",
+          "expr": "max(cov19_world_death{continent=\"Europe\"}) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -1214,7 +1214,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_infected > 0 ",
+          "expr": "max(cov19_world_infected) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -1309,7 +1309,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_death > 0 ",
+          "expr": "max(cov19_world_death) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -1404,7 +1404,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_infected > 0 ",
+          "expr": "max(cov19_world_infected) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -1499,7 +1499,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_world_death > 0 ",
+          "expr": "max(cov19_world_death) by(country) > 0 ",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
