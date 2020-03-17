@@ -2,9 +2,10 @@ package main
 
 import (
 	"errors"
-	"github.com/PuerkitoBio/goquery"
 	"net/http"
 	"regexp"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 //MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
@@ -44,6 +45,14 @@ func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 	return append(summary, details...), err
 }
 
+func (e *MinistryExporter) getTags(province string) *map[string]string {
+	if e.lp != nil && e.lp.GetLocation(province) != nil {
+		location := e.lp.GetLocation(province)
+		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
+	}
+	return &map[string]string{"country": "Austria", "province": province}
+}
+
 //GetProvinceStats exports metrics per "Bundesland"
 func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics, error) {
 	summary, err := document.Find(".infobox").Html()
@@ -60,15 +69,7 @@ func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics
 	matches := re.FindAllStringSubmatch(summaryMatch[0], -1)
 
 	for _, match := range matches {
-		var tags map[string]string
-		if e.lp != nil && e.lp.GetLocation(match[1]) != nil {
-			location := e.lp.GetLocation(match[1])
-			tags = map[string]string{"country": "Austria", "province": match[1], "latitude": ftos(location.lat), "longitude": ftos(location.long)}
-		} else {
-			tags = map[string]string{"country": "Austria", "province": match[1]}
-		}
-
-		metric := Metric{Name: "cov19_detail", Value: atoi(match[2]), Tags: &tags}
+		metric := Metric{Name: "cov19_detail", Value: atoi(match[2]), Tags: e.getTags(match[1])}
 		result = append(result, metric)
 	}
 
@@ -84,8 +85,7 @@ func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics
 		}
 		for _, match := range matches {
 			if len(match) > 2 {
-				tags := map[string]string{"country": "Austria", "province": match[provinceIndex]}
-				metric := Metric{Name: "cov19_detail_dead", Value: atoi(match[valueIndex]), Tags: &tags}
+				metric := Metric{Name: "cov19_detail_dead", Value: atoi(match[valueIndex]), Tags: e.getTags(match[provinceIndex])}
 				result = append(result, metric)
 			}
 		}
