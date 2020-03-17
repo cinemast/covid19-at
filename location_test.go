@@ -1,9 +1,8 @@
 package main
 
-
-import(
-	"testing"
+import (
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 var p = NewLocationProvider()
@@ -23,8 +22,8 @@ func TestAustriaLocations(t *testing.T) {
 func TestLocationsForMetrics(t *testing.T) {
 	metrics, err := NewEcdcExporter(p).GetMetrics()
 	assert.Nil(t, err)
-	for _,m := range metrics {
+	for _, m := range metrics {
 		country := (*m.Tags)["country"]
-		assert.NotNil(t, p.GetLocation(country), "Country lookup: " + country)
+		assert.NotNil(t, p.GetLocation(country), "Country lookup: "+country)
 	}
 }

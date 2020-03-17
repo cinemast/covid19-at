@@ -61,6 +61,7 @@ func (metrics Metrics) FindMetric(metricName string, tagMatch string) *Metric {
 	return nil
 }
 
+//CheckMetric finds a matric and validates it ag ainst checkFunction
 func (metrics Metrics) CheckMetric(metricName, tagMatch string, checkFunction func(x uint64) bool) error {
 	metric := metrics.FindMetric(metricName, tagMatch)
 	if metric == nil {

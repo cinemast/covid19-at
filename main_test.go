@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHealth(t *testing.T) {
@@ -16,6 +17,8 @@ func TestHealth(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 200, response.StatusCode)
 	greeting, err := ioutil.ReadAll(response.Body)
+
+	assert.Nil(t, err)
 	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/helth.png\"/></body></html>", string(greeting))
 }
 
@@ -26,6 +29,8 @@ func TestMetrics(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 200, response.StatusCode)
 	metricsString, err := ioutil.ReadAll(response.Body)
+	assert.Nil(t, err)
+
 	metricResult := string(metricsString)
 	assert.True(t, strings.Contains(metricResult, "cov19_tests"))
 	assert.True(t, strings.Contains(metricResult, "cov19_confirmed"))

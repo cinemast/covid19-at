@@ -1,15 +1,15 @@
 package main
 
-import(
-	"testing"
+import (
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestMinistryStats(t *testing.T) {
 	ministry := NewMinistryExporter(nil)
 	result, err := ministry.GetMetrics()
 
-	assert.Nil(t,err)
+	assert.Nil(t, err)
 	assert.True(t, len(result) >= 14)
 
 	totalConfirmed := result.FindMetric("cov19_confirmed", "")

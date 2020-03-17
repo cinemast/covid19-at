@@ -1,6 +1,6 @@
 package main
 
-import(
+import (
 	"encoding/csv"
 	"os"
 )
@@ -12,18 +12,18 @@ type LocationProvider struct {
 
 //Location describes Lat/Long values
 type Location struct {
-	lat float64
+	lat  float64
 	long float64
 }
 
 //NewLocationProvider creates a new locationProvider
-func NewLocationProvider() *LocationProvider{
+func NewLocationProvider() *LocationProvider {
 	csvFile, _ := os.Open("locations.csv")
 	r := csv.NewReader(csvFile)
 	records, _ := r.ReadAll()
 	locations := make(map[string]Location, len(records))
 
-	for _,row := range records {
+	for _, row := range records {
 		locations[row[2]] = Location{atof(row[0]), atof(row[1])}
 	}
 	return &LocationProvider{locations: locations}
