@@ -1,27 +1,27 @@
 package main
 
-import(
-	"net/http"
+import (
 	"errors"
-	"regexp"
 	"github.com/PuerkitoBio/goquery"
+	"net/http"
+	"regexp"
 )
 
 //MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
 type MinistryExporter struct {
 	url string
-	lp *LocationProvider
+	lp  *LocationProvider
 }
 
 //NewMinistryExporter creates a new MinistryExporter
 func NewMinistryExporter(lp *LocationProvider) *MinistryExporter {
-	return &MinistryExporter{url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", lp:lp}
+	return &MinistryExporter{url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", lp: lp}
 }
 
 //GetMetrics returns total stats and province details
 func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
 	response, err := http.Get(e.url)
-	if err != nil  {
+	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
@@ -41,13 +41,13 @@ func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
 		err = err2
 	}
 
-	return append(summary,details...), err
+	return append(summary, details...), err
 }
 
 //GetProvinceStats exports metrics per "Bundesland"
 func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) ([]Metric, error) {
 	summary, err := document.Find(".infobox").Html()
-	if err != nil { 
+	if err != nil {
 		return nil, err
 	}
 	result := make([]Metric, 0)
@@ -67,7 +67,7 @@ func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) ([]Metri
 		} else {
 			tags = map[string]string{"country": "Austria", "province": match[1]}
 		}
-		
+
 		metric := Metric{Name: "cov19_detail", Value: atoi(match[2]), Tags: &tags}
 		result = append(result, metric)
 	}
@@ -102,7 +102,7 @@ func (e *MinistryExporter) GetTotalStats(document *goquery.Document) ([]Metric, 
 		return nil, err
 	}
 
-	confirmedMatch := regexp.MustCompile(`Fälle: [^0-9]*([0-9]+)`).FindStringSubmatch(summary)
+	confirmedMatch := regexp.MustCompile(`Fälle: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(confirmedMatch) >= 2 {
 		result = append(result, Metric{Name: "cov19_confirmed", Value: atoi(confirmedMatch[1])})
 	}
