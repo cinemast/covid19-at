@@ -19,7 +19,7 @@ func NewMinistryExporter(lp *LocationProvider) *MinistryExporter {
 }
 
 //GetMetrics returns total stats and province details
-func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
+func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 	response, err := http.Get(e.url)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (e *MinistryExporter) GetMetrics() ([]Metric, error) {
 }
 
 //GetProvinceStats exports metrics per "Bundesland"
-func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) ([]Metric, error) {
+func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics, error) {
 	summary, err := document.Find(".infobox").Html()
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) ([]Metri
 }
 
 //GetTotalStats gets sumamrized stats and number of tests
-func (e *MinistryExporter) GetTotalStats(document *goquery.Document) ([]Metric, error) {
+func (e *MinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, error) {
 	result := make([]Metric, 0)
 	summary, err := document.Find(".abstract").First().Html()
 

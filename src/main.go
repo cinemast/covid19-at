@@ -20,38 +20,55 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleHealth(w http.ResponseWriter, r *http.Request) {
-	failures := 0
-	errorResponse := ""
-	
-	worldStats, err := ecdcExporter.GetMetrics()
-	if err != nil || len(worldStats) < 200 {
-		failures++
-		errorResponse = errorResponse + "World stats are failing\n"
+func getErrors() []error {
+	errors := make([]error, 0)
+
+	worldStats, _ := ecdcExporter.GetMetrics()
+	if len(worldStats) < 200 {
+		errors = append(errors, fmt.Errorf("World stats are failing"))
 	}
 
-	for _,m := range worldStats {
+	for _, m := range worldStats {
 		country := (*m.Tags)["country"]
 		if locationProvider.GetLocation(country) == nil {
-			failures++
-			errorResponse = errorResponse + "Could not find location for country " + country + "\n"
+			errors = append(errors, fmt.Errorf("Could not find location for country: %s", country))
 		}
 	}
 
 	ministryStats, err := ministryExporter.GetMetrics()
 	if err != nil {
-		failures++
-		errorResponse = errorResponse + err.Error() + "\n"
+		errors = append(errors, err)
 	}
 
 	if len(ministryStats) < 14 {
-		failures++
-		errorResponse = errorResponse + "Missing ministry stats\n"
+		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
 
+	err = ministryStats.CheckMetric("cov19_confirmed", "", func(x uint64) bool { return x > 1000 })
+	if err != nil {
+		errors = append(errors, err)
+	}
 
-	if failures > 0 {
+	err = ministryStats.CheckMetric("cov19_tests", "", func(x uint64) bool { return x > 10000 })
+	if err != nil {
+		errors = append(errors, err)
+	}
+
+	err = ministryStats.CheckMetric("cov19_healed", "", func(x uint64) bool { return x > 5 })
+	if err != nil {
+		errors = append(errors, err)
+	}
+	return errors
+}
+
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	errors := getErrors()
+	if len(errors) > 0 {
 		w.WriteHeader(http.StatusInternalServerError)
+		errorResponse := ""
+		for _, e := range errors {
+			errorResponse += e.Error() + "\n"
+		}
 		fmt.Fprintf(w, `<html><body><img width="500" src="https://spiessknafl.at/fine.jpg"/><pre>%s</pre></body></html>`, errorResponse)
 	} else {
 		fmt.Fprintf(w, `<html><body><img width="500" src="https://spiessknafl.at/helth.png"/></body></html>`)

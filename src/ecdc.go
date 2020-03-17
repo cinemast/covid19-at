@@ -1,15 +1,15 @@
 package main
 
-import 	(
+import (
+	"errors"
 	"github.com/PuerkitoBio/goquery"
 	"net/http"
-	"errors"
 )
 
 //EcdcExporter for parsing tables
 type EcdcExporter struct {
 	url string
-	lp *LocationProvider
+	lp  *LocationProvider
 }
 
 //EcdcStat for Cov19 infections and deaths
@@ -22,11 +22,11 @@ type EcdcStat struct {
 
 //NewEcdcExporter creates a new exporter
 func NewEcdcExporter(lp *LocationProvider) *EcdcExporter {
-	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", lp:lp}
+	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", lp: lp}
 }
 
 //GetMetrics parses the ECDC table
-func (e *EcdcExporter) GetMetrics() ([]Metric, error) {
+func (e *EcdcExporter) GetMetrics() (Metrics, error) {
 	stats, err := getEcdcStat(e.url)
 	if err != nil {
 		return nil, err
@@ -50,9 +50,9 @@ func (e *EcdcExporter) GetMetrics() ([]Metric, error) {
 	return result, nil
 }
 
-func getEcdcStat(url string) ([]EcdcStat,error) {
+func getEcdcStat(url string) ([]EcdcStat, error) {
 	response, err := http.Get(url)
-	if err != nil  {
+	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
@@ -76,5 +76,5 @@ func getEcdcStat(url string) ([]EcdcStat,error) {
 			}
 		}
 	})
-	return result,nil
+	return result, nil
 }
