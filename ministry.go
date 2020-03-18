@@ -116,5 +116,11 @@ func (e *MinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, e
 	if len(healedMatch) >= 2 {
 		result = append(result, Metric{Name: "cov19_healed", Value: atoi(healedMatch[1])})
 	}
+
+	deadMatch := regexp.MustCompile(`Todesfälle: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
+	if len(deadMatch) >= 2 {
+		result = append(result, Metric{Name: "cov19_dead", Value: atoi(deadMatch[1])})
+	}
+
 	return result, nil
 }

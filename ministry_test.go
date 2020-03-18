@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMinistryStats(t *testing.T) {
@@ -10,7 +11,7 @@ func TestMinistryStats(t *testing.T) {
 	result, err := ministry.GetMetrics()
 
 	assert.Nil(t, err)
-	assert.True(t, len(result) >= 14)
+	assert.True(t, len(result) >= 10)
 
 	totalConfirmed := result.FindMetric("cov19_confirmed", "")
 	assert.NotNil(t, totalConfirmed)
@@ -23,4 +24,8 @@ func TestMinistryStats(t *testing.T) {
 	healed := result.FindMetric("cov19_healed", "")
 	assert.NotNil(t, healed)
 	assert.True(t, healed.Value > 5)
+
+	dead := result.FindMetric("cov19_dead", "")
+	assert.NotNil(t, dead)
+	assert.True(t, dead.Value >= 4)
 }

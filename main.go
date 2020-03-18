@@ -40,7 +40,7 @@ func getErrors() []error {
 		errors = append(errors, err)
 	}
 
-	if len(ministryStats) < 14 {
+	if len(ministryStats) < 10 {
 		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
 
