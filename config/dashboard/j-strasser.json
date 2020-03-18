@@ -613,7 +613,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_detail) without(job, instance,latitude,longitude)",
+          "expr": "max(cov19_detail) without(job, instance, latitude,longitude,population)",
           "instant": false,
           "legendFormat": "{{province}}",
           "refId": "A"
@@ -715,7 +715,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_detail_dead) without(job, instance,latitude,longitude)",
+          "expr": "max(cov19_detail_dead) without(job, instance, latitude,longitude,population)",
           "instant": false,
           "legendFormat": "{{province}}",
           "refId": "A"
@@ -994,7 +994,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_world_infected{continent=\"Europe\"} > 0) without(job, instance,latitude,longitude)",
+          "expr": "max(cov19_world_infected{continent=\"Europe\"} > 0) without(job, instance,latitude,longitude, population)",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -1098,7 +1098,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_world_death{continent=\"Europe\"} > 0) without(job, instance,latitude,longitude)",
+          "expr": "max(cov19_world_death{continent=\"Europe\"} > 0) without(job, instance,latitude,longitude,population)",
           "instant": false,
           "legendFormat": "{{country}}",
           "refId": "A"
@@ -1379,7 +1379,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_world_infected > 0) without(job, instance,latitude,longitude)",
+          "expr": "max(cov19_world_infected > 0) without(job, instance,latitude,longitude,population)",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
@@ -1481,7 +1481,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_world_death > 0) without(job, instance,latitude,longitude)",
+          "expr": "max(cov19_world_death > 0) without(job, instance,latitude,longitude,population)",
           "legendFormat": "{{country}}",
           "refId": "A"
         }

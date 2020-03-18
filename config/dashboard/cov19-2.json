@@ -236,7 +236,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_detail{country=\"Austria\"}) without (instance,job,latitude,longitude)",
+          "expr": "max(cov19_detail{country=\"Austria\"}) without (instance,job,latitude,longitude,population)",
           "legendFormat": "{{province}}",
           "refId": "A"
         }
@@ -496,7 +496,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_detail{country=\"Austria\"}) without (instance,job,latitude,longitude)",
+          "expr": "max(cov19_detail{country=\"Austria\"}) without (instance,job,latitude,longitude,population)",
           "legendFormat": "{{province}}",
           "refId": "A"
         }
@@ -589,7 +589,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_detail_dead{country=\"Austria\"}) without (instance,job,latitude,longitude)",
+          "expr": "max(cov19_detail_dead{country=\"Austria\"}) without (instance,job,latitude,longitude,population)",
           "legendFormat": "{{province}}",
           "refId": "A"
         }

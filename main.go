@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-var locationProvider = NewLocationProvider()
-var ministryExporter = NewMinistryExporter(locationProvider)
-var ecdcExporter = NewEcdcExporter(locationProvider)
+var metadataProvider = NewMetadataProvider()
+var ministryExporter = NewMinistryExporter(metadataProvider)
+var ecdcExporter = NewEcdcExporter(metadataProvider)
 
 func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	austriaStats, _ := ministryExporter.GetMetrics()
@@ -30,7 +30,7 @@ func getErrors() []error {
 
 	for _, m := range worldStats {
 		country := (*m.Tags)["country"]
-		if locationProvider.GetLocation(country) == nil {
+		if metadataProvider.GetLocation(country) == nil {
 			errors = append(errors, fmt.Errorf("Could not find location for country: %s", country))
 		}
 	}

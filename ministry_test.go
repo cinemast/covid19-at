@@ -7,7 +7,7 @@ import (
 )
 
 func TestMinistryStats(t *testing.T) {
-	ministry := NewMinistryExporter(nil)
+	ministry := NewMinistryExporter(NewMetadataProvider())
 	result, err := ministry.GetMetrics()
 
 	assert.Nil(t, err)
@@ -28,4 +28,11 @@ func TestMinistryStats(t *testing.T) {
 	dead := result.FindMetric("cov19_dead", "")
 	assert.NotNil(t, dead)
 	assert.True(t, dead.Value >= 4)
+
+	vienna := result.FindMetric("cov19_detail", "province=Wien")
+	assert.NotNil(t, vienna)
+	assert.Equal(t, (*vienna.Tags)["country"], "Austria")
+	assert.Equal(t, (*vienna.Tags)["latitude"], "48.206351")
+	assert.Equal(t, (*vienna.Tags)["longitude"], "16.374817")
+	assert.Equal(t, (*vienna.Tags)["population"], "1889100")
 }

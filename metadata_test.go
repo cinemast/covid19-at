@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var p = NewLocationProvider()
+var p = NewMetadataProvider()
 
 func TestAustriaLocations(t *testing.T) {
 	assert.NotNil(t, p.GetLocation("Wien"))
@@ -26,5 +26,14 @@ func TestLocationsForMetrics(t *testing.T) {
 	for _, m := range metrics {
 		country := (*m.Tags)["country"]
 		assert.NotNil(t, p.GetLocation(country), "Country lookup: "+country)
+	}
+}
+
+func TestLocationsPopulationForMetrics(t *testing.T) {
+	metrics, err := NewEcdcExporter(p).GetMetrics()
+	assert.Nil(t, err)
+	for _, m := range metrics {
+		country := (*m.Tags)["country"]
+		assert.True(t, p.GetPopulation(country) > 0, "Population lookup: "+country)
 	}
 }

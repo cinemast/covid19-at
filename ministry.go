@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"regexp"
+	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -11,11 +12,11 @@ import (
 //MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
 type MinistryExporter struct {
 	url string
-	lp  *LocationProvider
+	lp  *MetadataProvider
 }
 
 //NewMinistryExporter creates a new MinistryExporter
-func NewMinistryExporter(lp *LocationProvider) *MinistryExporter {
+func NewMinistryExporter(lp *MetadataProvider) *MinistryExporter {
 	return &MinistryExporter{url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", lp: lp}
 }
 
@@ -48,7 +49,8 @@ func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 func (e *MinistryExporter) getTags(province string) *map[string]string {
 	if e.lp != nil && e.lp.GetLocation(province) != nil {
 		location := e.lp.GetLocation(province)
-		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
+		population := strconv.FormatUint(e.lp.GetPopulation(province), 10)
+		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long), "population": population}
 	}
 	return &map[string]string{"country": "Austria", "province": province}
 }

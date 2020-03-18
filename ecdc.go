@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -12,7 +13,7 @@ import (
 //EcdcExporter for parsing tables
 type EcdcExporter struct {
 	url string
-	lp  *LocationProvider
+	lp  *MetadataProvider
 }
 
 //EcdcStat for Cov19 infections and deaths
@@ -24,7 +25,7 @@ type EcdcStat struct {
 }
 
 //NewEcdcExporter creates a new exporter
-func NewEcdcExporter(lp *LocationProvider) *EcdcExporter {
+func NewEcdcExporter(lp *MetadataProvider) *EcdcExporter {
 	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", lp: lp}
 }
 
@@ -54,7 +55,8 @@ func (e *EcdcExporter) GetMetrics() (Metrics, error) {
 		var tags map[string]string
 		if e.lp != nil && e.lp.GetLocation(stats[i].country) != nil {
 			location := e.lp.GetLocation(stats[i].country)
-			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
+			population := strconv.FormatUint(e.lp.GetPopulation(stats[i].country), 10)
+			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long), "population": population}
 		} else {
 			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent}
 		}
