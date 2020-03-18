@@ -2,11 +2,9 @@ package main
 
 import (
 	"errors"
+	"github.com/PuerkitoBio/goquery"
 	"net/http"
 	"regexp"
-	"strconv"
-
-	"github.com/PuerkitoBio/goquery"
 )
 
 //MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
@@ -33,7 +31,7 @@ func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 	}
 
 	summary, err1 := e.GetTotalStats(document)
-	details, err2 := e.GetProvinceStats(document)
+	provinceStats, err2 := e.getProvinceStats(document)
 
 	if err1 != nil && err2 != nil {
 		err = errors.New(err1.Error() + " " + err2.Error())
@@ -43,25 +41,42 @@ func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 		err = err2
 	}
 
-	return append(summary, details...), err
+	provinceMetrics := make(Metrics, 0)
+	for _, s := range provinceStats {
+		tags := e.getTags(s.location)
+		provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail", Value: float64(s.infected), Tags: tags})
+		population := e.lp.GetPopulation(s.location)
+
+		if population > 0 {
+			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_infection_rate", Value: infectionRate(s.infected, population), Tags: tags})
+			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_infected_per_100k", Value: infection100k(s.infected, population), Tags: tags})
+		}
+		if s.deaths > 0 {
+			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_dead", Value: float64(s.deaths), Tags: tags})
+			if population > 0 {
+				provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_fatality_rate", Value: fatalityRate(s.infected, s.deaths), Tags: tags})
+			}
+		}
+	}
+
+	return append(summary, provinceMetrics...), err
 }
 
 func (e *MinistryExporter) getTags(province string) *map[string]string {
 	if e.lp != nil && e.lp.GetLocation(province) != nil {
 		location := e.lp.GetLocation(province)
-		population := strconv.FormatUint(e.lp.GetPopulation(province), 10)
-		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long), "population": population}
+		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
 	}
 	return &map[string]string{"country": "Austria", "province": province}
 }
 
 //GetProvinceStats exports metrics per "Bundesland"
-func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics, error) {
+func (e *MinistryExporter) getProvinceStats(document *goquery.Document) (map[string]CovidStat, error) {
+	result := make(map[string]CovidStat)
 	summary, err := document.Find(".infobox").Html()
 	if err != nil {
 		return nil, err
 	}
-	result := make([]Metric, 0)
 	summaryMatch := regexp.MustCompile(`Bestätigte Fälle.*`).FindAllString(summary, 1)
 	if len(summaryMatch) == 0 {
 		return nil, errors.New(`Could not find "Bestätigte Fälle"`)
@@ -71,8 +86,10 @@ func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics
 	matches := re.FindAllStringSubmatch(summaryMatch[0], -1)
 
 	for _, match := range matches {
-		metric := Metric{Name: "cov19_detail", Value: atoi(match[2]), Tags: e.getTags(match[1])}
-		result = append(result, metric)
+		infected := atoi(match[2])
+		province := match[1]
+		result[province] = CovidStat{province, infected, 0}
+
 	}
 
 	deathMatch := regexp.MustCompile(`Todesfälle.*`).FindAllString(summary, 1)
@@ -87,8 +104,10 @@ func (e *MinistryExporter) GetProvinceStats(document *goquery.Document) (Metrics
 		}
 		for _, match := range matches {
 			if len(match) > 2 {
-				metric := Metric{Name: "cov19_detail_dead", Value: atoi(match[valueIndex]), Tags: e.getTags(match[provinceIndex])}
-				result = append(result, metric)
+				location := match[provinceIndex]
+				stat := result[location]
+				stat.deaths = atoi(match[valueIndex])
+				result[location] = stat
 			}
 		}
 	}
@@ -106,22 +125,22 @@ func (e *MinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, e
 
 	confirmedMatch := regexp.MustCompile(`Fälle: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(confirmedMatch) >= 2 {
-		result = append(result, Metric{Name: "cov19_confirmed", Value: atoi(confirmedMatch[1])})
+		result = append(result, Metric{Name: "cov19_confirmed", Value: atoif(confirmedMatch[1])})
 	}
 
 	testsMatch := regexp.MustCompile(`Testungen: [^0-9]*(?P<number>[0-9\.]+)`).FindAllStringSubmatch(summary, -1)
 	if len(testsMatch) >= 1 && len(testsMatch[0]) >= 2 {
-		result = append(result, Metric{Name: "cov19_tests", Value: atoi(testsMatch[0][1])})
+		result = append(result, Metric{Name: "cov19_tests", Value: atoif(testsMatch[0][1])})
 	}
 
 	healedMatch := regexp.MustCompile(`Genesene Personen: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(healedMatch) >= 2 {
-		result = append(result, Metric{Name: "cov19_healed", Value: atoi(healedMatch[1])})
+		result = append(result, Metric{Name: "cov19_healed", Value: atoif(healedMatch[1])})
 	}
 
 	deadMatch := regexp.MustCompile(`Todesfälle: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(deadMatch) >= 2 {
-		result = append(result, Metric{Name: "cov19_dead", Value: atoi(deadMatch[1])})
+		result = append(result, Metric{Name: "cov19_dead", Value: atoif(deadMatch[1])})
 	}
 
 	return result, nil

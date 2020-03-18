@@ -17,10 +17,8 @@ type EcdcExporter struct {
 
 //EcdcStat for Cov19 infections and deaths
 type EcdcStat struct {
+	CovidStat
 	continent string
-	country   string
-	infected  uint64
-	deaths    uint64
 }
 
 //NewEcdcExporter creates a new exporter
@@ -51,32 +49,34 @@ func (e *EcdcExporter) GetMetrics() (Metrics, error) {
 	}
 	result := make([]Metric, 0)
 	for i := range stats {
-		var tags map[string]string
-		if e.lp != nil && e.lp.GetLocation(stats[i].country) != nil {
-			location := e.lp.GetLocation(stats[i].country)
-			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
-		} else {
-			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent}
-		}
+		tags := e.getTags(stats, i)
 		deaths := stats[i].deaths
 		infected := stats[i].infected
-		population := e.lp.GetPopulation(stats[i].country)
+		population := e.lp.GetPopulation(stats[i].location)
 		if deaths > 0 {
-			result = append(result, Metric{Name: "cov19_world_death", Value: deaths, Tags: &tags})
+			result = append(result, Metric{Name: "cov19_world_death", Value: float64(deaths), Tags: &tags})
 			if population > 0 {
-				result = append(result, Metric{Name: "cov19_world_fatality_rate", Value: deaths / infected, Tags: &tags})
+				result = append(result, Metric{Name: "cov19_world_fatality_rate", Value: fatalityRate(infected, deaths), Tags: &tags})
 			}
 		}
-		result = append(result, Metric{Name: "cov19_world_infected", Value: infected, Tags: &tags})
-
-		//TODO: fatality rate
-		//percent infected
-
+		result = append(result, Metric{Name: "cov19_world_infected", Value: float64(infected), Tags: &tags})
 		if population > 0 {
-
+			result = append(result, Metric{Name: "cov19_world_infection_rate", Value: infectionRate(infected, population), Tags: &tags})
+			result = append(result, Metric{Name: "cov19_world_infected_per_100k", Value: infection100k(infected, population), Tags: &tags})
 		}
 	}
 	return result, nil
+}
+
+func (e *EcdcExporter) getTags(stats []EcdcStat, i int) map[string]string {
+	var tags map[string]string
+	if e.lp != nil && e.lp.GetLocation(stats[i].location) != nil {
+		location := e.lp.GetLocation(stats[i].location)
+		tags = map[string]string{"country": stats[i].location, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
+	} else {
+		tags = map[string]string{"country": stats[i].location, "continent": stats[i].continent}
+	}
+	return tags
 }
 
 func getEcdcStat(url string) ([]EcdcStat, error) {
@@ -98,10 +98,12 @@ func getEcdcStat(url string) ([]EcdcStat, error) {
 		if i < rows.Size()-1 {
 			rowStart := s.Find("td").First()
 			result[i] = EcdcStat{
-				continent: rowStart.Text(),
-				country:   normalizeCountryName(rowStart.Next().Text()),
-				infected:  atoi(rowStart.Next().Next().Text()),
-				deaths:    atoi(rowStart.Next().Next().Next().Text()),
+				CovidStat{
+					location: normalizeCountryName(rowStart.Next().Text()),
+					infected: atoi(rowStart.Next().Next().Text()),
+					deaths:   atoi(rowStart.Next().Next().Next().Text()),
+				},
+				rowStart.Text(),
 			}
 		}
 	})

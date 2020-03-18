@@ -9,7 +9,7 @@ var metadataProvider = NewMetadataProvider()
 var ministryExporter = NewMinistryExporter(metadataProvider)
 var ecdcExporter = NewEcdcExporter(metadataProvider)
 
-func handleMetrics(w http.ResponseWriter, r *http.Request) {
+func handleMetrics(w http.ResponseWriter, _ *http.Request) {
 	austriaStats, _ := ministryExporter.GetMetrics()
 	if austriaStats != nil {
 		WriteMetrics(austriaStats, w)
@@ -44,24 +44,24 @@ func getErrors() []error {
 		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
 
-	err = ministryStats.CheckMetric("cov19_confirmed", "", func(x uint64) bool { return x > 1000 })
+	err = ministryStats.CheckMetric("cov19_confirmed", "", func(x float64) bool { return x > 1000 })
 	if err != nil {
 		errors = append(errors, err)
 	}
 
-	err = ministryStats.CheckMetric("cov19_tests", "", func(x uint64) bool { return x > 10000 })
+	err = ministryStats.CheckMetric("cov19_tests", "", func(x float64) bool { return x > 10000 })
 	if err != nil {
 		errors = append(errors, err)
 	}
 
-	err = ministryStats.CheckMetric("cov19_healed", "", func(x uint64) bool { return x > 5 })
+	err = ministryStats.CheckMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
 	if err != nil {
 		errors = append(errors, err)
 	}
 	return errors
 }
 
-func handleHealth(w http.ResponseWriter, r *http.Request) {
+func handleHealth(w http.ResponseWriter, _ *http.Request) {
 	errors := getErrors()
 	if len(errors) > 0 {
 		w.WriteHeader(http.StatusInternalServerError)

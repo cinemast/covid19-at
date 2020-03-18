@@ -34,5 +34,12 @@ func TestMinistryStats(t *testing.T) {
 	assert.Equal(t, (*vienna.Tags)["country"], "Austria")
 	assert.Equal(t, (*vienna.Tags)["latitude"], "48.206351")
 	assert.Equal(t, (*vienna.Tags)["longitude"], "16.374817")
-	assert.Equal(t, (*vienna.Tags)["population"], "1889100")
+
+	infectionRate := result.FindMetric("cov19_detail_infection_rate", "province=Wien")
+	assert.NotNil(t, infectionRate)
+	assert.True(t, infectionRate.Value > 0 && infectionRate.Value < 1, infectionRate.Value)
+
+	infected100k := result.FindMetric("cov19_detail_infected_per_100k", "province=Wien")
+	assert.NotNil(t, infected100k)
+	assert.True(t, infected100k.Value > 5 && infected100k.Value < 100, infected100k.Value)
 }
