@@ -2,8 +2,11 @@ package main
 
 import (
 	"errors"
-	"github.com/PuerkitoBio/goquery"
 	"net/http"
+	"strings"
+	"unicode"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 //EcdcExporter for parsing tables
@@ -23,6 +26,21 @@ type EcdcStat struct {
 //NewEcdcExporter creates a new exporter
 func NewEcdcExporter(lp *LocationProvider) *EcdcExporter {
 	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", lp: lp}
+}
+
+func normalizeCountryName(name string) string {
+	name = strings.TrimSpace(name)
+	parts := strings.FieldsFunc(name, func(r rune) bool { return r == ' ' || r == '_' })
+	for i, part := range parts {
+		if strings.ToUpper(part) == "AND" || strings.ToUpper(part) == "OF" {
+			parts[i] = strings.ToLower(part)
+		} else {
+			runes := []rune(part)
+			parts[i] = string(unicode.ToUpper(runes[0])) + strings.ToLower(string(runes[1:]))
+		}
+	}
+
+	return strings.Join(parts, " ")
 }
 
 //GetMetrics parses the ECDC table

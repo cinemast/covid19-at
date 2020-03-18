@@ -1,9 +1,17 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
+
+func TestNormalizeName(t *testing.T) {
+	assert.Equal(t, "Saudi Arabia", normalizeCountryName("Saudi_Arabia"))
+	assert.Equal(t, "Canada", normalizeCountryName("CANADA"))
+	assert.Equal(t, "United States of America", normalizeCountryName("United_States_of_America"))
+	assert.Equal(t, "Antigua and Barbuda", normalizeCountryName("Antigua_and_Barbuda"))
+}
 
 func TestEcdcStats(t *testing.T) {
 
