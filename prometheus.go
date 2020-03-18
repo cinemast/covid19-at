@@ -16,10 +16,9 @@ type MetricExporter interface {
 
 //Metric struct used for the exporter
 type Metric struct {
-	Name string
-	//Descrition string
+	Name  string
 	Tags  *map[string]string
-	Value uint64
+	Value string
 }
 
 //WriteMetrics exprots a slice of metrics to a writer

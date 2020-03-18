@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"net/http"
-	"strconv"
 	"strings"
 	"unicode"
 
@@ -50,22 +49,32 @@ func (e *EcdcExporter) GetMetrics() (Metrics, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := make([]Metric, 2*len(stats))
+	result := make([]Metric, 0)
 	for i := range stats {
 		var tags map[string]string
 		if e.lp != nil && e.lp.GetLocation(stats[i].country) != nil {
 			location := e.lp.GetLocation(stats[i].country)
-			population := strconv.FormatUint(e.lp.GetPopulation(stats[i].country), 10)
-			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long), "population": population}
+			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
 		} else {
 			tags = map[string]string{"country": stats[i].country, "continent": stats[i].continent}
 		}
-		result[2*i].Tags = &tags
-		result[2*i].Name = "cov19_world_death"
-		result[2*i].Value = stats[i].deaths
-		result[2*i+1].Tags = &tags
-		result[2*i+1].Name = "cov19_world_infected"
-		result[2*i+1].Value = stats[i].infected
+		deaths := stats[i].deaths
+		infected := stats[i].infected
+		population := e.lp.GetPopulation(stats[i].country)
+		if deaths > 0 {
+			result = append(result, Metric{Name: "cov19_world_death", Value: deaths, Tags: &tags})
+			if population > 0 {
+				result = append(result, Metric{Name: "cov19_world_fatality_rate", Value: deaths / infected, Tags: &tags})
+			}
+		}
+		result = append(result, Metric{Name: "cov19_world_infected", Value: infected, Tags: &tags})
+
+		//TODO: fatality rate
+		//percent infected
+
+		if population > 0 {
+
+		}
 	}
 	return result, nil
 }
