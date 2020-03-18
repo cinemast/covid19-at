@@ -88,7 +88,7 @@ func getEcdcStat(url string) ([]EcdcStat, error) {
 			rowStart := s.Find("td").First()
 			result[i] = EcdcStat{
 				continent: rowStart.Text(),
-				country:   rowStart.Next().Text(),
+				country:   normalizeCountryName(rowStart.Next().Text()),
 				infected:  atoi(rowStart.Next().Next().Text()),
 				deaths:    atoi(rowStart.Next().Next().Next().Text()),
 			}

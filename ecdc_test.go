@@ -31,4 +31,9 @@ func TestEcdcStats(t *testing.T) {
 	assert.NotNil(t, china)
 	assert.Equal(t, (*china.Tags)["continent"], "Asia")
 	assert.True(t, china.Value > 10000)
+
+	china = result.FindMetric("cov19_world_infected", "country=Bosnia and Herzegovina")
+	assert.NotNil(t, china)
+	assert.Equal(t, (*china.Tags)["continent"], "Europe")
+	assert.True(t, china.Value > 10)
 }
