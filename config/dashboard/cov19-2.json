@@ -15,26 +15,54 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
-  "links": [],
-  "panels": [
+  "id": 8,
+  "links": [
     {
-      "content": "# Source Code\nhttps://github.com/cinemast/covid19-at\n\n## Prometheus Raw Data\nhttps://covid19.spiessknafl.at/covid19/metrics",
-      "datasource": null,
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "id": 26,
-      "mode": "markdown",
-      "options": {},
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Info",
-      "type": "text"
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "Source Code on GitHub",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://github.com/cinemast/covid19-at"
     },
+    {
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "Sozialministerium Österreich",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+    },
+    {
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "ECDC",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+    },
+    {
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "Prometheus Data Source",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://covid19.spiessknafl.at/prometheus"
+    },
+    {
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "Metric Endpoint",
+      "type": "link",
+      "url": "https://covid19.spiessknafl.at/covid19/metrics"
+    }
+  ],
+  "panels": [
     {
       "collapsed": false,
       "datasource": null,
@@ -42,7 +70,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5
+        "y": 0
       },
       "id": 35,
       "panels": [],
@@ -55,7 +83,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 6
+        "y": 1
       },
       "id": 8,
       "links": [
@@ -109,7 +137,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 6
+        "y": 1
       },
       "id": 24,
       "links": [
@@ -168,7 +196,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 1
       },
       "hiddenSeries": false,
       "id": 10,
@@ -255,7 +283,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 10
+        "y": 5
       },
       "id": 28,
       "links": [
@@ -308,7 +336,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 10
+        "y": 5
       },
       "id": 6,
       "links": [
@@ -356,97 +384,63 @@
       "type": "stat"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
+      "circleMaxSize": "50",
+      "circleMinSize": "10",
+      "colors": [
+        "#37872D",
+        "#F2CC0C",
+        "#FA6400",
+        "#E02F44",
+        "#C4162A"
+      ],
       "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
+      "decimals": 0,
+      "esMetric": "Count",
       "gridPos": {
-        "h": 10,
+        "h": 22,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 9
       },
-      "hiddenSeries": false,
-      "id": 29,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 47,
+      "initialZoom": "7",
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "47.5",
+      "mapCenterLongitude": "13.5",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "options": {},
+      "showLegend": true,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "province",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "Value",
+        "queryType": "coordinates"
       },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_detail_dead{country=\"Austria\"}) without (instance,job,latitude,longitude)",
-          "legendFormat": "{{province}}",
+          "expr": "cov19_detail",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{country}}",
           "refId": "A"
         }
       ],
-      "thresholds": [],
+      "thresholds": "50,100,200,300",
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "Covid19 deaths in Austria by Province",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "Infection Overview AUSTRIA",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "persons",
+      "unitSingle": "",
+      "unitSingular": "person",
+      "valueName": "current"
     },
     {
       "aliasColors": {},
@@ -460,7 +454,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 30,
@@ -542,13 +536,106 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 29,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [
+        {
+          "title": "Source",
+          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+        }
+      ],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(cov19_detail_dead{country=\"Austria\"}) without (instance,job,latitude,longitude)",
+          "legendFormat": "{{province}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Covid19 deaths in Austria by Province",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 31
       },
       "id": 33,
       "panels": [],
@@ -561,7 +648,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 32
       },
       "id": 40,
       "links": [
@@ -615,7 +702,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 32
       },
       "id": 39,
       "links": [
@@ -676,7 +763,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 37
       },
       "hiddenSeries": false,
       "id": 17,
@@ -771,7 +858,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 37
       },
       "hiddenSeries": false,
       "id": 16,
@@ -866,7 +953,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 42
+        "y": 47
       },
       "hiddenSeries": false,
       "id": 31,
@@ -961,7 +1048,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 42
+        "y": 47
       },
       "hiddenSeries": false,
       "id": 38,
@@ -1050,7 +1137,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 57
       },
       "id": 37,
       "panels": [],
@@ -1063,7 +1150,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 53
+        "y": 58
       },
       "id": 41,
       "links": [
@@ -1112,12 +1199,69 @@
       "type": "stat"
     },
     {
+      "circleMaxSize": "100",
+      "circleMinSize": "1",
+      "colors": [
+        "#FFEE52",
+        "#FA6400",
+        "#C4162A"
+      ],
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 58
+      },
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 49,
+      "initialZoom": "1",
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "30",
+      "mapCenterLongitude": "18",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "options": {},
+      "showLegend": false,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "country",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "Value",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "expr": "cov19_world_infected",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{country}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "100,1000",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Infection Overview WORLDWIDE",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "persons",
+      "unitSingle": "",
+      "unitSingular": "person",
+      "valueName": "current"
+    },
+    {
       "datasource": null,
       "gridPos": {
         "h": 5,
         "w": 12,
-        "x": 12,
-        "y": 53
+        "x": 0,
+        "y": 63
       },
       "id": 12,
       "links": [
@@ -1178,7 +1322,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 58
+        "y": 68
       },
       "hiddenSeries": false,
       "id": 21,
@@ -1273,7 +1417,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 58
+        "y": 68
       },
       "hiddenSeries": false,
       "id": 22,
@@ -1368,7 +1512,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 68
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 43,
@@ -1463,7 +1607,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 68
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 42,
@@ -1558,7 +1702,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 78
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 19,
@@ -1654,7 +1798,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 78
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 20,
