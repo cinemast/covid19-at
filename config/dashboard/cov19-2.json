@@ -325,7 +325,7 @@
       "pluginVersion": "6.6.2",
       "targets": [
         {
-          "expr": "sum(cov19_detail_dead)",
+          "expr": "cov19_dead",
           "instant": true,
           "refId": "A"
         }
