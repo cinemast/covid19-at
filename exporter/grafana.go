@@ -8,8 +8,9 @@ import (
 var grafanaQueryUrl = "https://info.gesundheitsministerium.at/api/tsdb/query"
 
 type grafanaExporter struct {
-	url string
-	mp  *MetadataProvider
+	url      string
+	postBody []byte
+	mp       *MetadataProvider
 }
 
 type grafanaResult struct {
@@ -23,7 +24,8 @@ type grafanaResult struct {
 }
 
 func NewGrafanaExporter() *grafanaExporter {
-	return &grafanaExporter{url: grafanaQueryUrl, mp: NewMetadataProviderWithFilename("bezirke.csv")}
+	postBody := []byte(`{"from":"1582498800000","to":"1584557020522","queries":[{"refId":"A","intervalMs":10800000,"maxDataPoints":148,"datasourceId":3,"rawSql":"select Bezirk, count(*) as Anzahl from GRAFANA_Covid_Faelle group by Bezirk order by Bezirk","format":"table"}]}`)
+	return &grafanaExporter{url: grafanaQueryUrl, mp: NewMetadataProviderWithFilename("bezirke.csv"), postBody: postBody}
 }
 
 func (g *grafanaExporter) getTags(location string) *map[string]string {
@@ -36,7 +38,7 @@ func (g *grafanaExporter) getTags(location string) *map[string]string {
 }
 
 func (g *grafanaExporter) GetMetrics() (Metrics, error) {
-	json, _ := readJsonFromFile("response.json")
+	json, _ := g.getJsonData()
 	data, err := getBezirkData(json)
 	if err != nil {
 		return nil, err
@@ -70,4 +72,14 @@ func getBezirkData(jsonString []byte) ([]CovidStat, error) {
 		stats[i].infected = uint64(v[1].(float64))
 	}
 	return stats, nil
+}
+
+func (g *grafanaExporter) getJsonData() ([]byte, error) {
+	json, err := readJsonFromPost(g.url, g.postBody)
+	if err != nil {
+		logger.Println(err.Error())
+		logger.Println("Could not read from info.gesundheitsministerium.at, falling back to response.json")
+		return readJsonFromFile("response.json")
+	}
+	return json, err
 }

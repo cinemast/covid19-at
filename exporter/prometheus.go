@@ -3,6 +3,8 @@ package exporter
 import (
 	"fmt"
 	"io"
+	"log"
+	"os"
 	"strings"
 )
 
@@ -73,3 +75,5 @@ func (metrics Metrics) CheckMetric(metricName, tagMatch string, checkFunction fu
 	}
 	return nil
 }
+
+var logger = log.New(os.Stdout, "covid19-at", 0)

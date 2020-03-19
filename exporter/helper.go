@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -54,6 +55,11 @@ func readJsonFromPost(url string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if !strings.Contains(response.Header.Get("Content-Type"), "json") {
+		return nil, errors.New("Did not receive application/json")
+	}
+
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
