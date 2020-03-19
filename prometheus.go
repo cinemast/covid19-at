@@ -1,4 +1,4 @@
-package exporter
+package main
 
 import (
 	"fmt"
@@ -23,6 +23,11 @@ type CovidStat struct {
 	location string
 	infected uint64
 	deaths   uint64
+}
+
+type Exporter interface {
+	GetMetrics() (Metrics, error)
+	Health() []error
 }
 
 //WriteMetrics exprots a slice of metrics to a writer

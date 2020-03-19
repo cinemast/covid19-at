@@ -27,6 +27,8 @@ func emptyPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestErrors(t *testing.T) {
+	ministryExporter := exporters[0].(*MinistryExporter)
+	ecdcExporter := exporters[1].(*EcdcExporter)
 
 	ecdcURL := ecdcExporter.Url
 	ministryURL := ministryExporter.Url
@@ -45,7 +47,7 @@ func TestErrors(t *testing.T) {
 	greeting, err := ioutil.ReadAll(response.Body)
 
 	assert.Nil(t, err)
-	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>World stats are failing\nCould not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_confirmed / ()\nCould not find metric cov19_tests / ()\nCould not find metric cov19_healed / ()\n</pre></body></html>", string(greeting))
+	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Could not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_confirmed / ()\nCould not find metric cov19_tests / ()\nCould not find metric cov19_healed / ()\nWorld stats are failing\n</pre></body></html>", string(greeting))
 
 	ecdcExporter.Url = ecdcURL
 	ministryExporter.Url = ministryURL

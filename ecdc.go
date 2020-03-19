@@ -1,7 +1,8 @@
-package exporter
+package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 	"unicode"
@@ -24,6 +25,23 @@ type EcdcStat struct {
 //NewEcdcExporter creates a new exporter
 func NewEcdcExporter(lp *MetadataProvider) *EcdcExporter {
 	return &EcdcExporter{Url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", Mp: lp}
+}
+
+func (e *EcdcExporter) Health() []error {
+	errors := make([]error, 0)
+	worldStats, _ := e.GetMetrics()
+
+	if len(worldStats) < 200 {
+		errors = append(errors, fmt.Errorf("World stats are failing"))
+	}
+
+	for _, m := range worldStats {
+		country := (*m.Tags)["country"]
+		if metadataProvider.GetLocation(country) == nil {
+			errors = append(errors, fmt.Errorf("Could not find location for country: %s", country))
+		}
+	}
+	return errors
 }
 
 func normalizeCountryName(name string) string {

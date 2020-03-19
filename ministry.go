@@ -1,7 +1,8 @@
-package exporter
+package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"net/http"
 	"regexp"
@@ -17,6 +18,35 @@ type MinistryExporter struct {
 //NewMinistryExporter creates a new MinistryExporter
 func NewMinistryExporter(lp *MetadataProvider) *MinistryExporter {
 	return &MinistryExporter{Url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", Mp: lp}
+}
+
+func (e *MinistryExporter) Health() []error {
+	errors := make([]error, 0)
+
+	ministryStats, err := e.GetMetrics()
+	if err != nil {
+		errors = append(errors, err)
+	}
+
+	if len(ministryStats) < 10 {
+		errors = append(errors, fmt.Errorf("Missing ministry stats"))
+	}
+
+	err = ministryStats.CheckMetric("cov19_confirmed", "", func(x float64) bool { return x > 1000 })
+	if err != nil {
+		errors = append(errors, err)
+	}
+
+	err = ministryStats.CheckMetric("cov19_tests", "", func(x float64) bool { return x > 10000 })
+	if err != nil {
+		errors = append(errors, err)
+	}
+
+	err = ministryStats.CheckMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
+	if err != nil {
+		errors = append(errors, err)
+	}
+	return errors
 }
 
 //GetMetrics returns total stats and province details

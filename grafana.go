@@ -1,4 +1,4 @@
-package exporter
+package main
 
 import (
 	"encoding/json"
@@ -35,6 +35,11 @@ func (g *grafanaExporter) getTags(location string) *map[string]string {
 	}
 
 	return &map[string]string{"bezirk": location, "country": "Austria", "latitude": ftos(data.location.lat), "longitude": ftos(data.location.long)}
+}
+
+func (g *grafanaExporter) Health() []error {
+	//TODO: Implement once the service up again
+	return []error{}
 }
 
 func (g *grafanaExporter) GetMetrics() (Metrics, error) {

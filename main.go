@@ -2,74 +2,31 @@ package main
 
 import (
 	"fmt"
-	"github.com/cinemast/covid19-at/exporter"
 	"net/http"
 )
 
-var metadataProvider = exporter.NewMetadataProvider()
-var ministryExporter = exporter.NewMinistryExporter(metadataProvider)
-var ecdcExporter = exporter.NewEcdcExporter(metadataProvider)
-var grafanaExporter = exporter.NewGrafanaExporter()
-
-func handleMetrics(w http.ResponseWriter, _ *http.Request) {
-	austriaStats, err := ministryExporter.GetMetrics()
-	if err == nil {
-		exporter.WriteMetrics(austriaStats, w)
-	}
-	worldStats, err := ecdcExporter.GetMetrics()
-	if err == nil {
-		exporter.WriteMetrics(worldStats, w)
-	}
-
-	bezirkStats, err := grafanaExporter.GetMetrics()
-	if err == nil {
-		exporter.WriteMetrics(bezirkStats, w)
-	}
+var metadataProvider = NewMetadataProvider()
+var exporters = []Exporter{
+	NewMinistryExporter(metadataProvider),
+	NewEcdcExporter(metadataProvider),
+	NewGrafanaExporter(),
 }
 
-func getErrors() []error {
-	errors := make([]error, 0)
-
-	worldStats, _ := ecdcExporter.GetMetrics()
-	if len(worldStats) < 200 {
-		errors = append(errors, fmt.Errorf("World stats are failing"))
-	}
-
-	for _, m := range worldStats {
-		country := (*m.Tags)["country"]
-		if metadataProvider.GetLocation(country) == nil {
-			errors = append(errors, fmt.Errorf("Could not find location for country: %s", country))
+func handleMetrics(w http.ResponseWriter, _ *http.Request) {
+	for _, e := range exporters {
+		metrics, err := e.GetMetrics()
+		if err == nil {
+			WriteMetrics(metrics, w)
 		}
 	}
-
-	ministryStats, err := ministryExporter.GetMetrics()
-	if err != nil {
-		errors = append(errors, err)
-	}
-
-	if len(ministryStats) < 10 {
-		errors = append(errors, fmt.Errorf("Missing ministry stats"))
-	}
-
-	err = ministryStats.CheckMetric("cov19_confirmed", "", func(x float64) bool { return x > 1000 })
-	if err != nil {
-		errors = append(errors, err)
-	}
-
-	err = ministryStats.CheckMetric("cov19_tests", "", func(x float64) bool { return x > 10000 })
-	if err != nil {
-		errors = append(errors, err)
-	}
-
-	err = ministryStats.CheckMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
-	if err != nil {
-		errors = append(errors, err)
-	}
-	return errors
 }
 
 func handleHealth(w http.ResponseWriter, _ *http.Request) {
-	errors := getErrors()
+	errors := make([]error, 0)
+	for _, e := range exporters {
+		errors = append(errors, e.Health()...)
+	}
+
 	if len(errors) > 0 {
 		w.WriteHeader(http.StatusInternalServerError)
 		errorResponse := ""
