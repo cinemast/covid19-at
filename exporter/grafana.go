@@ -42,11 +42,15 @@ func (g *grafanaExporter) GetMetrics() (Metrics, error) {
 		return nil, err
 	}
 
-	result := make(Metrics, len(data))
-	for i, v := range data {
-		result[i].Value = float64(v.infected)
-		result[i].Name = "cov19_bezirk_infected"
-		result[i].Tags = g.getTags(v.location)
+	result := make(Metrics, 0)
+	for _, v := range data {
+		data := g.mp.GetMetadata(v.location)
+		tags := g.getTags(v.location)
+		if data != nil {
+			result = append(result, Metric{Name: "cov19_bezirk_infected_per_100k", Value: infection100k(v.infected, data.population), Tags: tags})
+		}
+
+		result = append(result, Metric{Name: "cov19_bezirk_infected", Value: float64(v.infected), Tags: tags})
 	}
 	return result, nil
 
