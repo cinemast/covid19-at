@@ -35,6 +35,8 @@ func TestMinistryStats(t *testing.T) {
 	assert.Equal(t, (*vienna.Tags)["latitude"], "48.206351")
 	assert.Equal(t, (*vienna.Tags)["longitude"], "16.374817")
 
+	assert.NotNil(t, result.FindMetric("cov19_detail_infection_rate", "province=Salzburg"))
+
 	infectionRate := result.FindMetric("cov19_detail_infection_rate", "province=Wien")
 	assert.NotNil(t, infectionRate)
 	assert.True(t, infectionRate.Value > 0 && infectionRate.Value < 1, infectionRate.Value)

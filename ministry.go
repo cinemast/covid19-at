@@ -5,6 +5,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 //MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
@@ -87,7 +88,7 @@ func (e *MinistryExporter) getProvinceStats(document *goquery.Document) (map[str
 
 	for _, match := range matches {
 		infected := atoi(match[2])
-		province := match[1]
+		province := strings.TrimSpace(strings.ReplaceAll(match[1], ",", ""))
 		result[province] = CovidStat{province, infected, 0}
 
 	}
@@ -104,7 +105,7 @@ func (e *MinistryExporter) getProvinceStats(document *goquery.Document) (map[str
 		}
 		for _, match := range matches {
 			if len(match) > 2 {
-				location := match[provinceIndex]
+				location := strings.TrimSpace(strings.ReplaceAll(match[provinceIndex], ",", ""))
 				stat := result[location]
 				stat.deaths = atoi(match[valueIndex])
 				result[location] = stat
