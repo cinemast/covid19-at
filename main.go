@@ -10,13 +10,18 @@ var ministryExporter = NewMinistryExporter(metadataProvider)
 var ecdcExporter = NewEcdcExporter(metadataProvider)
 
 func handleMetrics(w http.ResponseWriter, _ *http.Request) {
-	austriaStats, _ := ministryExporter.GetMetrics()
-	if austriaStats != nil {
+	austriaStats, err := ministryExporter.GetMetrics()
+	if err == nil {
 		WriteMetrics(austriaStats, w)
 	}
-	worldStats, _ := ecdcExporter.GetMetrics()
-	if worldStats != nil {
+	worldStats, err := ecdcExporter.GetMetrics()
+	if err == nil {
 		WriteMetrics(worldStats, w)
+	}
+
+	bezirkStats, err := getBezirkMetrics()
+	if err == nil {
+		WriteMetrics(bezirkStats, w)
 	}
 }
 

@@ -146,3 +146,13 @@ func (e *MinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, e
 
 	return result, nil
 }
+
+//Angefragte Adresse:https://info.gesundheitsministerium.at/api/tsdb/query
+//Anfragemethode:POST
+//Externe Adresse:[2a00:1610:0:50::1bb:4a]:443
+//Status-Code:
+//200
+//Version:HTTP/1.1
+//Referrer Policy:no-referrer-when-downgrade
+//curl 'https://info.gesundheitsministerium.at/api/tsdb/query' -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0' -H 'Accept: application/json, text/plain, */*' -H 'Accept-Language: de,en-US;q=0.7,en;q=0.3' --compressed -H 'X-Grafana-Org-Id: 1' -H 'Content-Type: application/json;charset=utf-8' -H 'X-TS-AJAX-Request: true' -H 'Origin: https://info.gesundheitsministerium.at' -H 'DNT: 1' -H 'Connection: keep-alive' -H 'Referer: https://info.gesundheitsministerium.at/d/87BA8__Wk1/covid-19-offentlich-zugangliche-information?orgId=1&refresh=5m' -H 'Cookie: BIGipServerpool_radw34=335816970.20480.0000; TS01ad2292=013fa7d1cc3dc0776143d03262ddf9eb60deb8e777c2652a1f3598ee675e56f9a76d0804033acddc7b642bcfbdc81544cb995ea13d' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' --data '{"from":"1582498800000","to":"1584559998509","queries":[{"refId":"A","intervalMs":3600000,"maxDataPoints":512,"datasourceId":3,"rawSql":"select Bezirk, count(*) as Anzahl from GRAFANA_Covid_Faelle group by Bezirk order by Bezirk","format":"table"}]}'
+//{"from":"1582498800000","to":"1584559998509","queries":[{"refId":"A","intervalMs":3600000,"maxDataPoints":512,"datasourceId":3,"rawSql":"select Bezirk, count(*) as Anzahl from GRAFANA_Covid_Faelle group by Bezirk order by Bezirk","format":"table"}]}
