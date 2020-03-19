@@ -20,7 +20,6 @@ func TestEcdcStats(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.True(t, len(result) > 0)
-	assert.True(t, len(result)%2 == 0)
 
 	china := result.FindMetric("cov19_world_death", "country=China")
 	assert.NotNil(t, china)

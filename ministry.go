@@ -124,22 +124,22 @@ func (e *MinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, e
 		return nil, err
 	}
 
-	confirmedMatch := regexp.MustCompile(`Fälle: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
+	confirmedMatch := regexp.MustCompile(`Fälle:[^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(confirmedMatch) >= 2 {
 		result = append(result, Metric{Name: "cov19_confirmed", Value: atoif(confirmedMatch[1])})
 	}
 
-	testsMatch := regexp.MustCompile(`Testungen: [^0-9]*(?P<number>[0-9\.]+)`).FindAllStringSubmatch(summary, -1)
+	testsMatch := regexp.MustCompile(`Testungen:[^0-9]*(?P<number>[0-9\.]+)`).FindAllStringSubmatch(summary, -1)
 	if len(testsMatch) >= 1 && len(testsMatch[0]) >= 2 {
 		result = append(result, Metric{Name: "cov19_tests", Value: atoif(testsMatch[0][1])})
 	}
 
-	healedMatch := regexp.MustCompile(`Genesene Personen: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
+	healedMatch := regexp.MustCompile(`Genesene Personen:[^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(healedMatch) >= 2 {
 		result = append(result, Metric{Name: "cov19_healed", Value: atoif(healedMatch[1])})
 	}
 
-	deadMatch := regexp.MustCompile(`Todesfälle: [^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
+	deadMatch := regexp.MustCompile(`Todesfälle:[^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(deadMatch) >= 2 {
 		result = append(result, Metric{Name: "cov19_dead", Value: atoif(deadMatch[1])})
 	}
