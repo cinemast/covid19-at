@@ -1,4 +1,4 @@
-package main
+package exporter
 
 import (
 	"errors"
@@ -11,8 +11,8 @@ import (
 
 //EcdcExporter for parsing tables
 type EcdcExporter struct {
-	url string
-	lp  *MetadataProvider
+	Url string
+	Mp  *MetadataProvider
 }
 
 //EcdcStat for Cov19 infections and deaths
@@ -23,7 +23,7 @@ type EcdcStat struct {
 
 //NewEcdcExporter creates a new exporter
 func NewEcdcExporter(lp *MetadataProvider) *EcdcExporter {
-	return &EcdcExporter{url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", lp: lp}
+	return &EcdcExporter{Url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", Mp: lp}
 }
 
 func normalizeCountryName(name string) string {
@@ -43,7 +43,7 @@ func normalizeCountryName(name string) string {
 
 //GetMetrics parses the ECDC table
 func (e *EcdcExporter) GetMetrics() (Metrics, error) {
-	stats, err := getEcdcStat(e.url)
+	stats, err := getEcdcStat(e.Url)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (e *EcdcExporter) GetMetrics() (Metrics, error) {
 		tags := e.getTags(stats, i)
 		deaths := stats[i].deaths
 		infected := stats[i].infected
-		population := e.lp.GetPopulation(stats[i].location)
+		population := e.Mp.GetPopulation(stats[i].location)
 		if deaths > 0 {
 			result = append(result, Metric{Name: "cov19_world_death", Value: float64(deaths), Tags: &tags})
 			if population > 0 {
@@ -70,8 +70,8 @@ func (e *EcdcExporter) GetMetrics() (Metrics, error) {
 
 func (e *EcdcExporter) getTags(stats []EcdcStat, i int) map[string]string {
 	var tags map[string]string
-	if e.lp != nil && e.lp.GetLocation(stats[i].location) != nil {
-		location := e.lp.GetLocation(stats[i].location)
+	if e.Mp != nil && e.Mp.GetLocation(stats[i].location) != nil {
+		location := e.Mp.GetLocation(stats[i].location)
 		tags = map[string]string{"country": stats[i].location, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
 	} else {
 		tags = map[string]string{"country": stats[i].location, "continent": stats[i].continent}

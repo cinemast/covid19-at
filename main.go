@@ -2,26 +2,28 @@ package main
 
 import (
 	"fmt"
+	"github.com/cinemast/covid19-at/exporter"
 	"net/http"
 )
 
-var metadataProvider = NewMetadataProvider()
-var ministryExporter = NewMinistryExporter(metadataProvider)
-var ecdcExporter = NewEcdcExporter(metadataProvider)
+var metadataProvider = exporter.NewMetadataProvider()
+var ministryExporter = exporter.NewMinistryExporter(metadataProvider)
+var ecdcExporter = exporter.NewEcdcExporter(metadataProvider)
+var grafanaExporter = exporter.NewGrafanaExporter()
 
 func handleMetrics(w http.ResponseWriter, _ *http.Request) {
 	austriaStats, err := ministryExporter.GetMetrics()
 	if err == nil {
-		WriteMetrics(austriaStats, w)
+		exporter.WriteMetrics(austriaStats, w)
 	}
 	worldStats, err := ecdcExporter.GetMetrics()
 	if err == nil {
-		WriteMetrics(worldStats, w)
+		exporter.WriteMetrics(worldStats, w)
 	}
 
-	bezirkStats, err := getBezirkMetrics()
+	bezirkStats, err := grafanaExporter.GetMetrics()
 	if err == nil {
-		WriteMetrics(bezirkStats, w)
+		exporter.WriteMetrics(bezirkStats, w)
 	}
 }
 

@@ -1,4 +1,4 @@
-package main
+package exporter
 
 import (
 	"encoding/json"
@@ -6,6 +6,11 @@ import (
 )
 
 var grafanaQueryUrl = "https://info.gesundheitsministerium.at/api/tsdb/query"
+
+type grafanaExporter struct {
+	url string
+	mp  *MetadataProvider
+}
 
 type grafanaResult struct {
 	Results struct {
@@ -17,7 +22,20 @@ type grafanaResult struct {
 	} `json:"results"`
 }
 
-func getBezirkMetrics() (Metrics, error) {
+func NewGrafanaExporter() *grafanaExporter {
+	return &grafanaExporter{url: grafanaQueryUrl, mp: NewMetadataProviderWithFilename("bezirke.csv")}
+}
+
+func (g *grafanaExporter) getTags(location string) *map[string]string {
+	data := g.mp.GetMetadata(location)
+	if data == nil {
+		return &map[string]string{"bezirk": location, "country": "Austria"}
+	}
+
+	return &map[string]string{"bezirk": location, "country": "Austria", "latitude": ftos(data.location.lat), "longitude": ftos(data.location.long)}
+}
+
+func (g *grafanaExporter) GetMetrics() (Metrics, error) {
 	json, _ := readJsonFromFile("response.json")
 	data, err := getBezirkData(json)
 	if err != nil {
@@ -28,7 +46,7 @@ func getBezirkMetrics() (Metrics, error) {
 	for i, v := range data {
 		result[i].Value = float64(v.infected)
 		result[i].Name = "cov19_bezirk_infected"
-		result[i].Tags = &map[string]string{"bezirk": v.location, "country": "Austria"}
+		result[i].Tags = g.getTags(v.location)
 	}
 	return result, nil
 

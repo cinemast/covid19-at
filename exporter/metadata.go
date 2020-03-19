@@ -1,4 +1,4 @@
-package main
+package exporter
 
 import (
 	"encoding/csv"
@@ -30,17 +30,34 @@ func normalizeName(name string) string {
 	return result
 }
 
-//NewMetadataProvider creates a new locationProvider
 func NewMetadataProvider() *MetadataProvider {
-	csvFile, _ := os.Open("metadata.csv")
+	return NewMetadataProviderWithFilename("metadata.csv")
+}
+
+//NewMetadataProvider creates a new locationProvider
+func NewMetadataProviderWithFilename(filename string) *MetadataProvider {
+	csvFile, err := os.Open(filename)
+	if err != nil {
+		panic(err)
+	}
 	r := csv.NewReader(csvFile)
-	records, _ := r.ReadAll()
+	records, err := r.ReadAll()
+	if err != nil {
+		panic(err)
+	}
 	data := make(map[string]metaData, len(records))
 
 	for _, row := range records {
 		data[normalizeName(row[0])] = metaData{Location{atof(row[2]), atof(row[3])}, row[0], atoi(row[1])}
 	}
 	return &MetadataProvider{data: data}
+}
+
+func (l *MetadataProvider) GetMetadata(location string) *metaData {
+	if l, ok := l.data[normalizeName(location)]; ok {
+		return &l
+	}
+	return nil
 }
 
 //GetLocation returns lat/long for a location name
