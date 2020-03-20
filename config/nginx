@@ -1,0 +1,44 @@
+server {
+  root /usr/share/nginx/html;
+  index index.html index.htm;
+  server_name covid19.spiessknafl.at;
+  location / {
+   proxy_pass http://localhost:3000/;
+  }
+
+  location /prometheus {
+   proxy_pass http://localhost:9090/prometheus;
+  }
+
+  location /covid19/metrics {
+   proxy_pass http://localhost:8282/metrics;
+  }
+
+  location /covid19/health {
+   proxy_pass http://localhost:8282/health;
+  }
+
+  location /report {
+    auth_basic "Admin";
+    auth_basic_user_file /etc/nginx/htpasswd;
+    alias /home/cinemast/report;
+  }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/dev.spiessknafl.at/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/dev.spiessknafl.at/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    if ($host = covid19.spiessknafl.at) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+  listen 80;
+  server_name covid19.spiessknafl.at;
+    return 404; # managed by Certbot
+}
