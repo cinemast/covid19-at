@@ -1,6 +1,6 @@
 global:
-  scrape_interval:     1m
-  evaluation_interval: 1m 
+  scrape_interval:     10m
+  evaluation_interval: 10m
 
 scrape_configs:
   - job_name: 'covid19'
