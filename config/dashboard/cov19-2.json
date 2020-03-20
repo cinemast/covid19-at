@@ -150,6 +150,7 @@
         "y": 1
       },
       "id": 28,
+      "interval": "1h",
       "links": [
         {
           "title": "Source",
@@ -203,6 +204,7 @@
         "y": 1
       },
       "id": 8,
+      "interval": "1h",
       "links": [
         {
           "title": "Source",
@@ -256,6 +258,7 @@
         "y": 1
       },
       "id": 6,
+      "interval": "1h",
       "links": [
         {
           "title": "Source",
@@ -310,6 +313,7 @@
         "y": 1
       },
       "id": 24,
+      "interval": "1h",
       "links": [
         {
           "title": "Source",
@@ -377,6 +381,7 @@
       "hideZero": false,
       "id": 47,
       "initialZoom": "7",
+      "interval": "1h",
       "locationData": "table",
       "mapCenter": "custom",
       "mapCenterLatitude": "47.5",
@@ -633,6 +638,7 @@
       "hideZero": false,
       "id": 55,
       "initialZoom": "7",
+      "interval": "1h",
       "locationData": "table",
       "mapCenter": "custom",
       "mapCenterLatitude": "47.5",
@@ -785,6 +791,7 @@
       "hideZero": false,
       "id": 69,
       "initialZoom": "8",
+      "interval": "1h",
       "links": [
         {
           "targetBlank": true,
@@ -948,6 +955,7 @@
         "y": 49
       },
       "id": 40,
+      "interval": "4h",
       "links": [
         {
           "title": "Source",
@@ -1002,6 +1010,7 @@
         "y": 49
       },
       "id": 39,
+      "interval": "4h",
       "links": [
         {
           "title": "Source",
@@ -1056,6 +1065,7 @@
         "y": 49
       },
       "id": 57,
+      "interval": "4h",
       "options": {
         "colorMode": "value",
         "fieldOptions": {
@@ -1648,6 +1658,7 @@
         {
           "expr": "sum(cov19_world_infected)",
           "instant": true,
+          "interval": "4h",
           "refId": "A"
         }
       ],
@@ -1702,6 +1713,7 @@
         {
           "expr": "sum(cov19_world_death)",
           "instant": true,
+          "interval": "4h",
           "refId": "A"
         }
       ],
@@ -1757,6 +1769,7 @@
       "targets": [
         {
           "expr": " sum(cov19_world_death) / sum(cov19_world_infected)",
+          "interval": "4h",
           "refId": "A"
         }
       ],
@@ -1790,7 +1803,7 @@
       "hideZero": false,
       "id": 63,
       "initialZoom": "3",
-      "interval": "",
+      "interval": "4h",
       "locationData": "table",
       "mapCenter": "custom",
       "mapCenterLatitude": "47.5",
@@ -2205,7 +2218,7 @@
       "hideZero": false,
       "id": 65,
       "initialZoom": "3",
-      "interval": "",
+      "interval": "4h",
       "locationData": "table",
       "mapCenter": "custom",
       "mapCenterLatitude": "47.5",
@@ -2661,5 +2674,5 @@
   "timezone": "",
   "title": "Covid-19-2",
   "uid": "2fa2-Y_Wz222",
-  "version": 10
+  "version": 11
 }
