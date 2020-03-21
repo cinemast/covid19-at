@@ -10,18 +10,16 @@ import (
 	"time"
 )
 
-//SocialMinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
-type SocialMinistryExporter struct {
-	Url string
-	Mp  *MetadataProvider
+type socialMinistryExporter struct {
+	url string
+	mp  *metadataProvider
 }
 
-//NewMinistryExporter creates a new SocialMinistryExporter
-func NewMinistryExporter(lp *MetadataProvider) *SocialMinistryExporter {
-	return &SocialMinistryExporter{Url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", Mp: lp}
+func newSocialMinistryExporter(lp *metadataProvider) *socialMinistryExporter {
+	return &socialMinistryExporter{url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", mp: lp}
 }
 
-func (e *SocialMinistryExporter) Health() []error {
+func (e *socialMinistryExporter) Health() []error {
 	errors := make([]error, 0)
 
 	ministryStats, err := e.GetMetrics()
@@ -33,7 +31,7 @@ func (e *SocialMinistryExporter) Health() []error {
 		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
 
-	err = ministryStats.CheckMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
+	err = ministryStats.checkMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
 	if err != nil {
 		errors = append(errors, err)
 	}
@@ -41,9 +39,9 @@ func (e *SocialMinistryExporter) Health() []error {
 }
 
 //GetMetrics returns total stats and province details
-func (e *SocialMinistryExporter) GetMetrics() (Metrics, error) {
+func (e *socialMinistryExporter) GetMetrics() (metrics, error) {
 	client := http.Client{Timeout: 3 * time.Second}
-	response, err := client.Get(e.Url)
+	response, err := client.Get(e.url)
 	if err != nil {
 		return nil, err
 	}
@@ -64,14 +62,14 @@ func (e *SocialMinistryExporter) GetMetrics() (Metrics, error) {
 		err = err2
 	}
 
-	provinceMetrics := make(Metrics, 0)
+	provinceMetrics := make(metrics, 0)
 	for _, s := range provinceStats {
 		tags := e.getTags(s.location)
-		population := e.Mp.GetPopulation(s.location)
+		population := e.mp.getPopulation(s.location)
 		if s.deaths > 0 {
-			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_dead", Value: float64(s.deaths), Tags: tags})
+			provinceMetrics = append(provinceMetrics, metric{Name: "cov19_detail_dead", Value: float64(s.deaths), Tags: tags})
 			if population > 0 {
-				provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_fatality_rate", Value: fatalityRate(s.infected, s.deaths), Tags: tags})
+				provinceMetrics = append(provinceMetrics, metric{Name: "cov19_detail_fatality_rate", Value: fatalityRate(s.infected, s.deaths), Tags: tags})
 			}
 		}
 	}
@@ -79,16 +77,16 @@ func (e *SocialMinistryExporter) GetMetrics() (Metrics, error) {
 	return append(summary, provinceMetrics...), err
 }
 
-func (e *SocialMinistryExporter) getTags(province string) *map[string]string {
-	if e.Mp != nil && e.Mp.GetLocation(province) != nil {
-		location := e.Mp.GetLocation(province)
+func (e *socialMinistryExporter) getTags(province string) *map[string]string {
+	if e.mp != nil && e.mp.getLocation(province) != nil {
+		location := e.mp.getLocation(province)
 		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
 	}
 	return &map[string]string{"country": "Austria", "province": province}
 }
 
 //GetProvinceStats exports metrics per "Bundesland"
-func (e *SocialMinistryExporter) getProvinceStats(document *goquery.Document) (map[string]CovidStat, error) {
+func (e *socialMinistryExporter) getProvinceStats(document *goquery.Document) (map[string]CovidStat, error) {
 	result := make(map[string]CovidStat)
 	summary, err := document.Find(".infobox").Html()
 	if err != nil {
@@ -132,8 +130,8 @@ func (e *SocialMinistryExporter) getProvinceStats(document *goquery.Document) (m
 }
 
 //GetTotalStats gets sumamrized stats and number of tests
-func (e *SocialMinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, error) {
-	result := make([]Metric, 0)
+func (e *socialMinistryExporter) GetTotalStats(document *goquery.Document) (metrics, error) {
+	result := make([]metric, 0)
 	summary, err := document.Find(".abstract").First().Html()
 
 	if err != nil {
@@ -142,22 +140,22 @@ func (e *SocialMinistryExporter) GetTotalStats(document *goquery.Document) (Metr
 
 	confirmedMatch := regexp.MustCompile(`Fälle:[^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(confirmedMatch) >= 2 {
-		result = append(result, Metric{Name: "cov19_confirmed", Value: atoif(confirmedMatch[1])})
+		result = append(result, metric{Name: "cov19_confirmed", Value: atoif(confirmedMatch[1])})
 	}
 
 	testsMatch := regexp.MustCompile(`Testungen:[^0-9]*(?P<number>[0-9\.]+)`).FindAllStringSubmatch(summary, -1)
 	if len(testsMatch) >= 1 && len(testsMatch[0]) >= 2 {
-		result = append(result, Metric{Name: "cov19_tests", Value: atoif(testsMatch[0][1])})
+		result = append(result, metric{Name: "cov19_tests", Value: atoif(testsMatch[0][1])})
 	}
 
 	healedMatch := regexp.MustCompile(`Genesene Personen:[^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(healedMatch) >= 2 {
-		result = append(result, Metric{Name: "cov19_healed", Value: atoif(healedMatch[1])})
+		result = append(result, metric{Name: "cov19_healed", Value: atoif(healedMatch[1])})
 	}
 
 	deadMatch := regexp.MustCompile(`Todesfälle:[^0-9]*([0-9\.]+)`).FindStringSubmatch(summary)
 	if len(deadMatch) >= 2 {
-		result = append(result, Metric{Name: "cov19_dead", Value: atoif(deadMatch[1])})
+		result = append(result, metric{Name: "cov19_dead", Value: atoif(deadMatch[1])})
 	}
 
 	return result, nil

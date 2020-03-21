@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var e = NewHealthMinistryExporter()
+var e = newHealthMinistryExporter()
 
 func TestBezirke(t *testing.T) {
 	result, err := e.getBezirke()
@@ -26,19 +26,19 @@ func TestBundesland(t *testing.T) {
 		assert.Equal(t, 4, len(*s.Tags), s.Tags)
 	}
 
-	vienna := result.FindMetric("cov19_detail", "province=Wien")
+	vienna := result.findMetric("cov19_detail", "province=Wien")
 	assert.NotNil(t, vienna)
 	assert.Equal(t, (*vienna.Tags)["country"], "Austria")
 	assert.Equal(t, (*vienna.Tags)["latitude"], "48.206351")
 	assert.Equal(t, (*vienna.Tags)["longitude"], "16.374817")
 
-	assert.NotNil(t, result.FindMetric("cov19_detail_infection_rate", "province=Salzburg"))
+	assert.NotNil(t, result.findMetric("cov19_detail_infection_rate", "province=Salzburg"))
 
-	infectionRate := result.FindMetric("cov19_detail_infection_rate", "province=Wien")
+	infectionRate := result.findMetric("cov19_detail_infection_rate", "province=Wien")
 	assert.NotNil(t, infectionRate)
 	assert.True(t, infectionRate.Value > 0 && infectionRate.Value < 1, infectionRate.Value)
 
-	infected100k := result.FindMetric("cov19_detail_infected_per_100k", "province=Wien")
+	infected100k := result.findMetric("cov19_detail_infected_per_100k", "province=Wien")
 	assert.NotNil(t, infected100k)
 	assert.True(t, infected100k.Value > 5 && infected100k.Value < 100, infected100k.Value)
 }
@@ -62,9 +62,9 @@ func TestGeschlechtsVerteilung(t *testing.T) {
 func TestSimpleData(t *testing.T) {
 	result, err := e.getSimpleData()
 	assert.Equal(t, 0, len(err))
-	assert.NotNil(t, result.FindMetric("cov19_confirmed", ""))
-	assert.NotNil(t, result.FindMetric("cov19_hospitalized", ""))
-	assert.NotNil(t, result.FindMetric("cov19_intensive_care", ""))
+	assert.NotNil(t, result.findMetric("cov19_confirmed", ""))
+	assert.NotNil(t, result.findMetric("cov19_hospitalized", ""))
+	assert.NotNil(t, result.findMetric("cov19_intensive_care", ""))
 }
 
 func TestHealthMinistryHealth(t *testing.T) {

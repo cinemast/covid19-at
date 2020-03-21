@@ -10,7 +10,7 @@ import (
 )
 
 type healthMinistryExporter struct {
-	mp  *MetadataProvider
+	mp  *metadataProvider
 	url string
 }
 
@@ -19,11 +19,11 @@ type ministryStat []struct {
 	Y     uint64
 }
 
-func NewHealthMinistryExporter() *healthMinistryExporter {
-	return &healthMinistryExporter{mp: NewMetadataProviderWithFilename("bezirke.csv"), url: "https://info.gesundheitsministerium.at/data"}
+func newHealthMinistryExporter() *healthMinistryExporter {
+	return &healthMinistryExporter{mp: newMetadataProviderWithFilename("bezirke.csv"), url: "https://info.gesundheitsministerium.at/data"}
 }
 
-func checkTags(result Metrics, field string) []error {
+func checkTags(result metrics, field string) []error {
 	errors := make([]error, 0)
 	for _, s := range result {
 		if len(*s.Tags) != 4 {
@@ -33,8 +33,8 @@ func checkTags(result Metrics, field string) []error {
 	return errors
 }
 
-func (h *healthMinistryExporter) GetMetrics() (Metrics, error) {
-	metrics := make(Metrics, 0)
+func (h *healthMinistryExporter) GetMetrics() (metrics, error) {
+	metrics := make(metrics, 0)
 
 	result, _ := h.getSimpleData()
 	metrics = append(metrics, result...)
@@ -107,7 +107,7 @@ func (h *healthMinistryExporter) getTags(location string, fieldName string, data
 	return &map[string]string{fieldName: location, "country": "Austria"}
 }
 
-func (h *healthMinistryExporter) getBezirke() (Metrics, error) {
+func (h *healthMinistryExporter) getBezirke() (metrics, error) {
 	arrayString, err := readArrayFromGet(h.url + "/Bezirke.js")
 	if err != nil {
 		return nil, err
@@ -117,13 +117,13 @@ func (h *healthMinistryExporter) getBezirke() (Metrics, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := make(Metrics, 0)
+	result := make(metrics, 0)
 	for _, s := range bezirkeStats {
-		data := h.mp.GetMetadata(s.Label)
+		data := h.mp.getMetadata(s.Label)
 		tags := h.getTags(s.Label, "bezirk", data)
-		result = append(result, Metric{"cov19_bezirk_infected", tags, float64(s.Y)})
+		result = append(result, metric{"cov19_bezirk_infected", tags, float64(s.Y)})
 		if data != nil {
-			result = append(result, Metric{"cov19_bezirk_infected_100k", tags, float64(infection100k(s.Y, data.population))})
+			result = append(result, metric{"cov19_bezirk_infected_100k", tags, float64(infection100k(s.Y, data.population))})
 		}
 	}
 	return result, nil
@@ -153,7 +153,7 @@ func mapBundeslandLabel(label string) string {
 	return "unknown"
 }
 
-func (h *healthMinistryExporter) getBundesland() (Metrics, error) {
+func (h *healthMinistryExporter) getBundesland() (metrics, error) {
 	arrayString, err := readArrayFromGet(h.url + "/Bundesland.js")
 	if err != nil {
 		return nil, err
@@ -163,21 +163,21 @@ func (h *healthMinistryExporter) getBundesland() (Metrics, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := make(Metrics, 0)
+	result := make(metrics, 0)
 	for _, s := range provinceStats {
 		s.Label = mapBundeslandLabel(s.Label)
-		data := h.mp.GetMetadata(s.Label)
+		data := h.mp.getMetadata(s.Label)
 		tags := h.getTags(s.Label, "province", data)
-		result = append(result, Metric{"cov19_detail", tags, float64(s.Y)})
+		result = append(result, metric{"cov19_detail", tags, float64(s.Y)})
 		if data != nil {
-			result = append(result, Metric{"cov19_detail_infected_per_100k", tags, float64(infection100k(s.Y, data.population))})
-			result = append(result, Metric{"cov19_detail_infection_rate", tags, float64(infectionRate(s.Y, data.population))})
+			result = append(result, metric{"cov19_detail_infected_per_100k", tags, float64(infection100k(s.Y, data.population))})
+			result = append(result, metric{"cov19_detail_infection_rate", tags, float64(infectionRate(s.Y, data.population))})
 		}
 	}
 	return result, nil
 }
 
-func (h *healthMinistryExporter) getAgeMetrics() (Metrics, error) {
+func (h *healthMinistryExporter) getAgeMetrics() (metrics, error) {
 	arrayString, err := readArrayFromGet(h.url + "/Altersverteilung.js")
 	if err != nil {
 		return nil, err
@@ -187,15 +187,15 @@ func (h *healthMinistryExporter) getAgeMetrics() (Metrics, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := make(Metrics, 0)
+	result := make(metrics, 0)
 	for _, s := range ageStats {
 		tags := &map[string]string{"country": "Austria", "group": s.Label}
-		result = append(result, Metric{"cov19_age_distribution", tags, float64(s.Y)})
+		result = append(result, metric{"cov19_age_distribution", tags, float64(s.Y)})
 	}
 	return result, nil
 }
 
-func (h *healthMinistryExporter) getGeschlechtsVerteilung() (Metrics, error) {
+func (h *healthMinistryExporter) getGeschlechtsVerteilung() (metrics, error) {
 	arrayString, err := readArrayFromGet(h.url + "/Geschlechtsverteilung.js")
 	if err != nil {
 		return nil, err
@@ -205,19 +205,19 @@ func (h *healthMinistryExporter) getGeschlechtsVerteilung() (Metrics, error) {
 	if err != nil {
 		return nil, err
 	}
-	result := make(Metrics, 0)
+	result := make(metrics, 0)
 	for _, s := range ageStats {
 		tags := &map[string]string{"country": "Austria", "sex": s.Label}
-		result = append(result, Metric{"cov19_sex_distribution", tags, float64(s.Y)})
+		result = append(result, metric{"cov19_sex_distribution", tags, float64(s.Y)})
 	}
 	return result, nil
 }
 
-func (h *healthMinistryExporter) getSimpleData() (Metrics, []error) {
+func (h *healthMinistryExporter) getSimpleData() (metrics, []error) {
 	client := http.Client{Timeout: 5 * time.Second}
 	errors := make([]error, 0)
 	response, err := client.Get(h.url + "/SimpleData.js")
-	result := make(Metrics, 0)
+	result := make(metrics, 0)
 	if err != nil {
 		return nil, []error{err}
 	}
@@ -227,17 +227,23 @@ func (h *healthMinistryExporter) getSimpleData() (Metrics, []error) {
 	erkrankungenMatch := regexp.MustCompile(`Erkrankungen = ([0-9]+)`).FindStringSubmatch(string(lines))
 	if len(erkrankungenMatch) != 2 {
 		errors = append(errors, fmt.Errorf("Could not find \"Bestätigte Fälle\""))
+	} else {
+		result = append(result, metric{"cov19_confirmed", nil, atof(erkrankungenMatch[1])})
 	}
-	result = append(result, Metric{"cov19_confirmed", nil, atof(erkrankungenMatch[1])})
+
 	hospitalized := regexp.MustCompile(`hospitalisiert = ([0-9]+)`).FindStringSubmatch(string(lines))
 	if len(hospitalized) != 2 {
 		errors = append(errors, fmt.Errorf("Could not find \"Hospitalisiert\""))
+	} else {
+		result = append(result, metric{"cov19_hospitalized", nil, atof(hospitalized[1])})
 	}
-	result = append(result, Metric{"cov19_hospitalized", nil, atof(hospitalized[1])})
+
 	intensiveCare := regexp.MustCompile(`Intensivstation = ([0-9]+)`).FindStringSubmatch(string(lines))
 	if len(intensiveCare) != 2 {
 		errors = append(errors, fmt.Errorf("Could not find \"Intensivstation\""))
+	} else {
+		result = append(result, metric{"cov19_intensive_care", nil, atof(intensiveCare[1])})
 	}
-	result = append(result, Metric{"cov19_intensive_care", nil, atof(intensiveCare[1])})
+
 	return result, errors
 }

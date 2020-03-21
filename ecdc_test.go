@@ -15,27 +15,27 @@ func TestNormalizeName(t *testing.T) {
 
 func TestEcdcStats(t *testing.T) {
 
-	ecdc := NewEcdcExporter(NewMetadataProvider())
+	ecdc := newEcdcExporter(newMetadataProvider())
 	result, err := ecdc.GetMetrics()
 
 	assert.Nil(t, err)
 	assert.True(t, len(result) > 0)
 
-	china := result.FindMetric("cov19_world_death", "country=China")
+	china := result.findMetric("cov19_world_death", "country=China")
 	assert.NotNil(t, china)
 	assert.Equal(t, (*china.Tags)["continent"], "Asia")
 	assert.Equal(t, (*china.Tags)["latitude"], "35.861660")
 	assert.Equal(t, (*china.Tags)["longitude"], "104.195397")
 	assert.True(t, china.Value > 3000)
 
-	china = result.FindMetric("cov19_world_infected", "country=China")
+	china = result.findMetric("cov19_world_infected", "country=China")
 	assert.NotNil(t, china)
 	assert.Equal(t, (*china.Tags)["continent"], "Asia")
 	assert.Equal(t, (*china.Tags)["latitude"], "35.861660")
 	assert.Equal(t, (*china.Tags)["longitude"], "104.195397")
 	assert.True(t, china.Value > 10000)
 
-	china = result.FindMetric("cov19_world_infected", "country=Bosnia and Herzegovina")
+	china = result.findMetric("cov19_world_infected", "country=Bosnia and Herzegovina")
 	assert.NotNil(t, china)
 	assert.Equal(t, (*china.Tags)["continent"], "Europe")
 	assert.Equal(t, (*china.Tags)["latitude"], "43.915886")

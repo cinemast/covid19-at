@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -72,36 +70,4 @@ func readArrayFromGet(url string) (string, error) {
 	}
 
 	return jsonString[arrayBegin : arrayEnd+1], nil
-}
-
-func readJsonFromPost(url string, body []byte) ([]byte, error) {
-	buffer := bytes.NewBuffer(body)
-	response, err := http.Post(url, "application/json;charset=utf-8", buffer)
-	defer response.Body.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	if !strings.Contains(response.Header.Get("Content-Type"), "json") {
-		return nil, errors.New("Did not receive application/json")
-	}
-
-	responseBody, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-	return responseBody, nil
-}
-
-func readJsonFromFile(filename string) ([]byte, error) {
-	response, err := os.Open(filename)
-	defer response.Close()
-	if err != nil {
-		return nil, err
-	}
-	body, err := ioutil.ReadAll(response)
-	if err != nil {
-		return nil, err
-	}
-	return body, nil
 }

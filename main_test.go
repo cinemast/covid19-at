@@ -26,36 +26,36 @@ func emptyPage(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("<html></html>"))
 }
 
-//func TestErrors(t *testing.T) {
-//	healthMinistryExporter := exporters[0].(*healthMinistryExporter)
-//	socialMinistry := exporters[1].(*SocialMinistryExporter)
-//	ecdcExporter := exporters[2].(*EcdcExporter)
-//
-//	ecdcURL := ecdcExporter.Url
-//	ministryURL := socialMinistry.Url
-//	healthMinistryURL := healthMinistryExporter.url
-//
-//	mockServer := httptest.NewServer(http.HandlerFunc(emptyPage))
-//	defer mockServer.Close()
-//	ecdcExporter.Url = mockServer.URL
-//	socialMinistry.Url = mockServer.URL
-//	healthMinistryExporter.url = mockServer.URL
-//
-//	ts := httptest.NewServer(http.HandlerFunc(handleHealth))
-//
-//	defer ts.Close()
-//	response, err := ts.Client().Get(ts.URL)
-//	assert.Nil(t, err)
-//	assert.Equal(t, 500, response.StatusCode)
-//	greeting, err := ioutil.ReadAll(response.Body)
-//
-//	assert.Nil(t, err)
-//	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Could not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_confirmed / ()\nCould not find metric cov19_tests / ()\nCould not find metric cov19_healed / ()\nWorld stats are failing\n</pre></body></html>", string(greeting))
-//
-//	ecdcExporter.Url = ecdcURL
-//	socialMinistry.Url = ministryURL
-//	healthMinistryExporter.url = healthMinistryURL
-//}
+func TestErrors(t *testing.T) {
+	healthMinistryExporter := exporters[0].(*healthMinistryExporter)
+	socialMinistry := exporters[1].(*socialMinistryExporter)
+	ecdcExporter := exporters[2].(*ecdcExporter)
+
+	ecdcURL := ecdcExporter.Url
+	ministryURL := socialMinistry.url
+	healthMinistryURL := healthMinistryExporter.url
+
+	mockServer := httptest.NewServer(http.HandlerFunc(emptyPage))
+	defer mockServer.Close()
+	ecdcExporter.Url = mockServer.URL
+	socialMinistry.url = mockServer.URL
+	healthMinistryExporter.url = mockServer.URL
+
+	ts := httptest.NewServer(http.HandlerFunc(handleHealth))
+
+	defer ts.Close()
+	response, err := ts.Client().Get(ts.URL)
+	assert.Nil(t, err)
+	assert.Equal(t, 500, response.StatusCode)
+	greeting, err := ioutil.ReadAll(response.Body)
+
+	assert.Nil(t, err)
+	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Could not find beginning of array\nNot enough Bezirke Results: 0\nCould not find beginning of array\nMissing Bundesland result 0\nCould not find beginning of array\nMissing age metrics\nCould not find beginning of array\nGeschlechtsverteilung failed\nCould not find \"Bestätigte Fälle\"\nCould not find \"Hospitalisiert\"\nCould not find \"Intensivstation\"\nCould not find \"Bestätigte Fälle\"\nCould not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_healed / ()\nWorld stats are failing\n</pre></body></html>", string(greeting))
+
+	ecdcExporter.Url = ecdcURL
+	socialMinistry.url = ministryURL
+	healthMinistryExporter.url = healthMinistryURL
+}
 
 func TestMetrics(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(handleMetrics))
@@ -75,3 +75,8 @@ func TestMetrics(t *testing.T) {
 	assert.True(t, strings.Contains(metricResult, "cov19_detail"))
 	assert.True(t, strings.Contains(metricResult, "cov19_detail_dead"))
 }
+
+//func TestStartup(m *testing.T) {
+//	go main()
+//	os.Signal(syscall.SIGHUP)
+//}

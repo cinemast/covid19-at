@@ -11,24 +11,49 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-//EcdcExporter for parsing tables
-type EcdcExporter struct {
+type ecdcExporter struct {
 	Url string
-	Mp  *MetadataProvider
+	Mp  *metadataProvider
 }
 
-//EcdcStat for Cov19 infections and deaths
-type EcdcStat struct {
+type ecdcStat struct {
 	CovidStat
 	continent string
 }
 
-//NewEcdcExporter creates a new exporter
-func NewEcdcExporter(lp *MetadataProvider) *EcdcExporter {
-	return &EcdcExporter{Url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", Mp: lp}
+func newEcdcExporter(lp *metadataProvider) *ecdcExporter {
+	return &ecdcExporter{Url: "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases", Mp: lp}
 }
 
-func (e *EcdcExporter) Health() []error {
+//GetMetrics parses the ECDC table
+func (e *ecdcExporter) GetMetrics() (metrics, error) {
+	stats, err := getEcdcStat(e.Url)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]metric, 0)
+	for i := range stats {
+		tags := e.getTags(stats, i)
+		deaths := stats[i].deaths
+		infected := stats[i].infected
+		population := e.Mp.getPopulation(stats[i].location)
+		if deaths > 0 {
+			result = append(result, metric{Name: "cov19_world_death", Value: float64(deaths), Tags: &tags})
+			if population > 0 {
+				result = append(result, metric{Name: "cov19_world_fatality_rate", Value: fatalityRate(infected, deaths), Tags: &tags})
+			}
+		}
+		result = append(result, metric{Name: "cov19_world_infected", Value: float64(infected), Tags: &tags})
+		if population > 0 {
+			result = append(result, metric{Name: "cov19_world_infection_rate", Value: infectionRate(infected, population), Tags: &tags})
+			result = append(result, metric{Name: "cov19_world_infected_per_100k", Value: infection100k(infected, population), Tags: &tags})
+		}
+	}
+	return result, nil
+}
+
+//Health checks the functionality of the exporter
+func (e *ecdcExporter) Health() []error {
 	errors := make([]error, 0)
 	worldStats, _ := e.GetMetrics()
 
@@ -38,7 +63,7 @@ func (e *EcdcExporter) Health() []error {
 
 	for _, m := range worldStats {
 		country := (*m.Tags)["country"]
-		if metadataProvider.GetLocation(country) == nil {
+		if mp.getLocation(country) == nil {
 			errors = append(errors, fmt.Errorf("Could not find location for country: %s", country))
 		}
 	}
@@ -60,37 +85,10 @@ func normalizeCountryName(name string) string {
 	return strings.Join(parts, " ")
 }
 
-//GetMetrics parses the ECDC table
-func (e *EcdcExporter) GetMetrics() (Metrics, error) {
-	stats, err := getEcdcStat(e.Url)
-	if err != nil {
-		return nil, err
-	}
-	result := make([]Metric, 0)
-	for i := range stats {
-		tags := e.getTags(stats, i)
-		deaths := stats[i].deaths
-		infected := stats[i].infected
-		population := e.Mp.GetPopulation(stats[i].location)
-		if deaths > 0 {
-			result = append(result, Metric{Name: "cov19_world_death", Value: float64(deaths), Tags: &tags})
-			if population > 0 {
-				result = append(result, Metric{Name: "cov19_world_fatality_rate", Value: fatalityRate(infected, deaths), Tags: &tags})
-			}
-		}
-		result = append(result, Metric{Name: "cov19_world_infected", Value: float64(infected), Tags: &tags})
-		if population > 0 {
-			result = append(result, Metric{Name: "cov19_world_infection_rate", Value: infectionRate(infected, population), Tags: &tags})
-			result = append(result, Metric{Name: "cov19_world_infected_per_100k", Value: infection100k(infected, population), Tags: &tags})
-		}
-	}
-	return result, nil
-}
-
-func (e *EcdcExporter) getTags(stats []EcdcStat, i int) map[string]string {
+func (e *ecdcExporter) getTags(stats []ecdcStat, i int) map[string]string {
 	var tags map[string]string
-	if e.Mp != nil && e.Mp.GetLocation(stats[i].location) != nil {
-		location := e.Mp.GetLocation(stats[i].location)
+	if e.Mp != nil && e.Mp.getLocation(stats[i].location) != nil {
+		location := e.Mp.getLocation(stats[i].location)
 		tags = map[string]string{"country": stats[i].location, "continent": stats[i].continent, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
 	} else {
 		tags = map[string]string{"country": stats[i].location, "continent": stats[i].continent}
@@ -98,7 +96,7 @@ func (e *EcdcExporter) getTags(stats []EcdcStat, i int) map[string]string {
 	return tags
 }
 
-func getEcdcStat(url string) ([]EcdcStat, error) {
+func getEcdcStat(url string) ([]ecdcStat, error) {
 	client := http.Client{Timeout: 3 * time.Second}
 	response, err := client.Get(url)
 	if err != nil {
@@ -112,12 +110,12 @@ func getEcdcStat(url string) ([]EcdcStat, error) {
 		return nil, errors.New("Could not find table")
 	}
 
-	result := make([]EcdcStat, rows.Size()-1)
+	result := make([]ecdcStat, rows.Size()-1)
 
 	rows.Each(func(i int, s *goquery.Selection) {
 		if i < rows.Size()-1 {
 			rowStart := s.Find("td").First()
-			result[i] = EcdcStat{
+			result[i] = ecdcStat{
 				CovidStat{
 					location: normalizeCountryName(rowStart.Next().Text()),
 					infected: atoi(rowStart.Next().Next().Text()),

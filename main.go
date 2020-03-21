@@ -2,21 +2,24 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 )
 
-var metadataProvider = NewMetadataProvider()
+var logger = log.New(os.Stdout, "covid19-at", 0)
+var mp = newMetadataProvider()
 var exporters = []Exporter{
-	NewHealthMinistryExporter(),
-	NewMinistryExporter(metadataProvider),
-	NewEcdcExporter(metadataProvider),
+	newHealthMinistryExporter(),
+	newSocialMinistryExporter(mp),
+	newEcdcExporter(mp),
 }
 
 func handleMetrics(w http.ResponseWriter, _ *http.Request) {
 	for _, e := range exporters {
 		metrics, err := e.GetMetrics()
 		if err == nil {
-			WriteMetrics(metrics, w)
+			writeMetrics(metrics, w)
 		}
 	}
 }

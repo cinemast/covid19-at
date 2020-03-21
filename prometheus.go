@@ -3,22 +3,17 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
-	"os"
 	"strings"
 )
 
-//Metrics contains a slice of Metric
-type Metrics []Metric
+type metrics []metric
 
-//Metric struct used for the exporter
-type Metric struct {
+type metric struct {
 	Name  string
 	Tags  *map[string]string
 	Value float64
 }
 
-//CovidStat metric struct
 type CovidStat struct {
 	location string
 	infected uint64
@@ -26,14 +21,13 @@ type CovidStat struct {
 }
 
 type Exporter interface {
-	GetMetrics() (Metrics, error)
+	GetMetrics() (metrics, error)
 	Health() []error
 }
 
-//WriteMetrics exprots a slice of metrics to a writer
-func WriteMetrics(metrics Metrics, w io.Writer) error {
+func writeMetrics(metrics metrics, w io.Writer) error {
 	for _, m := range metrics {
-		_, err := io.WriteString(w, FormatMetric(m))
+		_, err := io.WriteString(w, formatMetric(m))
 		if err != nil {
 			return err
 		}
@@ -41,8 +35,7 @@ func WriteMetrics(metrics Metrics, w io.Writer) error {
 	return nil
 }
 
-//FormatMetric converts the metric to a string
-func FormatMetric(m Metric) string {
+func formatMetric(m metric) string {
 	tags := []string{}
 	if m.Tags != nil {
 		for k, v := range *m.Tags {
@@ -53,8 +46,7 @@ func FormatMetric(m Metric) string {
 	return fmt.Sprintf("%s %f\n", m.Name, m.Value)
 }
 
-//FindMetric finds a metric by name and tagMatch (k=v)
-func (metrics Metrics) FindMetric(metricName string, tagMatch string) *Metric {
+func (metrics metrics) findMetric(metricName string, tagMatch string) *metric {
 	for _, m := range metrics {
 		if m.Name == metricName && tagMatch == "" {
 			return &m
@@ -69,9 +61,8 @@ func (metrics Metrics) FindMetric(metricName string, tagMatch string) *Metric {
 	return nil
 }
 
-//CheckMetric finds a matric and validates it ag ainst checkFunction
-func (metrics Metrics) CheckMetric(metricName, tagMatch string, checkFunction func(x float64) bool) error {
-	metric := metrics.FindMetric(metricName, tagMatch)
+func (metrics metrics) checkMetric(metricName, tagMatch string, checkFunction func(x float64) bool) error {
+	metric := metrics.findMetric(metricName, tagMatch)
 	if metric == nil {
 		return fmt.Errorf("Could not find metric %s / (%s)", metricName, tagMatch)
 	}
@@ -80,5 +71,3 @@ func (metrics Metrics) CheckMetric(metricName, tagMatch string, checkFunction fu
 	}
 	return nil
 }
-
-var logger = log.New(os.Stdout, "covid19-at", 0)

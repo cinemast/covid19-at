@@ -2,24 +2,23 @@ package main
 
 import (
 	"encoding/csv"
+	"log"
 	"os"
 	"regexp"
 	"strings"
 )
 
-//MetadataProvider to lookup locations based on names
-type MetadataProvider struct {
+type metadataProvider struct {
 	data map[string]metaData
 }
 
-//Location describes Lat/Long values
-type Location struct {
+type location struct {
 	lat  float64
 	long float64
 }
 
 type metaData struct {
-	location   Location
+	location   location
 	country    string
 	population uint64
 }
@@ -30,46 +29,47 @@ func normalizeName(name string) string {
 	return result
 }
 
-func NewMetadataProvider() *MetadataProvider {
-	return NewMetadataProviderWithFilename("metadata.csv")
+func newMetadataProvider() *metadataProvider {
+	return newMetadataProviderWithFilename("metadata.csv")
 }
 
-//NewMetadataProvider creates a new locationProvider
-func NewMetadataProviderWithFilename(filename string) *MetadataProvider {
+func newMetadataProviderWithFilename(filename string) *metadataProvider {
 	csvFile, err := os.Open(filename)
 	if err != nil {
-		panic(err)
+		log.Print(err)
+		return nil
 	}
 	r := csv.NewReader(csvFile)
 	records, err := r.ReadAll()
 	if err != nil {
-		panic(err)
+		log.Print(err)
+		return nil
 	}
 	data := make(map[string]metaData, len(records))
 
 	for _, row := range records {
-		data[normalizeName(row[0])] = metaData{Location{atof(row[2]), atof(row[3])}, row[0], atoi(row[1])}
+		data[normalizeName(row[0])] = metaData{location{atof(row[2]), atof(row[3])}, row[0], atoi(row[1])}
 	}
-	return &MetadataProvider{data: data}
+	return &metadataProvider{data: data}
 }
 
-func (l *MetadataProvider) GetMetadata(location string) *metaData {
+func (l *metadataProvider) getMetadata(location string) *metaData {
 	if l, ok := l.data[normalizeName(location)]; ok {
 		return &l
 	}
 	return nil
 }
 
-//GetLocation returns lat/long for a location name
-func (l *MetadataProvider) GetLocation(location string) *Location {
+//getLocation returns lat/long for a location name
+func (l *metadataProvider) getLocation(location string) *location {
 	if l, ok := l.data[normalizeName(location)]; ok {
 		return &l.location
 	}
 	return nil
 }
 
-//GetPopulation for a given location by name
-func (l *MetadataProvider) GetPopulation(location string) uint64 {
+//getPopulation for a given location by name
+func (l *metadataProvider) getPopulation(location string) uint64 {
 	if l, ok := l.data[normalizeName(location)]; ok {
 		return l.population
 	}
