@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 10,
+  "id": 4,
   "links": [
     {
       "icon": "external link",
@@ -88,7 +88,7 @@
       "datasource": null,
       "gridPos": {
         "h": 4,
-        "w": 2,
+        "w": 5,
         "x": 0,
         "y": 1
       },
@@ -127,72 +127,20 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.6.2",
+      "pluginVersion": "6.7.0-beta1",
       "repeat": null,
       "targets": [
         {
           "expr": "cov19_dead / cov19_confirmed",
-          "instant": false,
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 fatality rate Austria",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 2,
-        "y": 1
-      },
-      "id": 28,
-      "interval": "1h",
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-red",
-                  "value": null
-                }
-              ]
-            }
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "cov19_dead",
           "instant": true,
+          "interval": "",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Covid19 deaths in Austria",
+      "title": "Fatality rate",
       "type": "stat"
     },
     {
@@ -201,60 +149,6 @@
         "h": 4,
         "w": 3,
         "x": 5,
-        "y": 1
-      },
-      "id": 8,
-      "interval": "1h",
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "light-yellow",
-                  "value": null
-                }
-              ]
-            }
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "cov19_tests ",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 Tests in Austria",
-      "type": "stat"
-    },
-    {
-      "datasource": "Prometheus",
-      "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 8,
         "y": 1
       },
       "id": 6,
@@ -290,7 +184,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.6.2",
+      "pluginVersion": "6.7.0-beta1",
       "targets": [
         {
           "expr": "cov19_confirmed ",
@@ -300,7 +194,226 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Covid19 infected in Austria",
+      "title": "Infected",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 8,
+      "interval": "1h",
+      "links": [
+        {
+          "title": "Source",
+          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "light-yellow",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.7.0-beta1",
+      "targets": [
+        {
+          "expr": "cov19_tests ",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Tested",
+      "type": "stat"
+    },
+    {
+      "circleMaxSize": "50",
+      "circleMinSize": "10",
+      "colors": [
+        "#37872D",
+        "#F2CC0C",
+        "#FA6400",
+        "#E02F44",
+        "#C4162A"
+      ],
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 17,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 69,
+      "initialZoom": "8",
+      "interval": "1h",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Source",
+          "url": "https://info.gesundheitsministerium.at"
+        }
+      ],
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "47.5",
+      "mapCenterLongitude": "13.5",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "showLegend": true,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "bezirk",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "Value",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "expr": "cov19_bezirk_infected",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{country}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "10,20,50,100",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Infection Overview AUSTRIA by Bezirk",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "persons",
+      "unitSingle": "",
+      "unitSingular": "person",
+      "valueName": "current"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 5
+      },
+      "id": 71,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-blue",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.7.0-beta1",
+      "targets": [
+        {
+          "expr": "cov19_hospitalized",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Hospitalized",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 4,
+        "y": 5
+      },
+      "id": 72,
+      "interval": "",
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-purple",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.7.0-beta1",
+      "targets": [
+        {
+          "expr": "cov19_intensive_care",
+          "instant": true,
+          "interval": "1h",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "in Intensive Care",
       "type": "stat"
     },
     {
@@ -309,8 +422,8 @@
       "gridPos": {
         "h": 4,
         "w": 2,
-        "x": 10,
-        "y": 1
+        "x": 7,
+        "y": 5
       },
       "id": 24,
       "interval": "1h",
@@ -345,7 +458,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.6.2",
+      "pluginVersion": "6.7.0-beta1",
       "targets": [
         {
           "expr": "cov19_healed",
@@ -355,8 +468,107 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Covid19 healed in Austria",
+      "title": "Healed",
       "type": "stat"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 5
+      },
+      "id": 28,
+      "interval": "1h",
+      "links": [
+        {
+          "title": "Source",
+          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.7.0-beta1",
+      "targets": [
+        {
+          "expr": "cov19_dead",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Deaths",
+      "type": "stat"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fontSize": "175%",
+      "format": "percent",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 76,
+      "interval": null,
+      "legend": {
+        "percentage": false,
+        "show": true,
+        "values": true
+      },
+      "legendType": "On graph",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "expr": "cov19_sex_distribution",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{sex}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Sex distribution",
+      "type": "grafana-piechart-panel",
+      "valueName": "current"
     },
     {
       "circleMaxSize": "50",
@@ -372,28 +584,34 @@
       "decimals": 0,
       "esMetric": "Count",
       "gridPos": {
-        "h": 14,
+        "h": 17,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 18
       },
       "hideEmpty": false,
       "hideZero": false,
-      "id": 47,
-      "initialZoom": "7",
+      "id": 77,
+      "initialZoom": "8",
       "interval": "1h",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Source",
+          "url": "https://info.gesundheitsministerium.at"
+        }
+      ],
       "locationData": "table",
       "mapCenter": "custom",
       "mapCenterLatitude": "47.5",
       "mapCenterLongitude": "13.5",
       "maxDataPoints": 1,
       "mouseWheelZoom": true,
-      "options": {},
       "showLegend": true,
       "stickyLabels": false,
       "tableQueryOptions": {
         "geohashField": "geohash",
-        "labelField": "province",
+        "labelField": "bezirk",
         "latitudeField": "latitude",
         "longitudeField": "longitude",
         "metricField": "Value",
@@ -401,21 +619,67 @@
       },
       "targets": [
         {
-          "expr": "cov19_detail",
+          "expr": "cov19_bezirk_infected_per_100k",
           "format": "table",
           "instant": true,
+          "interval": "",
           "legendFormat": "{{country}}",
           "refId": "A"
         }
       ],
-      "thresholds": "50,100,200,300",
+      "thresholds": "10,20,50,100",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Infection Overview AUSTRIA",
+      "title": "Infection Overview AUSTRIA by Bezirk per 100k population",
       "type": "grafana-worldmap-panel",
-      "unitPlural": "persons",
+      "unitPlural": "persons / 100k",
       "unitSingle": "",
-      "unitSingular": "person",
+      "unitSingular": "person / 100k",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
+      "fontSize": "80%",
+      "format": "short",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 74,
+      "interval": null,
+      "legend": {
+        "percentage": true,
+        "show": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "expr": "cov19_age_distribution",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{group}} years",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Age distribution",
+      "type": "grafana-piechart-panel",
       "valueName": "current"
     },
     {
@@ -430,7 +694,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 29
       },
       "hiddenSeries": false,
       "id": 29,
@@ -516,6 +780,65 @@
       }
     },
     {
+      "circleMaxSize": "50",
+      "circleMinSize": "10",
+      "colors": [
+        "#37872D",
+        "#F2CC0C",
+        "#FA6400",
+        "#E02F44",
+        "#C4162A"
+      ],
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 35
+      },
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 47,
+      "initialZoom": "7",
+      "interval": "1h",
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "47.5",
+      "mapCenterLongitude": "13.5",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "showLegend": true,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "province",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "Value",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "expr": "cov19_detail",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{country}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "50,100,200,300",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Infection Overview AUSTRIA",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "persons",
+      "unitSingle": "",
+      "unitSingular": "person",
+      "valueName": "current"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -527,7 +850,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 39
       },
       "hiddenSeries": false,
       "id": 10,
@@ -616,226 +939,6 @@
       }
     },
     {
-      "circleMaxSize": "50",
-      "circleMinSize": "10",
-      "colors": [
-        "#37872D",
-        "#F2CC0C",
-        "#FA6400",
-        "#E02F44",
-        "#C4162A"
-      ],
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "esMetric": "Count",
-      "gridPos": {
-        "h": 16,
-        "w": 12,
-        "x": 12,
-        "y": 15
-      },
-      "hideEmpty": false,
-      "hideZero": false,
-      "id": 55,
-      "initialZoom": "7",
-      "interval": "1h",
-      "locationData": "table",
-      "mapCenter": "custom",
-      "mapCenterLatitude": "47.5",
-      "mapCenterLongitude": "13.5",
-      "maxDataPoints": 1,
-      "mouseWheelZoom": true,
-      "options": {},
-      "showLegend": true,
-      "stickyLabels": false,
-      "tableQueryOptions": {
-        "geohashField": "geohash",
-        "labelField": "province",
-        "latitudeField": "latitude",
-        "longitudeField": "longitude",
-        "metricField": "Value",
-        "queryType": "coordinates"
-      },
-      "targets": [
-        {
-          "expr": "cov19_detail_infected_per_100k",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "5,10,30,50",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Infection per 100k population in Austria",
-      "type": "grafana-worldmap-panel",
-      "unitPlural": "persons / 100k",
-      "unitSingle": "",
-      "unitSingular": "persons / 100k",
-      "valueName": "current"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 0,
-        "y": 25
-      },
-      "hiddenSeries": false,
-      "id": 53,
-      "interval": "1h",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "cov19_detail_infected_per_100k{province!=\", Salzburg\"}",
-          "legendFormat": "{{province}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 infections per 100k population Austria",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "circleMaxSize": "50",
-      "circleMinSize": "10",
-      "colors": [
-        "#37872D",
-        "#F2CC0C",
-        "#FA6400",
-        "#E02F44",
-        "#C4162A"
-      ],
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "esMetric": "Count",
-      "gridPos": {
-        "h": 17,
-        "w": 12,
-        "x": 12,
-        "y": 31
-      },
-      "hideEmpty": false,
-      "hideZero": false,
-      "id": 69,
-      "initialZoom": "8",
-      "interval": "1h",
-      "links": [
-        {
-          "targetBlank": true,
-          "title": "Source",
-          "url": "https://info.gesundheitsministerium.at"
-        }
-      ],
-      "locationData": "table",
-      "mapCenter": "custom",
-      "mapCenterLatitude": "47.5",
-      "mapCenterLongitude": "13.5",
-      "maxDataPoints": 1,
-      "mouseWheelZoom": true,
-      "options": {},
-      "showLegend": true,
-      "stickyLabels": false,
-      "tableQueryOptions": {
-        "geohashField": "geohash",
-        "labelField": "bezirk",
-        "latitudeField": "latitude",
-        "longitudeField": "longitude",
-        "metricField": "Value",
-        "queryType": "coordinates"
-      },
-      "targets": [
-        {
-          "expr": "cov19_bezirk_infected",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "10,20,50,100",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Infection Overview AUSTRIA (outdated, due to outage of info.gesundheitsministerium.at)",
-      "type": "grafana-worldmap-panel",
-      "unitPlural": "persons",
-      "unitSingle": "",
-      "unitSingular": "person",
-      "valueName": "current"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -847,7 +950,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 38
+        "y": 49
       },
       "hiddenSeries": false,
       "id": 30,
@@ -933,889 +1036,40 @@
       }
     },
     {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 48
-      },
-      "id": 33,
-      "panels": [],
-      "title": "Europe",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 49
-      },
-      "id": 40,
-      "interval": "4h",
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-orange",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "locale"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "sum(cov19_world_infected{continent=\"Europe\"})",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 Infections in Europe",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 6,
-        "y": 49
-      },
-      "id": 39,
-      "interval": "4h",
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "locale"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "sum(cov19_world_death{continent=\"Europe\"})",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 Deaths in Europe",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 12,
-        "y": 49
-      },
-      "id": 57,
-      "interval": "4h",
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "semi-dark-red",
-                  "value": null
-                },
-                {
-                  "color": "dark-red",
-                  "value": 1
-                }
-              ]
-            },
-            "unit": "percentunit"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": " sum(cov19_world_death{continent=\"Europe\"}) / sum(cov19_world_infected{continent=\"Europe\"})",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 fatality rate Europe",
-      "type": "stat"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 53
-      },
-      "hiddenSeries": false,
-      "id": 17,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_infected{continent=\"Europe\"}) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 infections in Europe",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 53
-      },
-      "hiddenSeries": false,
-      "id": 16,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_death{continent=\"Europe\"}) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 deaths in Europe",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 63
-      },
-      "hiddenSeries": false,
-      "id": 31,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_infected{continent=\"Europe\"}) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 infections in Europe (stacked)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 63
-      },
-      "hiddenSeries": false,
-      "id": 38,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_death{continent=\"Europe\"}) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 deaths in Europe (stacked)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 0,
-        "y": 73
-      },
-      "hiddenSeries": false,
-      "id": 59,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "cov19_world_infected_per_100k{continent=\"Europe\"}",
-          "interval": "4h",
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 infections per 100k population Europe",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 84
-      },
-      "id": 37,
-      "panels": [],
-      "title": "World",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 0,
-        "y": 85
-      },
-      "id": 41,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-orange",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "locale"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "sum(cov19_world_infected)",
-          "instant": true,
-          "interval": "4h",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 infections worldwide",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 5,
-        "y": 85
-      },
-      "id": 12,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "locale"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": "sum(cov19_world_death)",
-          "instant": true,
-          "interval": "4h",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 deaths worldwide",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 9,
-        "y": 85
-      },
-      "id": 67,
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "last"
-          ],
-          "defaults": {
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "semi-dark-yellow",
-                  "value": null
-                },
-                {
-                  "color": "semi-dark-orange",
-                  "value": 0.02
-                },
-                {
-                  "color": "dark-red",
-                  "value": 0.03
-                }
-              ]
-            },
-            "unit": "percentunit"
-          },
-          "overrides": [],
-          "values": false
-        },
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto"
-      },
-      "pluginVersion": "6.6.2",
-      "targets": [
-        {
-          "expr": " sum(cov19_world_death) / sum(cov19_world_infected)",
-          "interval": "4h",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Covid19 fatality rate World",
-      "type": "stat"
-    },
-    {
-      "circleMaxSize": "30",
+      "circleMaxSize": "50",
       "circleMinSize": "10",
       "colors": [
         "#37872D",
-        "#1F60C4",
         "#F2CC0C",
         "#FA6400",
-        "#8F3BB8",
         "#E02F44",
         "#C4162A"
       ],
       "datasource": "Prometheus",
-      "decimals": 2,
+      "decimals": 0,
       "esMetric": "Count",
       "gridPos": {
-        "h": 22,
+        "h": 16,
         "w": 12,
         "x": 12,
-        "y": 85
+        "y": 49
       },
       "hideEmpty": false,
       "hideZero": false,
-      "id": 63,
-      "initialZoom": "3",
-      "interval": "4h",
+      "id": 55,
+      "initialZoom": "7",
+      "interval": "1h",
       "locationData": "table",
       "mapCenter": "custom",
       "mapCenterLatitude": "47.5",
       "mapCenterLongitude": "13.5",
       "maxDataPoints": 1,
       "mouseWheelZoom": true,
-      "options": {},
       "showLegend": true,
       "stickyLabels": false,
       "tableQueryOptions": {
         "geohashField": "geohash",
-        "labelField": "country",
+        "labelField": "province",
         "latitudeField": "latitude",
         "longitudeField": "longitude",
         "metricField": "Value",
@@ -1823,17 +1077,17 @@
       },
       "targets": [
         {
-          "expr": "cov19_world_infected_per_100k",
+          "expr": "cov19_detail_infected_per_100k",
           "format": "table",
           "instant": true,
           "legendFormat": "{{country}}",
           "refId": "A"
         }
       ],
-      "thresholds": "5,10,30,50,100,300",
+      "thresholds": "5,10,30,50",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Infection per 100k population World",
+      "title": "Infection per 100k population in Austria",
       "type": "grafana-worldmap-panel",
       "unitPlural": "persons / 100k",
       "unitSingle": "",
@@ -1845,433 +1099,18 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 89
-      },
-      "hiddenSeries": false,
-      "id": 21,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_infected) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 infections worldwide",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 99
-      },
-      "hiddenSeries": false,
-      "id": 43,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_infected) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 infections worldwide (stacked)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "circleMaxSize": "100",
-      "circleMinSize": "1",
-      "colors": [
-        "#FFEE52",
-        "#FA6400",
-        "#C4162A"
-      ],
       "datasource": "Prometheus",
-      "decimals": 0,
-      "esMetric": "Count",
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 107
-      },
-      "hideEmpty": false,
-      "hideZero": false,
-      "id": 49,
-      "initialZoom": "1",
-      "locationData": "table",
-      "mapCenter": "custom",
-      "mapCenterLatitude": "30",
-      "mapCenterLongitude": "18",
-      "maxDataPoints": 1,
-      "mouseWheelZoom": true,
-      "options": {},
-      "showLegend": false,
-      "stickyLabels": false,
-      "tableQueryOptions": {
-        "geohashField": "geohash",
-        "labelField": "country",
-        "latitudeField": "latitude",
-        "longitudeField": "longitude",
-        "metricField": "Value",
-        "queryType": "coordinates"
-      },
-      "targets": [
-        {
-          "expr": "cov19_world_infected",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "100,1000",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Infection Overview WORLDWIDE",
-      "type": "grafana-worldmap-panel",
-      "unitPlural": "persons",
-      "unitSingle": "",
-      "unitSingular": "person",
-      "valueName": "current"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 109
+        "y": 59
       },
       "hiddenSeries": false,
-      "id": 22,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_world_death) by(country) > 0 ",
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 deaths worldwide",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "circleMaxSize": "30",
-      "circleMinSize": "10",
-      "colors": [
-        "#37872D",
-        "#1F60C4",
-        "#F2CC0C",
-        "#FA6400",
-        "#8F3BB8",
-        "#C4162A"
-      ],
-      "datasource": "Prometheus",
-      "decimals": 2,
-      "esMetric": "Count",
-      "gridPos": {
-        "h": 22,
-        "w": 12,
-        "x": 12,
-        "y": 117
-      },
-      "hideEmpty": false,
-      "hideZero": false,
-      "id": 65,
-      "initialZoom": "3",
-      "interval": "4h",
-      "locationData": "table",
-      "mapCenter": "custom",
-      "mapCenterLatitude": "47.5",
-      "mapCenterLongitude": "13.5",
-      "maxDataPoints": 1,
-      "mouseWheelZoom": true,
-      "options": {},
-      "showLegend": true,
-      "stickyLabels": false,
-      "tableQueryOptions": {
-        "geohashField": "geohash",
-        "labelField": "country",
-        "latitudeField": "latitude",
-        "longitudeField": "longitude",
-        "metricField": "Value",
-        "queryType": "coordinates"
-      },
-      "targets": [
-        {
-          "expr": "cov19_world_fatality_rate * 100",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "0,0.5,1,3,5",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Fatality rate World",
-      "type": "grafana-worldmap-panel",
-      "unitPlural": "%",
-      "unitSingle": "",
-      "unitSingular": "%",
-      "valueName": "current"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 119
-      },
-      "hiddenSeries": false,
-      "id": 42,
+      "id": 78,
+      "interval": "",
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -2290,7 +1129,7 @@
       "links": [
         {
           "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
         }
       ],
       "nullPointMode": "null",
@@ -2298,7 +1137,6 @@
         "dataLinks": []
       },
       "percentage": false,
-      "pluginVersion": "6.6.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2308,10 +1146,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(cov19_world_death) by(country) > 0 ",
-          "interval": "4h",
+          "expr": "max(cov19_bezirk_infected) without (instance,job,latitude,longitude,population)",
+          "instant": false,
+          "interval": "1h",
           "intervalFactor": 1,
-          "legendFormat": "{{country}}",
+          "legendFormat": "{{bezirk}}",
           "refId": "A"
         }
       ],
@@ -2319,10 +1158,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Covid19 deaths worldwide (stacked)",
+      "title": "Covid19 infections in Austria by Bezirk",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -2357,296 +1196,1719 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "cacheTimeout": null,
-      "dashLength": 10,
-      "dashes": false,
+      "collapsed": true,
       "datasource": null,
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 1,
+        "w": 24,
         "x": 0,
-        "y": 129
+        "y": 69
       },
-      "hiddenSeries": false,
-      "id": 19,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
+      "id": 33,
+      "panels": [
         {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(cov19_world_infected{continent!=\"China\"}) by (continent)",
-          "instant": false,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 49
+          },
+          "id": 40,
           "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{continent}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Infections by continent",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-orange",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "locale"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.0-beta1",
+          "targets": [
+            {
+              "expr": "sum(cov19_world_infected{continent=\"Europe\"})",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Covid19 Infections in Europe",
+          "type": "stat"
         },
         {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 49
+          },
+          "id": 39,
+          "interval": "4h",
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "locale"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.0-beta1",
+          "targets": [
+            {
+              "expr": "sum(cov19_world_death{continent=\"Europe\"})",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Covid19 Deaths in Europe",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 12,
+            "y": 49
+          },
+          "id": 57,
+          "interval": "4h",
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 1
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.0-beta1",
+          "targets": [
+            {
+              "expr": " sum(cov19_world_death{continent=\"Europe\"}) / sum(cov19_world_infected{continent=\"Europe\"})",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Covid19 fatality rate Europe",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 53
+          },
+          "hiddenSeries": false,
+          "id": 17,
+          "interval": "",
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_infected{continent=\"Europe\"}) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 infections in Europe",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 53
+          },
+          "hiddenSeries": false,
+          "id": 16,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_death{continent=\"Europe\"}) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 deaths in Europe",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 63
+          },
+          "hiddenSeries": false,
+          "id": 31,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_infected{continent=\"Europe\"}) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 infections in Europe (stacked)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 63
+          },
+          "hiddenSeries": false,
+          "id": 38,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_death{continent=\"Europe\"}) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 deaths in Europe (stacked)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 11,
+            "w": 12,
+            "x": 0,
+            "y": 73
+          },
+          "hiddenSeries": false,
+          "id": 59,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "cov19_world_infected_per_100k{continent=\"Europe\"}",
+              "interval": "4h",
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 infections per 100k population Europe",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "Europe",
+      "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "cacheTimeout": null,
-      "dashLength": 10,
-      "dashes": false,
+      "collapsed": true,
       "datasource": null,
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 1,
+        "w": 24,
         "x": 0,
-        "y": 137
+        "y": 70
       },
-      "hiddenSeries": false,
-      "id": 20,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
+      "id": 37,
+      "panels": [
         {
-          "title": "Source",
-          "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pluginVersion": "6.6.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(cov19_world_death{continent!=\"China\"}) by (continent)",
-          "instant": false,
-          "interval": "4h",
-          "intervalFactor": 1,
-          "legendFormat": "{{continent}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Deaths by continent",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 5,
+            "x": 0,
+            "y": 85
+          },
+          "id": 41,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-orange",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "locale"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.0-beta1",
+          "targets": [
+            {
+              "expr": "sum(cov19_world_infected)",
+              "instant": true,
+              "interval": "4h",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Covid19 infections worldwide",
+          "type": "stat"
         },
         {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "description": "",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 0,
-        "y": 145
-      },
-      "hiddenSeries": false,
-      "id": 61,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "cov19_world_fatality_rate",
-          "instant": false,
-          "interval": "4h",
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 fatality rate World",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 4,
+            "x": 5,
+            "y": 85
+          },
+          "id": 12,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "locale"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.0-beta1",
+          "targets": [
+            {
+              "expr": "sum(cov19_world_death)",
+              "instant": true,
+              "interval": "4h",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Covid19 deaths worldwide",
+          "type": "stat"
         },
         {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 9,
+            "y": 85
+          },
+          "id": 67,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "last"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-yellow",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 0.02
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 0.03
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.0-beta1",
+          "targets": [
+            {
+              "expr": " sum(cov19_world_death) / sum(cov19_world_infected)",
+              "interval": "4h",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Covid19 fatality rate World",
+          "type": "stat"
+        },
+        {
+          "circleMaxSize": "30",
+          "circleMinSize": "10",
+          "colors": [
+            "#37872D",
+            "#1F60C4",
+            "#F2CC0C",
+            "#FA6400",
+            "#8F3BB8",
+            "#E02F44",
+            "#C4162A"
+          ],
+          "datasource": "Prometheus",
+          "decimals": 2,
+          "esMetric": "Count",
+          "gridPos": {
+            "h": 22,
+            "w": 12,
+            "x": 12,
+            "y": 85
+          },
+          "hideEmpty": false,
+          "hideZero": false,
+          "id": 63,
+          "initialZoom": "3",
+          "interval": "4h",
+          "locationData": "table",
+          "mapCenter": "custom",
+          "mapCenterLatitude": "47.5",
+          "mapCenterLongitude": "13.5",
+          "maxDataPoints": 1,
+          "mouseWheelZoom": true,
+          "showLegend": true,
+          "stickyLabels": false,
+          "tableQueryOptions": {
+            "geohashField": "geohash",
+            "labelField": "country",
+            "latitudeField": "latitude",
+            "longitudeField": "longitude",
+            "metricField": "Value",
+            "queryType": "coordinates"
+          },
+          "targets": [
+            {
+              "expr": "cov19_world_infected_per_100k",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": "5,10,30,50,100,300",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Infection per 100k population World",
+          "type": "grafana-worldmap-panel",
+          "unitPlural": "persons / 100k",
+          "unitSingle": "",
+          "unitSingular": "persons / 100k",
+          "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 89
+          },
+          "hiddenSeries": false,
+          "id": 21,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_infected) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 infections worldwide",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 99
+          },
+          "hiddenSeries": false,
+          "id": 43,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_infected) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 infections worldwide (stacked)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "circleMaxSize": "100",
+          "circleMinSize": "1",
+          "colors": [
+            "#FFEE52",
+            "#FA6400",
+            "#C4162A"
+          ],
+          "datasource": "Prometheus",
+          "decimals": 0,
+          "esMetric": "Count",
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 107
+          },
+          "hideEmpty": false,
+          "hideZero": false,
+          "id": 49,
+          "initialZoom": "1",
+          "locationData": "table",
+          "mapCenter": "custom",
+          "mapCenterLatitude": "30",
+          "mapCenterLongitude": "18",
+          "maxDataPoints": 1,
+          "mouseWheelZoom": true,
+          "showLegend": false,
+          "stickyLabels": false,
+          "tableQueryOptions": {
+            "geohashField": "geohash",
+            "labelField": "country",
+            "latitudeField": "latitude",
+            "longitudeField": "longitude",
+            "metricField": "Value",
+            "queryType": "coordinates"
+          },
+          "targets": [
+            {
+              "expr": "cov19_world_infected",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": "100,1000",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Infection Overview WORLDWIDE",
+          "type": "grafana-worldmap-panel",
+          "unitPlural": "persons",
+          "unitSingle": "",
+          "unitSingular": "person",
+          "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 109
+          },
+          "hiddenSeries": false,
+          "id": 22,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_death) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 deaths worldwide",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "circleMaxSize": "30",
+          "circleMinSize": "10",
+          "colors": [
+            "#37872D",
+            "#1F60C4",
+            "#F2CC0C",
+            "#FA6400",
+            "#8F3BB8",
+            "#C4162A"
+          ],
+          "datasource": "Prometheus",
+          "decimals": 2,
+          "esMetric": "Count",
+          "gridPos": {
+            "h": 22,
+            "w": 12,
+            "x": 12,
+            "y": 117
+          },
+          "hideEmpty": false,
+          "hideZero": false,
+          "id": 65,
+          "initialZoom": "3",
+          "interval": "4h",
+          "locationData": "table",
+          "mapCenter": "custom",
+          "mapCenterLatitude": "47.5",
+          "mapCenterLongitude": "13.5",
+          "maxDataPoints": 1,
+          "mouseWheelZoom": true,
+          "showLegend": true,
+          "stickyLabels": false,
+          "tableQueryOptions": {
+            "geohashField": "geohash",
+            "labelField": "country",
+            "latitudeField": "latitude",
+            "longitudeField": "longitude",
+            "metricField": "Value",
+            "queryType": "coordinates"
+          },
+          "targets": [
+            {
+              "expr": "cov19_world_fatality_rate * 100",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": "0,0.5,1,3,5",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Fatality rate World",
+          "type": "grafana-worldmap-panel",
+          "unitPlural": "%",
+          "unitSingle": "",
+          "unitSingular": "%",
+          "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 119
+          },
+          "hiddenSeries": false,
+          "id": 42,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max(cov19_world_death) by(country) > 0 ",
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 deaths worldwide (stacked)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "cacheTimeout": null,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 129
+          },
+          "hiddenSeries": false,
+          "id": 19,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(cov19_world_infected{continent!=\"China\"}) by (continent)",
+              "instant": false,
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{continent}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Infections by continent",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "cacheTimeout": null,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 137
+          },
+          "hiddenSeries": false,
+          "id": 20,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+            {
+              "title": "Source",
+              "url": "https://www.ecdc.europa.eu/en/geographical-distribution-2019-ncov-cases"
+            }
+          ],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.2",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(cov19_world_death{continent!=\"China\"}) by (continent)",
+              "instant": false,
+              "interval": "4h",
+              "intervalFactor": 1,
+              "legendFormat": "{{continent}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Deaths by continent",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 12,
+            "w": 12,
+            "x": 0,
+            "y": 145
+          },
+          "hiddenSeries": false,
+          "id": 61,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "sort": "current",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "cov19_world_fatality_rate",
+              "instant": false,
+              "interval": "4h",
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Covid19 fatality rate World",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "World",
+      "type": "row"
     }
   ],
   "refresh": "1h",
@@ -2672,5 +2934,8 @@
   "timezone": "",
   "title": "Covid-19-2",
   "uid": "2fa2-Y_Wz222",
-  "version": 11
+  "variables": {
+    "list": []
+  },
+  "version": 1
 }

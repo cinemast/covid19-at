@@ -238,6 +238,6 @@ func (h *healthMinistryExporter) getSimpleData() (Metrics, []error) {
 	if len(intensiveCare) != 2 {
 		errors = append(errors, fmt.Errorf("Could not find \"Intensivstation\""))
 	}
-	result = append(result, Metric{"cov19_intensive_care", nil, atof(hospitalized[1])})
+	result = append(result, Metric{"cov19_intensive_care", nil, atof(intensiveCare[1])})
 	return result, errors
 }

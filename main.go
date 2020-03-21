@@ -10,7 +10,6 @@ var exporters = []Exporter{
 	NewHealthMinistryExporter(),
 	NewMinistryExporter(metadataProvider),
 	NewEcdcExporter(metadataProvider),
-	NewGrafanaExporter(),
 }
 
 func handleMetrics(w http.ResponseWriter, _ *http.Request) {
