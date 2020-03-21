@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/PuerkitoBio/goquery"
@@ -98,7 +99,8 @@ func (e *EcdcExporter) getTags(stats []EcdcStat, i int) map[string]string {
 }
 
 func getEcdcStat(url string) ([]EcdcStat, error) {
-	response, err := http.Get(url)
+	client := http.Client{Timeout: 3 * time.Second}
+	response, err := client.Get(url)
 	if err != nil {
 		return nil, err
 	}

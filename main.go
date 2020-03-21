@@ -7,6 +7,7 @@ import (
 
 var metadataProvider = NewMetadataProvider()
 var exporters = []Exporter{
+	NewHealthMinistryExporter(),
 	NewMinistryExporter(metadataProvider),
 	NewEcdcExporter(metadataProvider),
 	NewGrafanaExporter(),

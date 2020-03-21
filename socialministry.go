@@ -7,20 +7,21 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 )
 
-//MinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
-type MinistryExporter struct {
+//SocialMinistryExporter for parsing tables from https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html
+type SocialMinistryExporter struct {
 	Url string
 	Mp  *MetadataProvider
 }
 
-//NewMinistryExporter creates a new MinistryExporter
-func NewMinistryExporter(lp *MetadataProvider) *MinistryExporter {
-	return &MinistryExporter{Url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", Mp: lp}
+//NewMinistryExporter creates a new SocialMinistryExporter
+func NewMinistryExporter(lp *MetadataProvider) *SocialMinistryExporter {
+	return &SocialMinistryExporter{Url: "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html", Mp: lp}
 }
 
-func (e *MinistryExporter) Health() []error {
+func (e *SocialMinistryExporter) Health() []error {
 	errors := make([]error, 0)
 
 	ministryStats, err := e.GetMetrics()
@@ -32,16 +33,6 @@ func (e *MinistryExporter) Health() []error {
 		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
 
-	err = ministryStats.CheckMetric("cov19_confirmed", "", func(x float64) bool { return x > 1000 })
-	if err != nil {
-		errors = append(errors, err)
-	}
-
-	err = ministryStats.CheckMetric("cov19_tests", "", func(x float64) bool { return x > 10000 })
-	if err != nil {
-		errors = append(errors, err)
-	}
-
 	err = ministryStats.CheckMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
 	if err != nil {
 		errors = append(errors, err)
@@ -50,8 +41,9 @@ func (e *MinistryExporter) Health() []error {
 }
 
 //GetMetrics returns total stats and province details
-func (e *MinistryExporter) GetMetrics() (Metrics, error) {
-	response, err := http.Get(e.Url)
+func (e *SocialMinistryExporter) GetMetrics() (Metrics, error) {
+	client := http.Client{Timeout: 3 * time.Second}
+	response, err := client.Get(e.Url)
 	if err != nil {
 		return nil, err
 	}
@@ -75,13 +67,7 @@ func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 	provinceMetrics := make(Metrics, 0)
 	for _, s := range provinceStats {
 		tags := e.getTags(s.location)
-		provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail", Value: float64(s.infected), Tags: tags})
 		population := e.Mp.GetPopulation(s.location)
-
-		if population > 0 {
-			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_infection_rate", Value: infectionRate(s.infected, population), Tags: tags})
-			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_infected_per_100k", Value: infection100k(s.infected, population), Tags: tags})
-		}
 		if s.deaths > 0 {
 			provinceMetrics = append(provinceMetrics, Metric{Name: "cov19_detail_dead", Value: float64(s.deaths), Tags: tags})
 			if population > 0 {
@@ -93,7 +79,7 @@ func (e *MinistryExporter) GetMetrics() (Metrics, error) {
 	return append(summary, provinceMetrics...), err
 }
 
-func (e *MinistryExporter) getTags(province string) *map[string]string {
+func (e *SocialMinistryExporter) getTags(province string) *map[string]string {
 	if e.Mp != nil && e.Mp.GetLocation(province) != nil {
 		location := e.Mp.GetLocation(province)
 		return &map[string]string{"country": "Austria", "province": province, "latitude": ftos(location.lat), "longitude": ftos(location.long)}
@@ -102,7 +88,7 @@ func (e *MinistryExporter) getTags(province string) *map[string]string {
 }
 
 //GetProvinceStats exports metrics per "Bundesland"
-func (e *MinistryExporter) getProvinceStats(document *goquery.Document) (map[string]CovidStat, error) {
+func (e *SocialMinistryExporter) getProvinceStats(document *goquery.Document) (map[string]CovidStat, error) {
 	result := make(map[string]CovidStat)
 	summary, err := document.Find(".infobox").Html()
 	if err != nil {
@@ -146,7 +132,7 @@ func (e *MinistryExporter) getProvinceStats(document *goquery.Document) (map[str
 }
 
 //GetTotalStats gets sumamrized stats and number of tests
-func (e *MinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, error) {
+func (e *SocialMinistryExporter) GetTotalStats(document *goquery.Document) (Metrics, error) {
 	result := make([]Metric, 0)
 	summary, err := document.Find(".abstract").First().Html()
 
