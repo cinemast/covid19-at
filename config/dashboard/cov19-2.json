@@ -619,7 +619,7 @@
       },
       "targets": [
         {
-          "expr": "cov19_bezirk_infected_per_100k",
+          "expr": "cov19_bezirk_infected_100k",
           "format": "table",
           "instant": true,
           "interval": "",
