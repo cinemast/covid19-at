@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 13,
   "links": [
     {
       "icon": "external link",
@@ -127,7 +127,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "repeat": null,
       "targets": [
         {
@@ -184,7 +184,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_confirmed ",
@@ -238,7 +238,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_tests ",
@@ -288,6 +288,7 @@
       "mapCenterLongitude": "13.5",
       "maxDataPoints": 1,
       "mouseWheelZoom": true,
+      "options": {},
       "showLegend": true,
       "stickyLabels": false,
       "tableQueryOptions": {
@@ -351,7 +352,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_hospitalized",
@@ -401,7 +402,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_intensive_care",
@@ -458,7 +459,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_healed",
@@ -512,7 +513,7 @@
         "justifyMode": "auto",
         "orientation": "auto"
       },
-      "pluginVersion": "6.7.0-beta1",
+      "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_dead",
@@ -527,48 +528,103 @@
     },
     {
       "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": null,
-      "fontSize": "175%",
-      "format": "percent",
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 12,
         "x": 0,
         "y": 9
       },
-      "id": 76,
-      "interval": null,
+      "hiddenSeries": false,
+      "id": 29,
       "legend": {
-        "percentage": false,
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
+        "total": false,
         "values": true
       },
-      "legendType": "On graph",
-      "links": [],
-      "maxDataPoints": 3,
-      "nullPointMode": "connected",
-      "pieType": "pie",
-      "strokeWidth": 1,
+      "lines": true,
+      "linewidth": 1,
+      "links": [
+        {
+          "title": "Source",
+          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+        }
+      ],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
       "targets": [
         {
-          "expr": "cov19_sex_distribution",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{sex}}",
+          "expr": "max(cov19_detail_dead{country=\"Austria\",province!=\", Salzburg\"}) without (instance,job,latitude,longitude,population)",
+          "interval": "1h",
+          "intervalFactor": 1,
+          "legendFormat": "{{province}}",
           "refId": "A"
         }
       ],
+      "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "Sex distribution",
-      "type": "grafana-piechart-panel",
-      "valueName": "current"
+      "title": "Covid19 deaths in Austria by Province (stacked)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "circleMaxSize": "50",
@@ -607,6 +663,7 @@
       "mapCenterLongitude": "13.5",
       "maxDataPoints": 1,
       "mouseWheelZoom": true,
+      "options": {},
       "showLegend": true,
       "stickyLabels": false,
       "tableQueryOptions": {
@@ -646,13 +703,59 @@
         "threshold": 0
       },
       "datasource": null,
+      "fontSize": "175%",
+      "format": "percent",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 76,
+      "interval": null,
+      "legend": {
+        "percentage": false,
+        "show": true,
+        "values": true
+      },
+      "legendType": "On graph",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "expr": "cov19_sex_distribution",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{sex}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Sex distribution",
+      "type": "grafana-piechart-panel",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": null,
       "fontSize": "80%",
       "format": "short",
       "gridPos": {
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 29
       },
       "id": 74,
       "interval": null,
@@ -665,6 +768,7 @@
       "links": [],
       "maxDataPoints": 3,
       "nullPointMode": "connected",
+      "options": {},
       "pieType": "pie",
       "strokeWidth": 1,
       "targets": [
@@ -681,103 +785,6 @@
       "title": "Age distribution",
       "type": "grafana-piechart-panel",
       "valueName": "current"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 29
-      },
-      "hiddenSeries": false,
-      "id": 29,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "title": "Source",
-          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(cov19_detail_dead{country=\"Austria\",province!=\", Salzburg\"}) without (instance,job,latitude,longitude,population)",
-          "interval": "1h",
-          "intervalFactor": 1,
-          "legendFormat": "{{province}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Covid19 deaths in Austria by Province",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "circleMaxSize": "50",
@@ -809,6 +816,7 @@
       "mapCenterLongitude": "13.5",
       "maxDataPoints": 1,
       "mouseWheelZoom": true,
+      "options": {},
       "showLegend": true,
       "stickyLabels": false,
       "tableQueryOptions": {
@@ -1065,6 +1073,7 @@
       "mapCenterLongitude": "13.5",
       "maxDataPoints": 1,
       "mouseWheelZoom": true,
+      "options": {},
       "showLegend": true,
       "stickyLabels": false,
       "tableQueryOptions": {
@@ -1158,7 +1167,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Covid19 infections in Austria by Bezirk",
+      "title": "Covid19 infections in Austria by Bezirk (stacked)",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2934,8 +2943,5 @@
   "timezone": "",
   "title": "Covid-19-2",
   "uid": "2fa2-Y_Wz222",
-  "variables": {
-    "list": []
-  },
-  "version": 1
+  "version": 2
 }
