@@ -16,13 +16,22 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 14,
-  "links": [],
+  "links": [
+    {
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "Impressum",
+      "type": "link",
+      "url": "https://covid19.spiessknafl.at/impressum.html"
+    }
+  ],
   "panels": [
     {
       "datasource": null,
       "gridPos": {
         "h": 5,
-        "w": 13,
+        "w": 24,
         "x": 0,
         "y": 0
       },

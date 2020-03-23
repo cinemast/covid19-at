@@ -67,6 +67,14 @@
       "title": "Metric Endpoint",
       "type": "link",
       "url": "https://covid19.spiessknafl.at/covid19/metrics"
+    },
+    {
+      "icon": "external link",
+      "tags": [],
+      "targetBlank": true,
+      "title": "Impressum",
+      "type": "link",
+      "url": "https://covid19.spiessknafl.at/impressum.html"
     }
   ],
   "panels": [

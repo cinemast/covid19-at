@@ -6,6 +6,10 @@ server {
    proxy_pass http://localhost:3000/;
   }
 
+  location /impressum.html {
+    alias /home/cinemast/covid19-at/impressum.html;
+  }
+
   location /prometheus {
    proxy_pass http://localhost:9090/prometheus;
   }
@@ -41,4 +45,6 @@ server {
   listen 80;
   server_name covid19.spiessknafl.at;
     return 404; # managed by Certbot
+
+
 }
