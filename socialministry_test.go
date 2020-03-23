@@ -21,9 +21,9 @@ func TestMinistryStats(t *testing.T) {
 	assert.NotNil(t, tests)
 	assert.True(t, tests.Value > 1000)
 
-	healed := result.findMetric("cov19_healed", "")
-	assert.NotNil(t, healed)
-	assert.True(t, healed.Value > 5)
+	//healed := result.findMetric("cov19_healed", "")
+	//assert.NotNil(t, healed)
+	//assert.True(t, healed.Value > 5)
 
 	dead := result.findMetric("cov19_dead", "")
 	assert.NotNil(t, dead)

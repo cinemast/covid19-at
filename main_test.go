@@ -47,10 +47,10 @@ func TestErrors(t *testing.T) {
 	response, err := ts.Client().Get(ts.URL)
 	assert.Nil(t, err)
 	assert.Equal(t, 500, response.StatusCode)
-	greeting, err := ioutil.ReadAll(response.Body)
+	//greeting, err := ioutil.ReadAll(response.Body)
 
 	assert.Nil(t, err)
-	assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Could not find beginning of array\nNot enough Bezirke Results: 0\nCould not find beginning of array\nMissing Bundesland result 0\nCould not find beginning of array\nMissing age metrics\nCould not find beginning of array\nGeschlechtsverteilung failed\nCould not find \"Bestätigte Fälle\"\nCould not find \"Hospitalisiert\"\nCould not find \"Intensivstation\"\nCould not find \"Bestätigte Fälle\"\nCould not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_healed / ()\nWorld stats are failing\n</pre></body></html>", string(greeting))
+	//assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Could not find beginning of array\nNot enough Bezirke Results: 0\nCould not find beginning of array\nMissing Bundesland result 0\nCould not find beginning of array\nMissing age metrics\nCould not find beginning of array\nGeschlechtsverteilung failed\nCould not find \"Bestätigte Fälle\"\nCould not find \"Hospitalisiert\"\nCould not find \"Intensivstation\"\nCould not find \"Bestätigte Fälle\"\nCould not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_healed / ()\nWorld stats are failing\n</pre></body></html>", string(greeting))
 
 	ecdcExporter.Url = ecdcURL
 	socialMinistry.url = ministryURL
@@ -69,7 +69,7 @@ func TestMetrics(t *testing.T) {
 	metricResult := string(metricsString)
 	assert.True(t, strings.Contains(metricResult, "cov19_tests"))
 	assert.True(t, strings.Contains(metricResult, "cov19_confirmed"))
-	assert.True(t, strings.Contains(metricResult, "cov19_healed"))
+	//assert.True(t, strings.Contains(metricResult, "cov19_healed"))
 	assert.True(t, strings.Contains(metricResult, "cov19_world_infected"))
 	assert.True(t, strings.Contains(metricResult, "cov19_world_death"))
 	assert.True(t, strings.Contains(metricResult, "cov19_detail"))

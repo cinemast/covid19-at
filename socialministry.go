@@ -31,10 +31,10 @@ func (e *socialMinistryExporter) Health() []error {
 		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
 
-	err = ministryStats.checkMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
-	if err != nil {
-		errors = append(errors, err)
-	}
+	//err = ministryStats.checkMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
+	//if err != nil {
+	//	errors = append(errors, err)
+	//}
 	return errors
 }
 
