@@ -456,13 +456,15 @@
         }
       ],
       "options": {
+        "graphMode": "none",
         "colorMode": "value",
+        "justifyMode": "auto",
         "fieldOptions": {
+          "values": false,
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "defaults": {
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -471,20 +473,18 @@
                   "value": null
                 }
               ]
-            }
+            },
+            "mappings": []
           },
-          "overrides": [],
-          "values": false
+          "overrides": []
         },
-        "graphMode": "area",
-        "justifyMode": "auto",
         "orientation": "auto"
       },
       "pluginVersion": "6.6.2",
       "targets": [
         {
           "expr": "cov19_healed",
-          "instant": true,
+          "instant": false,
           "refId": "A"
         }
       ],
