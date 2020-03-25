@@ -13,6 +13,7 @@ var exporters = []Exporter{
 	newHealthMinistryExporter(),
 	newSocialMinistryExporter(mp),
 	newEcdcExporter(mp),
+	newMathdroExporter(),
 }
 
 func handleMetrics(w http.ResponseWriter, _ *http.Request) {
