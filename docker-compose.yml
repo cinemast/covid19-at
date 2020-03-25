@@ -13,6 +13,7 @@ services:
     command:
       - "--web.external-url=http://localhost:9090/prometheus"
       - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.enable-admin-api"
       - "--storage.tsdb.path=/prometheus"
       - "--storage.tsdb.retention.time=300d"
       - "--web.console.libraries=/usr/share/prometheus/console_libraries"

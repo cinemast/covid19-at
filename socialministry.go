@@ -97,7 +97,7 @@ func (e *socialMinistryExporter) getProvinceStats(document *goquery.Document) (m
 		return nil, errors.New(`Could not find "Bestätigte Fälle"`)
 	}
 
-	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`)
+	re := regexp.MustCompile(`(?P<location>\S+) \((?P<number>[0-9\.]+)\)`)
 	matches := re.FindAllStringSubmatch(summaryMatch[0], -1)
 
 	for _, match := range matches {
@@ -109,11 +109,11 @@ func (e *socialMinistryExporter) getProvinceStats(document *goquery.Document) (m
 
 	deathMatch := regexp.MustCompile(`Todesfälle.*`).FindAllString(summary, 1)
 	if len(deathMatch) > 0 {
-		matches := regexp.MustCompile(`(?P<number>\d+) \((?P<location>\S+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
+		matches := regexp.MustCompile(`(?P<number>[0-9\.]+) \((?P<location>\S+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
 		provinceIndex := 2
 		valueIndex := 1
 		if len(matches) == 0 {
-			matches = regexp.MustCompile(`(?P<location>\S+) \((?P<number>\d+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
+			matches = regexp.MustCompile(`(?P<location>\S+) \((?P<number>[0-9\.]+)\)`).FindAllStringSubmatch(deathMatch[0], -1)
 			provinceIndex = 1
 			valueIndex = 2
 		}

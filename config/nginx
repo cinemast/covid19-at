@@ -10,6 +10,12 @@ server {
     alias /home/cinemast/covid19-at/impressum.html;
   }
 
+  location /prometheus/api/v1/admin/ {
+    auth_basic "admin";
+    auth_basic_user_file /etc/nginx/htpasswd;
+    proxy_pass http://localhost:9090/prometheus/api/v1/admin/;
+  }
+
   location /prometheus {
    proxy_pass http://localhost:9090/prometheus;
   }
