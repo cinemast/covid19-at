@@ -29,3 +29,15 @@ func TestMinistryStats(t *testing.T) {
 	assert.NotNil(t, dead)
 	assert.True(t, dead.Value >= 4)
 }
+
+func TestHospitalized(t *testing.T) {
+	ministry := newSocialMinistryExporter(newMetadataProvider())
+	result, err := ministry.getHospitalized()
+
+	assert.Nil(t, err)
+	assert.True(t, len(result) > 0, len(result))
+	assert.NotNil(t, result.findMetric("cov19_hospitalized", ""))
+	assert.NotNil(t, result.findMetric("cov19_intensive_care", ""))
+	assert.NotNil(t, result.findMetric("cov19_intensive_care_detail", "province=Wien"))
+
+}

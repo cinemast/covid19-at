@@ -110,19 +110,23 @@ func getEcdcStat(url string) ([]ecdcStat, error) {
 		return nil, errors.New("Could not find table")
 	}
 
-	result := make([]ecdcStat, rows.Size()-1)
+	result := make([]ecdcStat, 0)
 
 	rows.Each(func(i int, s *goquery.Selection) {
 		if i < rows.Size()-1 {
 			rowStart := s.Find("td").First()
-			result[i] = ecdcStat{
-				CovidStat{
-					location: normalizeCountryName(rowStart.Next().Text()),
-					infected: atoi(rowStart.Next().Next().Text()),
-					deaths:   atoi(rowStart.Next().Next().Next().Text()),
-				},
-				rowStart.Text(),
+			location := normalizeCountryName(rowStart.Next().Text())
+			if location != "Other" {
+				result = append(result, ecdcStat{
+					CovidStat{
+						location: location,
+						infected: atoi(rowStart.Next().Next().Text()),
+						deaths:   atoi(rowStart.Next().Next().Next().Text()),
+					},
+					rowStart.Text(),
+				})
 			}
+
 		}
 	})
 	return result, nil

@@ -74,7 +74,8 @@ func (e *socialMinistryExporter) GetMetrics() (metrics, error) {
 		}
 	}
 
-	return append(summary, provinceMetrics...), err
+	hosp, _ := e.getHospitalized()
+	return append(append(summary, provinceMetrics...), hosp...), err
 }
 
 func (e *socialMinistryExporter) getTags(province string) *map[string]string {
@@ -158,5 +159,35 @@ func (e *socialMinistryExporter) GetTotalStats(document *goquery.Document) (metr
 		result = append(result, metric{Name: "cov19_dead", Value: atoif(deadMatch[1])})
 	}
 
+	return result, nil
+}
+
+func (e *socialMinistryExporter) getHospitalized() (metrics, error) {
+	client := http.Client{Timeout: 3 * time.Second}
+	response, err := client.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Dashboard/Zahlen-zur-Hospitalisierung")
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	document, _ := goquery.NewDocumentFromReader(response.Body)
+	rows := document.Find("table").Find("tbody").Find("tr")
+
+	result := make(metrics, 0)
+
+	rows.Each(func(i int, s *goquery.Selection) {
+		rowStart := s.Find("td").First()
+		province := (rowStart.Text())
+		hospitalized := atoi(rowStart.Next().Text())
+		intensiveCare := atoi(rowStart.Next().Next().Text())
+		if i < rows.Size()-1 {
+			tags := e.getTags(province)
+			result = append(result, metric{Name: "cov19_hospitalized_detail", Tags: tags, Value: float64(hospitalized)})
+			result = append(result, metric{Name: "cov19_intensive_care_detail", Tags: tags, Value: float64(intensiveCare)})
+		} else {
+			result = append(result, metric{Name: "cov19_hospitalized", Tags: nil, Value: float64(hospitalized)})
+			result = append(result, metric{Name: "cov19_intensive_care", Tags: nil, Value: float64(intensiveCare)})
+		}
+	})
 	return result, nil
 }

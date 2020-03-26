@@ -93,7 +93,7 @@ func (h *healthMinistryExporter) Health() []error {
 	result, err2 := h.getSimpleData()
 	errors = append(errors, err2...)
 
-	if len(result) < 3 {
+	if len(result) < 1 {
 		errors = append(errors, fmt.Errorf("Could not find \"Bestätigte Fälle\""))
 	}
 
@@ -230,20 +230,5 @@ func (h *healthMinistryExporter) getSimpleData() (metrics, []error) {
 	} else {
 		result = append(result, metric{"cov19_confirmed", nil, atof(erkrankungenMatch[1])})
 	}
-
-	hospitalized := regexp.MustCompile(`hospitalisiert = ([0-9]+)`).FindStringSubmatch(string(lines))
-	if len(hospitalized) != 2 {
-		errors = append(errors, fmt.Errorf("Could not find \"Hospitalisiert\""))
-	} else {
-		result = append(result, metric{"cov19_hospitalized", nil, atof(hospitalized[1])})
-	}
-
-	intensiveCare := regexp.MustCompile(`Intensivstation = ([0-9]+)`).FindStringSubmatch(string(lines))
-	if len(intensiveCare) != 2 {
-		errors = append(errors, fmt.Errorf("Could not find \"Intensivstation\""))
-	} else {
-		result = append(result, metric{"cov19_intensive_care", nil, atof(intensiveCare[1])})
-	}
-
 	return result, errors
 }
