@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 13,
+  "id": 3,
   "links": [
     {
       "icon": "external link",
@@ -456,15 +456,13 @@
         }
       ],
       "options": {
-        "graphMode": "none",
         "colorMode": "value",
-        "justifyMode": "auto",
         "fieldOptions": {
-          "values": false,
           "calcs": [
             "lastNotNull"
           ],
           "defaults": {
+            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -473,11 +471,13 @@
                   "value": null
                 }
               ]
-            },
-            "mappings": []
+            }
           },
-          "overrides": []
+          "overrides": [],
+          "values": false
         },
+        "graphMode": "none",
+        "justifyMode": "auto",
         "orientation": "auto"
       },
       "pluginVersion": "6.6.2",
@@ -1238,13 +1238,262 @@
       }
     },
     {
+      "circleMaxSize": "50",
+      "circleMinSize": "10",
+      "colors": [
+        "#37872D",
+        "#F2CC0C",
+        "#FA6400",
+        "#E02F44",
+        "#C4162A"
+      ],
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 65
+      },
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 82,
+      "initialZoom": "7",
+      "interval": "1h",
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "47.5",
+      "mapCenterLongitude": "13.5",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "options": {},
+      "showLegend": true,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "province",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "Value",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "expr": "cov19_hospitalized_detail",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{country}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "50,100,200,500",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Hospitalized in Austria",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "",
+      "unitSingle": "",
+      "unitSingular": "",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 67
+      },
+      "hiddenSeries": false,
+      "id": 81,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "cov19_intensive_care_detail",
+          "interval": "",
+          "legendFormat": "{{province}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Intensive Care Patients by Province",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 75
+      },
+      "hiddenSeries": false,
+      "id": 80,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "cov19_hospitalized_detail",
+          "interval": "",
+          "legendFormat": "{{province}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Hospitalized by Province",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 67
+        "y": 83
       },
       "id": 33,
       "panels": [],
@@ -1257,7 +1506,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 68
+        "y": 84
       },
       "id": 40,
       "interval": "4h",
@@ -1312,7 +1561,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 68
+        "y": 84
       },
       "id": 39,
       "interval": "4h",
@@ -1367,7 +1616,7 @@
         "h": 4,
         "w": 3,
         "x": 12,
-        "y": 68
+        "y": 84
       },
       "id": 57,
       "interval": "4h",
@@ -1426,7 +1675,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 72
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 31,
@@ -1525,7 +1774,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 72
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 38,
@@ -1626,7 +1875,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 82
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 17,
@@ -1726,7 +1975,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 82
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 16,
@@ -1827,7 +2076,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 92
+        "y": 108
       },
       "hiddenSeries": false,
       "id": 59,
@@ -1914,7 +2163,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 103
+        "y": 119
       },
       "id": 37,
       "panels": [],
@@ -1927,7 +2176,7 @@
         "h": 4,
         "w": 5,
         "x": 0,
-        "y": 104
+        "y": 120
       },
       "id": 41,
       "links": [
@@ -1982,7 +2231,7 @@
         "h": 4,
         "w": 4,
         "x": 5,
-        "y": 104
+        "y": 120
       },
       "id": 12,
       "links": [
@@ -2037,7 +2286,7 @@
         "h": 4,
         "w": 3,
         "x": 9,
-        "y": 104
+        "y": 120
       },
       "id": 67,
       "options": {
@@ -2106,7 +2355,7 @@
         "h": 22,
         "w": 12,
         "x": 12,
-        "y": 104
+        "y": 120
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -2162,7 +2411,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 108
+        "y": 124
       },
       "hiddenSeries": false,
       "id": 21,
@@ -2263,7 +2512,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 118
+        "y": 134
       },
       "hiddenSeries": false,
       "id": 43,
@@ -2364,7 +2613,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 126
+        "y": 142
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -2419,7 +2668,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 128
+        "y": 144
       },
       "hiddenSeries": false,
       "id": 22,
@@ -2523,7 +2772,7 @@
         "h": 22,
         "w": 12,
         "x": 12,
-        "y": 136
+        "y": 152
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -2579,7 +2828,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 138
+        "y": 154
       },
       "hiddenSeries": false,
       "id": 42,
@@ -2680,7 +2929,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 148
+        "y": 164
       },
       "hiddenSeries": false,
       "id": 19,
@@ -2780,7 +3029,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 156
+        "y": 172
       },
       "hiddenSeries": false,
       "id": 20,
@@ -2878,7 +3127,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 164
+        "y": 180
       },
       "hiddenSeries": false,
       "id": 61,
@@ -2983,5 +3232,5 @@
   "timezone": "",
   "title": "Covid-19-2",
   "uid": "2fa2-Y_Wz222",
-  "version": 9
+  "version": 22
 }
