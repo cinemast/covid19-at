@@ -21,20 +21,13 @@ func newSocialMinistryExporter(lp *metadataProvider) *socialMinistryExporter {
 
 func (e *socialMinistryExporter) Health() []error {
 	errors := make([]error, 0)
-
 	ministryStats, err := e.GetMetrics()
 	if err != nil {
 		errors = append(errors, err)
 	}
-
 	if len(ministryStats) < 10 {
 		errors = append(errors, fmt.Errorf("Missing ministry stats"))
 	}
-
-	//err = ministryStats.checkMetric("cov19_healed", "", func(x float64) bool { return x > 5 })
-	//if err != nil {
-	//	errors = append(errors, err)
-	//}
 	return errors
 }
 
@@ -51,7 +44,7 @@ func (e *socialMinistryExporter) GetMetrics() (metrics, error) {
 		return nil, err
 	}
 
-	summary, err1 := e.GetTotalStats(document)
+	summary, err1 := e.getTotalMetrics(document)
 	provinceStats, err2 := e.getProvinceStats(document)
 
 	if err1 != nil && err2 != nil {
@@ -74,7 +67,7 @@ func (e *socialMinistryExporter) GetMetrics() (metrics, error) {
 		}
 	}
 
-	hosp, _ := e.getHospitalized()
+	hosp, _ := e.getHospitalizedMetrics()
 	return append(append(summary, provinceMetrics...), hosp...), err
 }
 
@@ -86,7 +79,20 @@ func (e *socialMinistryExporter) getTags(province string) *map[string]string {
 	return &map[string]string{"country": "Austria", "province": province}
 }
 
-//GetProvinceStats exports metrics per "Bundesland"
+func (e *socialMinistryExporter) getBundeslandStats() (map[string]CovidStat, error) {
+	client := http.Client{Timeout: 3 * time.Second}
+	response, err := client.Get(e.url)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+	document, err := goquery.NewDocumentFromReader(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	return e.getProvinceStats(document)
+}
+
 func (e *socialMinistryExporter) getProvinceStats(document *goquery.Document) (map[string]CovidStat, error) {
 	result := make(map[string]CovidStat)
 	summary, err := document.Find(".infobox").Html()
@@ -130,8 +136,7 @@ func (e *socialMinistryExporter) getProvinceStats(document *goquery.Document) (m
 	return result, nil
 }
 
-//GetTotalStats gets sumamrized stats and number of tests
-func (e *socialMinistryExporter) GetTotalStats(document *goquery.Document) (metrics, error) {
+func (e *socialMinistryExporter) getTotalMetrics(document *goquery.Document) (metrics, error) {
 	result := make([]metric, 0)
 	summary, err := document.Find(".abstract").First().Html()
 
@@ -162,7 +167,32 @@ func (e *socialMinistryExporter) GetTotalStats(document *goquery.Document) (metr
 	return result, nil
 }
 
-func (e *socialMinistryExporter) getHospitalized() (metrics, error) {
+func (e *socialMinistryExporter) getHospitalizedMetrics() (metrics, error) {
+	hospitalStats, err := e.getHospitalizedStats()
+	if err != nil {
+		return nil, err
+	}
+	result := make(metrics, 0)
+
+	for k, v := range hospitalStats {
+		if k != "total" {
+			tags := e.getTags(k)
+			result = append(result, metric{Name: "cov19_hospitalized_detail", Tags: tags, Value: float64(v.Hospitalized)})
+			result = append(result, metric{Name: "cov19_intensive_care_detail", Tags: tags, Value: float64(v.IntensiveCare)})
+		} else {
+			result = append(result, metric{Name: "cov19_hospitalized", Tags: nil, Value: float64(v.Hospitalized)})
+			result = append(result, metric{Name: "cov19_intensive_care", Tags: nil, Value: float64(v.IntensiveCare)})
+		}
+	}
+	return result, nil
+}
+
+type hospitalStat struct {
+	Hospitalized  uint64
+	IntensiveCare uint64
+}
+
+func (e *socialMinistryExporter) getHospitalizedStats() (map[string]hospitalStat, error) {
 	client := http.Client{Timeout: 3 * time.Second}
 	response, err := client.Get("https://www.sozialministerium.at/Informationen-zum-Coronavirus/Dashboard/Zahlen-zur-Hospitalisierung")
 	if err != nil {
@@ -173,7 +203,7 @@ func (e *socialMinistryExporter) getHospitalized() (metrics, error) {
 	document, _ := goquery.NewDocumentFromReader(response.Body)
 	rows := document.Find("table").Find("tbody").Find("tr")
 
-	result := make(metrics, 0)
+	result := make(map[string]hospitalStat, 0)
 
 	rows.Each(func(i int, s *goquery.Selection) {
 		rowStart := s.Find("td").First()
@@ -181,12 +211,9 @@ func (e *socialMinistryExporter) getHospitalized() (metrics, error) {
 		hospitalized := atoi(rowStart.Next().Text())
 		intensiveCare := atoi(rowStart.Next().Next().Text())
 		if i < rows.Size()-1 {
-			tags := e.getTags(province)
-			result = append(result, metric{Name: "cov19_hospitalized_detail", Tags: tags, Value: float64(hospitalized)})
-			result = append(result, metric{Name: "cov19_intensive_care_detail", Tags: tags, Value: float64(intensiveCare)})
+			result[province] = hospitalStat{Hospitalized: hospitalized, IntensiveCare: intensiveCare}
 		} else {
-			result = append(result, metric{Name: "cov19_hospitalized", Tags: nil, Value: float64(hospitalized)})
-			result = append(result, metric{Name: "cov19_intensive_care", Tags: nil, Value: float64(intensiveCare)})
+			result["total"] = hospitalStat{Hospitalized: hospitalized, IntensiveCare: intensiveCare}
 		}
 	})
 	return result, nil

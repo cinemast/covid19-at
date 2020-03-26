@@ -8,7 +8,7 @@ import (
 var e = newHealthMinistryExporter()
 
 func TestBezirke(t *testing.T) {
-	result, err := e.getBezirke()
+	result, err := e.getBezirkMetric()
 	assert.Nil(t, err)
 	assert.True(t, len(result) > 10, len(result))
 
@@ -18,7 +18,7 @@ func TestBezirke(t *testing.T) {
 }
 
 func TestBundesland(t *testing.T) {
-	result, err := e.getBundesland()
+	result, err := e.getBundeslandInfectedMetric()
 	assert.Nil(t, err)
 	assert.True(t, len(result) == 3*9, len(result))
 

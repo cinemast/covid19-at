@@ -40,7 +40,7 @@ func TestLocationsPopulationForMetrics(t *testing.T) {
 
 func TestMetadataForBezirke(t *testing.T) {
 	healthMinistryExporter := newHealthMinistryExporter()
-	metrics, err := healthMinistryExporter.getBezirke()
+	metrics, err := healthMinistryExporter.getBezirkMetric()
 	assert.Nil(t, err)
 	for _, m := range metrics {
 		bezirk := (*m.Tags)["bezirk"]

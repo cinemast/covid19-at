@@ -32,7 +32,7 @@ func TestMinistryStats(t *testing.T) {
 
 func TestHospitalized(t *testing.T) {
 	ministry := newSocialMinistryExporter(newMetadataProvider())
-	result, err := ministry.getHospitalized()
+	result, err := ministry.getHospitalizedMetrics()
 
 	assert.Nil(t, err)
 	assert.True(t, len(result) > 0, len(result))
