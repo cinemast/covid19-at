@@ -20,7 +20,7 @@ sync-logs:
 	rsync -avz covid19.spiessknafl.at:/var/log/nginx/ data/nginx/
 
 report-exporter: sync-logs
-	gzcat -f data/nginx/* | grep "GET /covid19/metrics" | LANG="en_US.UTF-8" goaccess --log-format=COMBINED -q -a -o data/report-exporter.html --ignore-crawlers
+	gzcat -f data/nginx/* | grep "GET /covid19/metrics\|GET /api" | LANG="en_US.UTF-8" goaccess --log-format=COMBINED -q -a -o data/report-exporter.html --ignore-crawlers
 	open data/report-exporter.html
 
 report-prometheus: sync-logs

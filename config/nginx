@@ -20,6 +20,10 @@ server {
    proxy_pass http://localhost:9090/prometheus;
   }
 
+  location /covid19/api/ {
+    proxy_pass http://localhost:8282/api/;
+  }
+
   location /covid19/metrics {
    proxy_pass http://localhost:8282/metrics;
   }
