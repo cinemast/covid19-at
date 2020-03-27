@@ -116,12 +116,14 @@ func getEcdcStat(url string) ([]ecdcStat, error) {
 		if i < rows.Size()-1 {
 			rowStart := s.Find("td").First()
 			location := normalizeCountryName(rowStart.Next().Text())
-			if location != "Other" {
+			infections := atoi(rowStart.Next().Next().Text())
+			deaths := atoi(rowStart.Next().Next().Next().Text())
+			if (infections > 0 || deaths > 0) && location != "Other" {
 				result = append(result, ecdcStat{
 					CovidStat{
 						location: location,
-						infected: atoi(rowStart.Next().Next().Text()),
-						deaths:   atoi(rowStart.Next().Next().Next().Text()),
+						infected: infections,
+						deaths:   deaths,
 					},
 					rowStart.Text(),
 				})
