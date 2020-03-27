@@ -101,6 +101,7 @@
         "y": 1
       },
       "id": 51,
+      "interval": "",
       "options": {
         "colorMode": "value",
         "fieldOptions": {
@@ -139,7 +140,7 @@
       "repeat": null,
       "targets": [
         {
-          "expr": "cov19_dead / cov19_confirmed",
+          "expr": "sum(cov19_detail_dead) / sum(cov19_detail)",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -537,7 +538,7 @@
       "pluginVersion": "6.6.2",
       "targets": [
         {
-          "expr": "cov19_dead",
+          "expr": "sum(cov19_detail_dead)",
           "instant": true,
           "refId": "A"
         }
@@ -3232,5 +3233,5 @@
   "timezone": "",
   "title": "Covid-19-2",
   "uid": "2fa2-Y_Wz222",
-  "version": 22
+  "version": 23
 }
