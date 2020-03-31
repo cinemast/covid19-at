@@ -261,7 +261,7 @@ func (h *healthMinistryExporter) getSimpleData() (metrics, []error) {
 	defer response.Body.Close()
 	lines, err := ioutil.ReadAll(response.Body)
 
-	erkrankungenMatch := regexp.MustCompile(`Erkrankungen = ([0-9]+)`).FindStringSubmatch(string(lines))
+	erkrankungenMatch := regexp.MustCompile(`Erkrankungen = "([0-9]+)"`).FindStringSubmatch(string(lines))
 	if len(erkrankungenMatch) != 2 {
 		errors = append(errors, fmt.Errorf("Could not find \"Bestätigte Fälle\""))
 	} else {
