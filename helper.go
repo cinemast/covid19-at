@@ -86,5 +86,5 @@ func readJsVarFromGet(url string, varName string) (string, error) {
 	if len(match) != 2 {
 		return "", errors.New(varName + " not found in " + url[strings.LastIndex(url, "/"):])
 	}
-	return match[1], nil
+	return strings.Replace(match[1], ".", "", 1), nil
 }

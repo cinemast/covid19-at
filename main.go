@@ -81,5 +81,8 @@ func main() {
 	http.HandleFunc("/api/bundesland", handleApiBundesland)
 	http.HandleFunc("/api/bezirk", handleApiBezirk)
 	http.HandleFunc("/api/total", handleApiTotal)
-	http.ListenAndServe(":8282", nil)
+	err := http.ListenAndServe(":8282", nil)
+	if err != nil {
+		panic(err)
+	}
 }
