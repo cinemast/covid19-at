@@ -43,6 +43,31 @@ func TestBundesland(t *testing.T) {
 	assert.True(t, infected100k.Value > 5 && infected100k.Value < 100, infected100k.Value)
 }
 
+func TestBundeslandHealedDeaths(t *testing.T) {
+	result, err := e.getBundeslandHealedDeaths()
+	assert.Nil(t, err)
+	assert.True(t, len(result) == 2*9, len(result))
+
+	for _, s := range result {
+		assert.Equal(t, 4, len(*s.Tags), s.Tags)
+	}
+
+	vienna := result.findMetric("cov19_detail_dead", "province=Wien")
+	assert.NotNil(t, vienna)
+	assert.Equal(t, (*vienna.Tags)["country"], "Austria")
+	assert.Equal(t, (*vienna.Tags)["latitude"], "48.206351")
+	assert.Equal(t, (*vienna.Tags)["longitude"], "16.374817")
+
+	vienna = result.findMetric("cov19_detail_healed", "province=Wien")
+	assert.NotNil(t, vienna)
+	assert.Equal(t, (*vienna.Tags)["country"], "Austria")
+	assert.Equal(t, (*vienna.Tags)["latitude"], "48.206351")
+	assert.Equal(t, (*vienna.Tags)["longitude"], "16.374817")
+
+	assert.NotNil(t, result.findMetric("cov19_detail_dead", "province=Salzburg"))
+	assert.NotNil(t, result.findMetric("cov19_detail_healed", "province=Salzburg"))
+}
+
 func TestAltersverteilung(t *testing.T) {
 	result, err := e.getAgeMetrics()
 	assert.Nil(t, err)

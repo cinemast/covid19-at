@@ -205,7 +205,6 @@ func (h *healthMinistryExporter) getBundeslandHealedDeaths() (metrics, error) {
 	}
 	result := make(metrics, 0)
 	for _, s := range provinceStats {
-		s.Label = mapBundeslandLabel(s.Label)
 		data := h.mp.getMetadata(s.Label)
 		tags := h.getTags(s.Label, "province", data)
 		result = append(result, metric{"cov19_detail_healed", tags, float64(s.Y)})
