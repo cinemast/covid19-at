@@ -8,7 +8,7 @@ import (
 var e = newHealthMinistryExporter()
 
 func TestBezirke(t *testing.T) {
-	result, err := e.getBezirkMetric()
+	result, err := e.getBezirke()
 	assert.Nil(t, err)
 	assert.True(t, len(result) > 10, len(result))
 
@@ -18,7 +18,7 @@ func TestBezirke(t *testing.T) {
 }
 
 func TestBundesland(t *testing.T) {
-	result, err := e.getBundeslandInfectedMetric()
+	result, err := e.getBundeslandInfections()
 	assert.Nil(t, err)
 	assert.True(t, len(result) == 3*9, len(result))
 
@@ -63,6 +63,8 @@ func TestSimpleData(t *testing.T) {
 	result, err := e.getSimpleData()
 	assert.Equal(t, 0, len(err))
 	assert.NotNil(t, result.findMetric("cov19_confirmed", ""))
+	assert.NotNil(t, result.findMetric("cov19_hospitalized", ""))
+	assert.NotNil(t, result.findMetric("cov19_intensive_care", ""))
 }
 
 func TestHealthMinistryHealth(t *testing.T) {

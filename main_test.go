@@ -28,17 +28,14 @@ func emptyPage(w http.ResponseWriter, r *http.Request) {
 
 func TestErrors(t *testing.T) {
 	healthMinistryExporter := exporters[0].(*healthMinistryExporter)
-	socialMinistry := exporters[1].(*socialMinistryExporter)
-	ecdcExporter := exporters[2].(*ecdcExporter)
+	ecdcExporter := exporters[1].(*ecdcExporter)
 
 	ecdcURL := ecdcExporter.Url
-	ministryURL := socialMinistry.url
 	healthMinistryURL := healthMinistryExporter.url
 
 	mockServer := httptest.NewServer(http.HandlerFunc(emptyPage))
 	defer mockServer.Close()
 	ecdcExporter.Url = mockServer.URL
-	socialMinistry.url = mockServer.URL
 	healthMinistryExporter.url = mockServer.URL
 
 	ts := httptest.NewServer(http.HandlerFunc(handleHealth))
@@ -47,13 +44,28 @@ func TestErrors(t *testing.T) {
 	response, err := ts.Client().Get(ts.URL)
 	assert.Nil(t, err)
 	assert.Equal(t, 500, response.StatusCode)
-	//greeting, err := ioutil.ReadAll(response.Body)
+	greeting, err := ioutil.ReadAll(response.Body)
 
 	assert.Nil(t, err)
-	//assert.Equal(t, "<html><body><img width=\"500\" src=\"https://spiessknafl.at/fine.jpg\"/><pre>Could not find beginning of array\nNot enough Bezirke Results: 0\nCould not find beginning of array\nMissing Bundesland result 0\nCould not find beginning of array\nMissing age metrics\nCould not find beginning of array\nGeschlechtsverteilung failed\nCould not find \"Bestätigte Fälle\"\nCould not find \"Hospitalisiert\"\nCould not find \"Intensivstation\"\nCould not find \"Bestätigte Fälle\"\nCould not find \"Bestätigte Fälle\"\nMissing ministry stats\nCould not find metric cov19_healed / ()\nWorld stats are failing\n</pre></body></html>", string(greeting))
+	assert.Equal(t, `<html><body><img width="500" src="https://spiessknafl.at/fine.jpg"/><pre>Could not find beginning of array
+Not enough Bezirke Results: 0
+Could not find beginning of array
+Missing Bundesland result 0
+Could not find beginning of array
+Missing age metrics
+Could not find beginning of array
+Geschlechtsverteilung failed
+Erkrankungen not found in /SimpleData.js
+dpGenesen not found in /Genesen.js
+dpTot not found in /Verstorben.js
+dpGesNBBel not found in /GesamtzahlNormalbettenBel.js
+dpGesIBBel not found in /GesamtzahlIntensivBettenBel.js
+dpGesTestungen not found in /GesamtzahlTestungen.js
+Could not find "Bestätigte Fälle"
+World stats are failing
+</pre></body></html>`, string(greeting))
 
 	ecdcExporter.Url = ecdcURL
-	socialMinistry.url = ministryURL
 	healthMinistryExporter.url = healthMinistryURL
 }
 
@@ -69,30 +81,9 @@ func TestMetrics(t *testing.T) {
 	metricResult := string(metricsString)
 	assert.True(t, strings.Contains(metricResult, "cov19_tests"))
 	assert.True(t, strings.Contains(metricResult, "cov19_confirmed"))
-	//assert.True(t, strings.Contains(metricResult, "cov19_healed"))
+	assert.True(t, strings.Contains(metricResult, "cov19_healed"))
 	assert.True(t, strings.Contains(metricResult, "cov19_world_infected"))
 	assert.True(t, strings.Contains(metricResult, "cov19_world_death"))
 	assert.True(t, strings.Contains(metricResult, "cov19_detail"))
 	assert.True(t, strings.Contains(metricResult, "cov19_detail_dead"))
-}
-
-func TestApiOverall(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(handleApiTotal))
-	defer ts.Close()
-	_, err := ts.Client().Get(ts.URL)
-	assert.Nil(t, err)
-}
-
-func TestApiBezirk(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(handleApiBezirk))
-	defer ts.Close()
-	_, err := ts.Client().Get(ts.URL)
-	assert.Nil(t, err)
-}
-
-func TestApiBundesland(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(handleApiBundesland))
-	defer ts.Close()
-	_, err := ts.Client().Get(ts.URL)
-	assert.Nil(t, err)
 }

@@ -11,15 +11,13 @@ import (
 var logger = log.New(os.Stdout, "covid19-at", 0)
 var mp = newMetadataProvider()
 var he = newHealthMinistryExporter()
-var se = newSocialMinistryExporter(mp)
 var exporters = []Exporter{
 	he,
-	se,
 	newEcdcExporter(mp),
 	newMathdroExporter(),
 }
 
-var a = newApi(he, se)
+var a = newApi(he)
 
 func writeJson(w http.ResponseWriter, f func() (interface{}, error)) {
 	result, err := f()

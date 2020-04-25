@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -70,4 +71,20 @@ func readArrayFromGet(url string) (string, error) {
 	}
 
 	return jsonString[arrayBegin : arrayEnd+1], nil
+}
+
+func readJsVarFromGet(url string, varName string) (string, error) {
+	client := http.Client{Timeout: 5 * time.Second}
+	response, err := client.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer response.Body.Close()
+	lines, err := ioutil.ReadAll(response.Body)
+
+	match := regexp.MustCompile(varName + ` = "([0-9\.]+)"`).FindStringSubmatch(string(lines))
+	if len(match) != 2 {
+		return "", errors.New(varName + " not found in " + url[strings.LastIndex(url, "/"):])
+	}
+	return match[1], nil
 }

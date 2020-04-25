@@ -13,6 +13,7 @@ type bundeslandStat struct {
 	Dead          uint64
 	Hospitalized  uint64
 	IntensiveCare uint64
+	Healed        uint64
 }
 
 type bezirkStat struct {
@@ -32,11 +33,10 @@ type overallStat struct {
 
 type api struct {
 	he *healthMinistryExporter
-	se *socialMinistryExporter
 }
 
-func newApi(he *healthMinistryExporter, se *socialMinistryExporter) *api {
-	return &api{he, se}
+func newApi(he *healthMinistryExporter) *api {
+	return &api{he}
 }
 
 func (a *api) GetOverallStat() (overallStat, error) {
@@ -81,18 +81,9 @@ func (a *api) GetBezirkStat() ([]bezirkStat, error) {
 }
 
 func (a *api) GetBundeslandStat() ([]bundeslandStat, error) {
-	hospitalStat, err := a.se.getHospitalizedStats()
-	if err != nil {
-		return nil, err
-	}
-
-	bundeslandStats, err := a.se.getBundeslandStats()
-	if err != nil {
-		return nil, err
-	}
 
 	result := make([]bundeslandStat, 0)
-	for k, v := range bundeslandStats {
+	/*for k, v := range bundeslandStats {
 		data := a.se.mp.getMetadata(k)
 		hospitalized := uint64(0)
 		intensiveCare := uint64(0)
@@ -109,6 +100,6 @@ func (a *api) GetBundeslandStat() ([]bundeslandStat, error) {
 			IntensiveCare: intensiveCare,
 			Location:      apiLocaiton{Lat: data.location.lat, Long: data.location.long},
 		})
-	}
+	}*/
 	return result, nil
 }
