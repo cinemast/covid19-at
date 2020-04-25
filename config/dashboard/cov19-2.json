@@ -96,7 +96,7 @@
       "datasource": null,
       "gridPos": {
         "h": 4,
-        "w": 5,
+        "w": 4,
         "x": 0,
         "y": 1
       },
@@ -140,7 +140,7 @@
       "repeat": null,
       "targets": [
         {
-          "expr": "sum(cov19_detail_dead) / sum(cov19_detail)",
+          "expr": "sum(cov19_detail_dead) / cov19_confirmed",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -156,8 +156,8 @@
       "datasource": "Prometheus",
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 5,
+        "w": 4,
+        "x": 4,
         "y": 1
       },
       "id": 6,
@@ -169,15 +169,13 @@
         }
       ],
       "options": {
-        "graphMode": "area",
         "colorMode": "value",
-        "justifyMode": "auto",
         "fieldOptions": {
-          "values": false,
           "calcs": [
             "mean"
           ],
           "defaults": {
+            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -186,11 +184,13 @@
                   "value": null
                 }
               ]
-            },
-            "mappings": []
+            }
           },
-          "overrides": []
+          "overrides": [],
+          "values": false
         },
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto"
       },
       "pluginVersion": "6.6.2",
@@ -238,7 +238,8 @@
                   "value": null
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": [],
           "values": false
@@ -601,31 +602,31 @@
       "targets": [
         {
           "expr": "cov19_world_recovered{country=\"Austria\"}",
-          "interval": "1h",
+          "interval": "1m",
           "legendFormat": "Recovered",
           "refId": "B"
         },
         {
           "expr": "cov19_confirmed",
-          "interval": "1h",
+          "interval": "1m",
           "legendFormat": "Infected",
           "refId": "A"
         },
         {
           "expr": "cov19_hospitalized",
-          "interval": "1h",
+          "interval": "1m",
           "legendFormat": "Hospitalized",
           "refId": "C"
         },
         {
           "expr": "cov19_intensive_care",
-          "interval": "1h",
+          "interval": "1m",
           "legendFormat": "Intensive Care",
           "refId": "E"
         },
         {
           "expr": "sum(cov19_detail_dead)",
-          "interval": "1h",
+          "interval": "1m",
           "legendFormat": "Dead",
           "refId": "D"
         }
@@ -1007,7 +1008,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1015,6 +1015,164 @@
         "w": 12,
         "x": 0,
         "y": 45
+      },
+      "hiddenSeries": false,
+      "id": 88,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [
+        {
+          "title": "Source",
+          "url": "https://www.sozialministerium.at/Informationen-zum-Coronavirus/Neuartiges-Coronavirus-(2019-nCov).html"
+        }
+      ],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(cov19_detail_healed{country=\"Austria\"}) without (instance,job,latitude,longitude,population)",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{province}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Covid19 healed in Austria by Province (stacked)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "circleMaxSize": "50",
+      "circleMinSize": "10",
+      "colors": [
+        "#37872D",
+        "#F2CC0C",
+        "#FA6400",
+        "#E02F44",
+        "#C4162A"
+      ],
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 49
+      },
+      "hideEmpty": false,
+      "hideZero": false,
+      "id": 55,
+      "initialZoom": "7",
+      "interval": "1h",
+      "locationData": "table",
+      "mapCenter": "custom",
+      "mapCenterLatitude": "47.5",
+      "mapCenterLongitude": "13.5",
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "options": {},
+      "showLegend": true,
+      "stickyLabels": false,
+      "tableQueryOptions": {
+        "geohashField": "geohash",
+        "labelField": "province",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "Value",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "expr": "cov19_detail_infected_per_100k",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{country}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "5,10,30,50",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Infection per 100k population in Austria",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "persons / 100k",
+      "unitSingle": "",
+      "unitSingular": "persons / 100k",
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 55
       },
       "hiddenSeries": false,
       "id": 29,
@@ -1102,66 +1260,6 @@
       }
     },
     {
-      "circleMaxSize": "50",
-      "circleMinSize": "10",
-      "colors": [
-        "#37872D",
-        "#F2CC0C",
-        "#FA6400",
-        "#E02F44",
-        "#C4162A"
-      ],
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "esMetric": "Count",
-      "gridPos": {
-        "h": 16,
-        "w": 12,
-        "x": 12,
-        "y": 49
-      },
-      "hideEmpty": false,
-      "hideZero": false,
-      "id": 55,
-      "initialZoom": "7",
-      "interval": "1h",
-      "locationData": "table",
-      "mapCenter": "custom",
-      "mapCenterLatitude": "47.5",
-      "mapCenterLongitude": "13.5",
-      "maxDataPoints": 1,
-      "mouseWheelZoom": true,
-      "options": {},
-      "showLegend": true,
-      "stickyLabels": false,
-      "tableQueryOptions": {
-        "geohashField": "geohash",
-        "labelField": "province",
-        "latitudeField": "latitude",
-        "longitudeField": "longitude",
-        "metricField": "Value",
-        "queryType": "coordinates"
-      },
-      "targets": [
-        {
-          "expr": "cov19_detail_infected_per_100k",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "{{country}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": "5,10,30,50",
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Infection per 100k population in Austria",
-      "type": "grafana-worldmap-panel",
-      "unitPlural": "persons / 100k",
-      "unitSingle": "",
-      "unitSingular": "persons / 100k",
-      "valueName": "current"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1173,7 +1271,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 55
+        "y": 65
       },
       "hiddenSeries": false,
       "id": 78,
@@ -1229,100 +1327,6 @@
       "tooltip": {
         "shared": true,
         "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "decimals": 0,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 65
-      },
-      "hiddenSeries": false,
-      "id": 81,
-      "interval": "",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "cov19_intensive_care_detail",
-          "interval": "",
-          "legendFormat": "{{province}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Intensive Care Patients by Province",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1430,7 +1434,101 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 73
+        "y": 75
+      },
+      "hiddenSeries": false,
+      "id": 81,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "cov19_intensive_care_detail",
+          "interval": "",
+          "legendFormat": "{{province}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Intensive Care Patients by Province",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 83
       },
       "hiddenSeries": false,
       "id": 80,
@@ -1518,7 +1616,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 81
+        "y": 91
       },
       "id": 33,
       "panels": [],
@@ -1531,7 +1629,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 82
+        "y": 92
       },
       "id": 40,
       "interval": "4h",
@@ -1586,7 +1684,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 82
+        "y": 92
       },
       "id": 39,
       "interval": "4h",
@@ -1641,7 +1739,7 @@
         "h": 4,
         "w": 3,
         "x": 12,
-        "y": 82
+        "y": 92
       },
       "id": 57,
       "interval": "4h",
@@ -1700,7 +1798,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 86
+        "y": 96
       },
       "hiddenSeries": false,
       "id": 31,
@@ -1799,7 +1897,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 86
+        "y": 96
       },
       "hiddenSeries": false,
       "id": 38,
@@ -1900,7 +1998,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 96
+        "y": 106
       },
       "hiddenSeries": false,
       "id": 17,
@@ -2000,7 +2098,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 96
+        "y": 106
       },
       "hiddenSeries": false,
       "id": 16,
@@ -2101,7 +2199,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 106
+        "y": 116
       },
       "hiddenSeries": false,
       "id": 59,
@@ -2188,7 +2286,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 117
+        "y": 127
       },
       "id": 37,
       "panels": [],
@@ -2201,7 +2299,7 @@
         "h": 4,
         "w": 5,
         "x": 0,
-        "y": 118
+        "y": 128
       },
       "id": 41,
       "links": [
@@ -2256,7 +2354,7 @@
         "h": 4,
         "w": 4,
         "x": 5,
-        "y": 118
+        "y": 128
       },
       "id": 12,
       "links": [
@@ -2311,7 +2409,7 @@
         "h": 4,
         "w": 3,
         "x": 9,
-        "y": 118
+        "y": 128
       },
       "id": 67,
       "options": {
@@ -2380,7 +2478,7 @@
         "h": 22,
         "w": 12,
         "x": 12,
-        "y": 118
+        "y": 128
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -2436,7 +2534,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 122
+        "y": 132
       },
       "hiddenSeries": false,
       "id": 43,
@@ -2534,7 +2632,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 132
+        "y": 142
       },
       "hiddenSeries": false,
       "id": 86,
@@ -2631,7 +2729,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 140
+        "y": 150
       },
       "hiddenSeries": false,
       "id": 42,
@@ -2735,7 +2833,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 140
+        "y": 150
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -2790,7 +2888,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 150
+        "y": 160
       },
       "hiddenSeries": false,
       "id": 19,
@@ -2893,7 +2991,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 150
+        "y": 160
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -2948,7 +3046,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 158
+        "y": 168
       },
       "hiddenSeries": false,
       "id": 20,
@@ -3051,7 +3149,7 @@
         "h": 22,
         "w": 12,
         "x": 12,
-        "y": 160
+        "y": 170
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -3107,7 +3205,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 166
+        "y": 176
       },
       "hiddenSeries": false,
       "id": 61,
@@ -3197,7 +3295,7 @@
     "list": []
   },
   "time": {
-    "from": "2020-02-29T23:00:00.000Z",
+    "from": "now-30d",
     "to": "now"
   },
   "timepicker": {
@@ -3212,5 +3310,5 @@
   "timezone": "",
   "title": "Covid-19-2",
   "uid": "2fa2-Y_Wz222",
-  "version": 24
+  "version": 26
 }
