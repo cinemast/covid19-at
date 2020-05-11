@@ -282,7 +282,7 @@ func (h *healthMinistryExporter) getSimpleData() (metrics, []error) {
 
 	errors, result = addVarIfValid(errors, result, h.url+"/SimpleData.js", "Erkrankungen", "cov19_confirmed")
 	errors, result = addVarIfValid(errors, result, h.url+"/Genesen.js", "dpGenesen", "cov19_healed")
-	errors, result = addVarIfValid(errors, result, h.url+"/Verstorben.js", "dpTot", "cov19_dead")
+	errors, result = addVarIfValid(errors, result, h.url+"/VerstorbenGemeldet.js", "dpTotGemeldet", "cov19_dead")
 	errors, result = addVarIfValid(errors, result, h.url+"/GesamtzahlNormalbettenBel.js", "dpGesNBBel", "cov19_hospitalized")
 	errors, result = addVarIfValid(errors, result, h.url+"/GesamtzahlIntensivBettenBel.js", "dpGesIBBel", "cov19_intensive_care")
 	errors, result = addVarIfValid(errors, result, h.url+"/GesamtzahlTestungen.js", "dpGesTestungen", "cov19_tests")

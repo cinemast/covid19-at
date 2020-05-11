@@ -57,7 +57,7 @@ Could not find beginning of array
 Geschlechtsverteilung failed
 Erkrankungen not found in /SimpleData.js
 dpGenesen not found in /Genesen.js
-dpTot not found in /Verstorben.js
+dpTotGemeldet not found in /VerstorbenGemeldet.js
 dpGesNBBel not found in /GesamtzahlNormalbettenBel.js
 dpGesIBBel not found in /GesamtzahlIntensivBettenBel.js
 dpGesTestungen not found in /GesamtzahlTestungen.js
