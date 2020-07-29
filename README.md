@@ -29,13 +29,13 @@ It then exposes the gathered metrics as [prometheus](https://prometheus.io/) end
 - `docker pull cinemast/covid19-at`
 
 ## Demo Setup
-
-- https://covid19.spiessknafl.at
-- https://covid19.spiessknafl.at/prometheus
-- https://covid19.spiessknafl.at/covid19/metrics
-- https://covid19.spiessknafl.at/covid19/api/total
-- https://covid19.spiessknafl.at/covid19/api/bundesland
-- https://covid19.spiessknafl.at/covid19/api/bezirk
+Demo setup is currently shut down.
+- ~~https://covid19.spiessknafl.at~~
+- ~~https://covid19.spiessknafl.at/prometheus~~
+- ~~https://covid19.spiessknafl.at/covid19/metrics~~
+- ~~https://covid19.spiessknafl.at/covid19/api/total~~
+- ~~https://covid19.spiessknafl.at/covid19/api/bundesland~~
+- ~~https://covid19.spiessknafl.at/covid19/api/bezirk~~
 
 ## Screenshot
 ![](screenshots/grafana.png)
